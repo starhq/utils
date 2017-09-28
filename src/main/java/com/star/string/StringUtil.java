@@ -2,7 +2,6 @@ package com.star.string;
 
 import com.star.collection.ArrayUtil;
 import com.star.io.CharsetUtil;
-import com.star.lang.Assert;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -380,10 +379,7 @@ public final class StringUtil {
         }
         return strs;
     }
-    //    +++++++++++++++++++++++++split+++++++++++++++++++++++++++++++
 
-
-    //    +++++++++++++++++++++++++++++sub++++++++++++++++++++++++++++++++++
 
     /**
      * substring的plus版本
@@ -422,10 +418,7 @@ public final class StringUtil {
     public static String sub(final String str, final int fromIndex) {
         return sub(str, fromIndex, str.length());
     }
-    //    +++++++++++++++++++++++++++++sub++++++++++++++++++++++++++++++++++
 
-
-    //++++++++++++++++++format++++++++++++
 
     /**
      * 格式化文本
@@ -448,7 +441,7 @@ public final class StringUtil {
             char currentChar;
             for (int i = 0; i < length; i++) {
                 if (valueIndex >= values.length) {
-                    stringBuilder.append(template.substring(i, length));
+                    stringBuilder.append(sub(template, i, length));
                     break;
                 }
 
@@ -471,6 +464,7 @@ public final class StringUtil {
         return result;
     }
 
+
     /**
      * 格式化文本
      *
@@ -485,7 +479,7 @@ public final class StringUtil {
         } else {
             str = template;
             for (final Map.Entry<?, ?> entry : map.entrySet()) {
-                str = str.replace(DELIM_START + entry.getKey() + DELIM_END, entry.getValue().toString());
+                str = str.replace(DELIM_START + entry.getKey() + DELIM_END, str(entry.getValue(), CharsetUtil.UTF_8));
             }
         }
         return str;
@@ -504,25 +498,14 @@ public final class StringUtil {
         if (isBlank(camelCaseStr)) {
             result = EMPTY;
         } else {
-            final int length = camelCaseStr.length();
             final StringBuilder builder = builder();
-            char cha;
-            boolean isPreUpperCase = false;
-            for (int i = 0; i < length; i++) {
-                cha = camelCaseStr.charAt(i);
-                boolean isNextUpperCase = true;
-                if (i < (length - 1)) {
-                    isNextUpperCase = Character.isUpperCase(camelCaseStr.charAt(i + 1));
+            final char[] chars = camelCaseStr.toCharArray();
+            final int len = chars.length;
+            for (int i = 0; i < len; i++) {
+                builder.append(toUpperOrLowwer(chars[i], false));
+                if (i < len - 1 && Character.isUpperCase(chars[i + 1])) {
+                    builder.append(C_UNDERLINE);
                 }
-                if (Character.isUpperCase(cha)) {
-                    if ((!isPreUpperCase || !isNextUpperCase) && i > 0) {
-                        builder.append(UNDERLINE);
-                    }
-                    isPreUpperCase = true;
-                } else {
-                    isPreUpperCase = false;
-                }
-                builder.append(Character.toLowerCase(cha));
             }
             result = builder.toString();
         }
@@ -533,38 +516,36 @@ public final class StringUtil {
     /**
      * 下划线命名改成驼峰命名
      * <p>
-     * hello_world-&gt;HelloWorld
+     * hello_world-&gt;helloWorld
      *
      * @param name 下划线命名
      * @return 驼峰
      */
     public static String toCamelCase(final String name) {
-        String result = name.toLowerCase();
-        if (result.contains(UNDERLINE)) {
-
-            final StringBuilder builder = builder(result.length());
-            boolean upperCase = false;
-            char cha;
-            for (int i = 0; i < result.length(); i++) {
-                cha = result.charAt(i);
-
-                if (cha == C_UNDERLINE) {
-                    upperCase = true;
-                } else if (upperCase) {
-                    builder.append(Character.toUpperCase(cha));
-                    upperCase = false;
-                } else {
-                    builder.append(cha);
+        Objects.requireNonNull(name, "input string can not be null");
+        String result;
+        if (name.contains(UNDERLINE)) {
+            final StringBuilder builder = builder(name.length());
+            final char[] chars = name.toCharArray();
+            final int len = chars.length;
+            for (int i = 0; i < len; i++) {
+                if (chars[i] == C_UNDERLINE) {
+                    continue;
                 }
+
+                builder.append(toUpperOrLowwer(chars[i], i != 0 && chars[i - 1] == C_UNDERLINE));
             }
             result = builder.toString();
+        } else {
+            result = name;
         }
         return result;
     }
-    //    +++++++++++++++++++++format+++++++++++++++++++++++++
 
+    private static char toUpperOrLowwer(final char temp, final boolean upper) {
+        return upper ? Character.toUpperCase(temp) : Character.toLowerCase(temp);
+    }
 
-    //++++++++++++++++++++++bytes++++++++++++++++++++++
 
     /**
      * 编码字符串
@@ -594,10 +575,7 @@ public final class StringUtil {
         }
         return bytes;
     }
-    //++++++++++++++++++++++bytes++++++++++++++++++++++
 
-
-    //+++++++++++++++++++++++str+++++++++++++++++++++++++++++
 
     /**
      * 对象转字符串
@@ -693,10 +671,6 @@ public final class StringUtil {
     public static ByteBuffer byteBuffer(final String str, final String charset) {
         return ByteBuffer.wrap(bytes(str, charset));
     }
-    //+++++++++++++++++++++++str+++++++++++++++++++++++++++++
-
-
-    //++++++++++++++++++++join++++++++++++++++++++++++++++++
 
     /**
      * 按指定格式组装string
@@ -710,10 +684,7 @@ public final class StringUtil {
      */
     public static String join(final String start, final String end, final String delimiter, final Charset charset, final Objects... objs) {
         final StringJoiner joiner = joiner(start, end, delimiter);
-        for (final Object obj : objs) {
-            joiner.add(str(obj, CharsetUtil.charset(charset)));
-        }
-        return joiner.toString();
+        return getString(joiner, objs, charset);
     }
 
     /**
@@ -726,13 +697,17 @@ public final class StringUtil {
      * @return 组装好的字符串
      */
     public static String join(final String start, final String end, final String delimiter, final Objects... objs) {
-
         final StringJoiner joiner = joiner(start, end, delimiter);
-        for (final Object obj : objs) {
-            joiner.add(str(obj, CharsetUtil.DEFAULT));
-        }
-        return joiner.toString();
+        return getString(joiner, objs, CharsetUtil.charset(CharsetUtil.UTF_8));
     }
+
+    private static String getString(final StringJoiner joiner, final Objects[] objs, final Charset charset) {
+        for (final Object obj : objs) {
+            joiner.add(str(obj, charset));
+        }
+        return str(joiner, charset);
+    }
+
 
     /**
      * 按指定格式组装string
@@ -746,12 +721,8 @@ public final class StringUtil {
     }
 
     private static StringJoiner joiner(final String start, final String end, final String delimiter) {
-        Assert.isTrue(!isBlank(delimiter), "delimiter must have text");
-        return new StringJoiner(delimiter, defaultIfEmpty(start, EMPTY), defaultIfEmpty(end, EMPTY));
+        return new StringJoiner(defaultIfEmpty(delimiter, EMPTY), defaultIfEmpty(start, EMPTY), defaultIfEmpty(end, EMPTY));
     }
-    //++++++++++++++++++++join++++++++++++++++++++++++++++++
-
-    //+++++++++++++++builder+++++++++++++++++++++++++
 
     /**
      * 创建StringBuilder对象
@@ -768,7 +739,6 @@ public final class StringUtil {
      * @return StringBuilder对象
      */
     public static StringBuilder builder(final int capacity) {
-        Assert.isTrue(capacity > 0, "capacity must greater than zero");
         return new StringBuilder(capacity);
     }
 
@@ -779,16 +749,13 @@ public final class StringUtil {
      * @return builder
      */
     public static StringBuilder builder(final String... strings) {
-        final StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = builder();
         for (int i = 0; i < strings.length; i++) {
             builder.append(strings[i]);
         }
         return builder;
     }
-//++++++++++++++++++++++builder+++++++++++++++++++++++++++++++++
 
-
-//+++++++++++++++++reader & writer+++++++++++++++++++++
 
     /**
      * 获得StringReader
@@ -797,7 +764,7 @@ public final class StringUtil {
      * @return StringReader
      */
     public static StringReader getReader(final String str) {
-        return new StringReader(str);
+        return new StringReader(Objects.requireNonNull(str, "str can not be null"));
     }
 
     /**
@@ -808,5 +775,5 @@ public final class StringUtil {
     public static StringWriter getWriter() {
         return new StringWriter();
     }
-    //+++++++++++++++++reader & writer+++++++++++++++++++++
+
 }
