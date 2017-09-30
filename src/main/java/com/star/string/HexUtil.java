@@ -1,6 +1,7 @@
 package com.star.string;
 
 import com.star.collection.ArrayUtil;
+import com.star.exception.ToolException;
 import com.star.lang.Assert;
 
 /**
@@ -13,52 +14,50 @@ public final class HexUtil {
     /**
      * 用于建立十六进制字符的输出的小写字符数组
      */
-    private static final char[] DIGITS_LOWER = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+    private static final char[] DIGITS_LOWER = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd',
+            'e', 'f'};
 
     /**
      * 用于建立十六进制字符的输出的大写字符数组
      */
-    private static final char[] DIGITS_UPPER = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+    private static final char[] DIGITS_UPPER = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D',
+            'E', 'F'};
 
     private HexUtil() {
     }
 
     /**
-     * 是否是16进制数
+     * 将字节数组转换为十六进制字符数组
      *
-     * @param value 需要判断的字符串
-     * @return 是否16进制
+     * @param data        byte[]
+     * @param toLowerCase 是否转换大小写
+     * @return 十六进制char[]
      */
-    public static boolean isHexNumber(final String value) {
-        final boolean isBlank = StringUtil.isBlank(value);
-        final int index = !isBlank && value.startsWith(StringUtil.DASH) ? 1 : 0;
-        return !isBlank && (value.startsWith("0x", index) || value.startsWith("0X", index) || value.charAt(0) == '#');
+    public static char[] encode(final byte[] data, final boolean toLowerCase) {
+        return ArrayUtil.isEmpty(data) ? new char[0] : encode(data, toLowerCase ? DIGITS_LOWER : DIGITS_UPPER);
     }
 
     /**
-     * 字节数组转16进制字符串
+     * 将字节数组转换为十六进制字符串
      *
-     * @param data        字节数组
-     * @param toLowerCase 是否大小写
-     * @return 16进制字符串
+     * @param data        byte[]
+     * @param toLowerCase 是否转换大小写
+     * @return 十六进制char[]
      */
-    public static String encode(final byte[] data, final boolean toLowerCase) {
-        final int len = ArrayUtil.isEmpty(data) ? 0 : data.length;
-        char[] out;
-        if (len > 0) {
-            out = new char[len << 1];
-            final char[] toDigits = toLowerCase ? DIGITS_LOWER : DIGITS_UPPER;
-            int flag = 0;
-            for (int i = 0; i < len; i++) {
-                out[flag++] = toDigits[(0xF0 & data[i]) >>> 4];
-                out[flag++] = toDigits[0x0F & data[i]];
-            }
-        } else {
-            out = new char[0];
-        }
-        return new String(out);
+    public static String encodeToString(final byte[] data, final boolean toLowerCase) {
+        final char[] result = encode(data, toLowerCase);
+        return ArrayUtil.isEmpty(result) ? StringUtil.EMPTY : new String(result);
     }
 
+    /**
+     * 将16进制字符串转为字节数组
+     *
+     * @param hex 16进制字符串
+     * @return 字节数组
+     */
+    public static byte[] decode(final String hex) {
+        return StringUtil.isBlank(hex) ? new byte[0] : decode(hex.toCharArray());
+    }
 
     /**
      * 16进制字符数组还原成字节数组
@@ -86,9 +85,36 @@ public final class HexUtil {
         return out;
     }
 
+    /**
+     * 将字节数组转换为十六进制字符数组
+     *
+     * @param data     byte[]
+     * @param toDigits 用于控制输出的char[]
+     * @return 十六进制char[]
+     */
+    private static char[] encode(final byte[] data, final char... toDigits) {
+        final int len = data.length;
+        char[] out = new char[len << 1];
+        for (int i = 0,
+             j = 0; i < len; i++) {
+            out[j++] = toDigits[(0xF0 & data[i]) >>> 4];
+            out[j++] = toDigits[0x0F & data[i]];
+        }
+        return out;
+    }
+
+    /**
+     * 将十六进制字符转换成一个整数
+     *
+     * @param cha   十六进制char
+     * @param index 十六进制字符在字符数组中的位置
+     * @return 一个整数
+     */
     private static int toDigit(final char cha, final int index) {
         final int digit = Character.digit(cha, 16);
-        Assert.isTrue(digit != -1, StringUtil.format("Illegal hexadecimal character {} at index {}", cha, index));
+        if (digit == -1) {
+            throw new ToolException(StringUtil.format("Illegal hexadecimal character {} at index {}", cha, index));
+        }
         return digit;
     }
 }
