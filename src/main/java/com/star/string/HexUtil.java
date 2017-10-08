@@ -4,6 +4,8 @@ import com.star.collection.ArrayUtil;
 import com.star.exception.ToolException;
 import com.star.lang.Assert;
 
+import java.util.Objects;
+
 /**
  * 16进制转换
  * <p>
@@ -34,7 +36,7 @@ public final class HexUtil {
      * @return 十六进制char[]
      */
     public static char[] encode(final byte[] data, final boolean toLowerCase) {
-        return ArrayUtil.isEmpty(data) ? new char[0] : encode(data, toLowerCase ? DIGITS_LOWER : DIGITS_UPPER);
+        return encode(data, toLowerCase ? DIGITS_LOWER : DIGITS_UPPER);
     }
 
     /**
@@ -45,8 +47,7 @@ public final class HexUtil {
      * @return 十六进制char[]
      */
     public static String encodeToString(final byte[] data, final boolean toLowerCase) {
-        final char[] result = encode(data, toLowerCase);
-        return ArrayUtil.isEmpty(result) ? StringUtil.EMPTY : new String(result);
+        return encodeHexStr(data, toLowerCase ? DIGITS_UPPER : DIGITS_LOWER);
     }
 
     /**
@@ -86,6 +87,17 @@ public final class HexUtil {
     }
 
     /**
+     * 将字节数组转换为十六进制字符串
+     *
+     * @param data     byte[]
+     * @param toDigits 用于控制输出的char[]
+     * @return 十六进制String
+     */
+    private static String encodeHexStr(final byte[] data, final char... toDigits) {
+        return new String(encode(data, toDigits));
+    }
+
+    /**
      * 将字节数组转换为十六进制字符数组
      *
      * @param data     byte[]
@@ -93,13 +105,19 @@ public final class HexUtil {
      * @return 十六进制char[]
      */
     private static char[] encode(final byte[] data, final char... toDigits) {
-        final int len = data.length;
-        char[] out = new char[len << 1];
-        for (int i = 0,
-             j = 0; i < len; i++) {
-            out[j++] = toDigits[(0xF0 & data[i]) >>> 4];
-            out[j++] = toDigits[0x0F & data[i]];
+        final int len = Objects.isNull(data) ? 0 : data.length;
+        char[] out;
+        if (len == 0 || ArrayUtil.isEmpty(toDigits)) {
+            out = new char[0];
+        } else {
+            out = new char[len << 1];
+            for (int i = 0,
+                 j = 0; i < len; i++) {
+                out[j++] = toDigits[(0xF0 & data[i]) >>> 4];
+                out[j++] = toDigits[0x0F & data[i]];
+            }
         }
+
         return out;
     }
 
