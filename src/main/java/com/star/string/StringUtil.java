@@ -257,7 +257,8 @@ public final class StringUtil {
      * @return 是否后缀结尾
      */
     public static boolean endWith(final String str, final String suffix, final boolean isIgnoreCase) {
-        return !isBlank(str) && !isBlank(suffix) && str.regionMatches(isIgnoreCase, str.length() - suffix.length(), suffix, 0, suffix.length());
+        return !isBlank(str) && !isBlank(suffix) && str.regionMatches(isIgnoreCase, str.length() - suffix.length(),
+                suffix, 0, suffix.length());
     }
 
     /**
@@ -395,7 +396,8 @@ public final class StringUtil {
             result = EMPTY;
         } else {
             int start = fromIndex < 0 ? string.length() + fromIndex : fromIndex;
-            int end = toIndex < 0 ? string.length() + toIndex : toIndex == 0 && fromIndex < 0 ? string.length() : toIndex;
+            int end = toIndex < 0 ? string.length() + toIndex : toIndex == 0 && fromIndex < 0 ? string.length() :
+                    toIndex;
 
             if (end < start) {
                 start = start ^ end;
@@ -679,12 +681,13 @@ public final class StringUtil {
      * @param end       结尾符
      * @param delimiter 分隔符
      * @param charset   编码
-     * @param objs      需要拼接的对象
+     * @param objects   需要拼接的对象
      * @return 组装好的字符串
      */
-    public static String join(final String start, final String end, final String delimiter, final Charset charset, final Objects... objs) {
+    public static String join(final String start, final String end, final String delimiter, final Charset charset,
+                              final Object... objects) {
         final StringJoiner joiner = joiner(start, end, delimiter);
-        return getString(joiner, objs, charset);
+        return getString(joiner, objects, charset);
     }
 
     /**
@@ -693,16 +696,16 @@ public final class StringUtil {
      * @param start     开始符
      * @param end       结尾符
      * @param delimiter 分隔符
-     * @param objs      需要拼接的对象
+     * @param objects   需要拼接的对象
      * @return 组装好的字符串
      */
-    public static String join(final String start, final String end, final String delimiter, final Objects... objs) {
+    public static String join(final String start, final String end, final String delimiter, final Object... objects) {
         final StringJoiner joiner = joiner(start, end, delimiter);
-        return getString(joiner, objs, CharsetUtil.charset(CharsetUtil.UTF_8));
+        return getString(joiner, objects, CharsetUtil.charset(CharsetUtil.UTF_8));
     }
 
-    private static String getString(final StringJoiner joiner, final Objects[] objs, final Charset charset) {
-        for (final Object obj : objs) {
+    private static String getString(final StringJoiner joiner, final Object[] objects, final Charset charset) {
+        for (final Object obj : objects) {
             joiner.add(str(obj, charset));
         }
         return str(joiner, charset);
@@ -713,15 +716,16 @@ public final class StringUtil {
      * 按指定格式组装string
      *
      * @param delimiter 分隔符
-     * @param objs      需要拼接的对象
+     * @param objects   需要拼接的对象
      * @return 组装好的字符串
      */
-    public static String join(final String delimiter, final Objects... objs) {
-        return join(EMPTY, EMPTY, delimiter, objs);
+    public static String join(final String delimiter, final Objects... objects) {
+        return join(EMPTY, EMPTY, delimiter, objects);
     }
 
     private static StringJoiner joiner(final String start, final String end, final String delimiter) {
-        return new StringJoiner(defaultIfEmpty(delimiter, EMPTY), defaultIfEmpty(start, EMPTY), defaultIfEmpty(end, EMPTY));
+        return new StringJoiner(defaultIfEmpty(delimiter, EMPTY), defaultIfEmpty(start, EMPTY), defaultIfEmpty(end,
+                EMPTY));
     }
 
     /**

@@ -1,7 +1,7 @@
 package com.star.collection;
 
 import com.star.lang.Filter;
-import com.sun.xml.internal.ws.util.UtilException;
+import com.star.string.StringUtil;
 
 import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
@@ -16,6 +16,11 @@ import java.util.Objects;
  * Created by win7 on 2017/5/13.
  */
 public final class ArrayUtil {
+
+    /**
+     * 数组中元素未找到的下标，值为-1
+     */
+    public static final int INDEX_NOT_FOUND = -1;
 
     private ArrayUtil() {
     }
@@ -69,7 +74,7 @@ public final class ArrayUtil {
      * @return 增大后的数组
      */
     public static <T> T[] resize(final T[] buffer, final int newSize) {
-        return resize(buffer, newSize, buffer.getClass().getComponentType());
+        return resize(buffer, newSize, getComponentType(buffer));
     }
 
     /**
@@ -106,10 +111,8 @@ public final class ArrayUtil {
             }
             len += array.length;
         }
-        final T[] result = newArray(arrays.getClass().getComponentType().getComponentType(), len);
-
+        final T[] result = newArray(getComponentType(arrays).getComponentType(), len);
         len = 0;
-
         for (final T[] array : arrays) {
             if (isEmpty(array)) {
                 continue;
@@ -139,7 +142,7 @@ public final class ArrayUtil {
     }
 
     /**
-     * 获取元素在数组中的下标
+     * 获取元素在数组中首次出现的下标
      *
      * @param array 数组
      * @param value 需搜索的元素
@@ -148,9 +151,9 @@ public final class ArrayUtil {
      */
     public static <T> int indexOf(final T[] array, final Object value) {
         final int len = array.length;
-        int index = -1;
+        int index = INDEX_NOT_FOUND;
         for (int i = 0; i < len; i++) {
-            if (Objects.equals(value, array[len])) {
+            if (Objects.equals(value, array[i])) {
                 index = i;
                 break;
             }
@@ -159,54 +162,63 @@ public final class ArrayUtil {
     }
 
     /**
+     * 获取元素在数组中最后一次出现的下标
+     *
+     * @param array 数组
+     * @param value 需搜索的元素
+     * @param <T>   泛型
+     * @return 元素的位置
+     */
+    public static <T> int lastIndexOf(final T[] array, final Object value) {
+        final int len = array.length;
+        int index = INDEX_NOT_FOUND;
+        for (int i = len - 1; i >= 0; i++) {
+            if (Objects.equals(value, array[i])) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
+    /**
+     * 数组中是否包含指定元素
+     *
+     * @param array 数组
+     * @param value 元素
+     * @param <T>   泛型
+     * @return 是否包含
+     */
+    public static <T> boolean contains(final T[] array, final Object value) {
+        return indexOf(array, value) >= INDEX_NOT_FOUND;
+    }
+
+    /**
      * 判断对象是否为数组
      *
      * @param obj 需要判断的对象
      * @return 是否为数组
      */
-    public static boolean isArray(Object obj) {
-        return Objects.isNull(obj) && obj.getClass().isArray();
+    public static boolean isArray(final Object obj) {
+        return !Objects.isNull(obj) && obj.getClass().isArray();
     }
 
     /**
-     * 数组或集合转String
+     * 数组转字符串
      *
-     * @param obj 集合或数组对象
-     * @return 数组字符串，与集合转字符串格式相同
+     * @param obj 数组对象
+     * @return 字符串
      */
-    public static String toString(Object obj) {
-        if (null == obj) {
-            return null;
+    public static String toString(final Object obj) {
+        String str;
+        if (isArray(obj)) {
+            str = StringUtil.join(StringUtil.BRACE_START, StringUtil.BRACE_END, StringUtil.COMMA, (Object[]) obj);
+        } else {
+            str = obj.toString();
         }
-        if (ArrayUtil.isArray(obj)) {
-            try {
-                return Arrays.deepToString((Object[]) obj);
-            } catch (Exception e) {
-                final String className = obj.getClass().getComponentType().getName();
-                switch (className) {
-                    case "long":
-                        return Arrays.toString((long[]) obj);
-                    case "int":
-                        return Arrays.toString((int[]) obj);
-                    case "short":
-                        return Arrays.toString((short[]) obj);
-                    case "char":
-                        return Arrays.toString((char[]) obj);
-                    case "byte":
-                        return Arrays.toString((byte[]) obj);
-                    case "boolean":
-                        return Arrays.toString((boolean[]) obj);
-                    case "float":
-                        return Arrays.toString((float[]) obj);
-                    case "double":
-                        return Arrays.toString((double[]) obj);
-                    default:
-                        throw new UtilException(e);
-                }
-            }
-        }
-        return obj.toString();
+        return str;
     }
+
 
     /**
      * 获取数组的长度
@@ -226,15 +238,15 @@ public final class ArrayUtil {
      */
     public static byte[] toArray(final ByteBuffer byteBuffer) {
         if (byteBuffer.hasArray()) {
-            int oldPosition = byteBuffer.position();
+            return Arrays.copyOfRange(byteBuffer.array(), byteBuffer.position(), byteBuffer.limit());
+        } else {
+            final int oldPosition = byteBuffer.position();
             byteBuffer.position(0);
-            int size = byteBuffer.limit();
-            byte[] buffers = new byte[size];
+            final int size = byteBuffer.limit();
+            final byte[] buffers = new byte[size];
             byteBuffer.get(buffers);
             byteBuffer.position(oldPosition);
             return buffers;
-        } else {
-            return Arrays.copyOfRange(byteBuffer.array(), byteBuffer.position(), byteBuffer.limit());
         }
     }
 
@@ -262,16 +274,22 @@ public final class ArrayUtil {
         if (null == array) {
             return array;
         }
-        int length = length(array);
+        final int length = length(array);
         if (index < 0 || index >= length) {
             return array;
         }
 
-        final Object result = Array.newInstance(array.getClass().getComponentType(), length - 1);
+        final Object result = Array.newInstance(getComponentType(array), length - 1);
         System.arraycopy(array, 0, result, 0, index);
         if (index < length - 1) {
             System.arraycopy(array, index + 1, result, index, length - index - 1);
         }
         return result;
     }
+
+    private static Class<?> getComponentType(final Object obj) {
+        final Class<?> clazz = obj.getClass();
+        return clazz.getComponentType();
+    }
+
 }
