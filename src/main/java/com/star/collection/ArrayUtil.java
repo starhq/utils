@@ -271,18 +271,18 @@ public final class ArrayUtil {
      * @return 删除后的数组
      */
     public static Object remove(final Object array, final int index) {
-        if (null == array) {
-            return array;
-        }
-        final int length = length(array);
-        if (index < 0 || index >= length) {
-            return array;
-        }
-
-        final Object result = Array.newInstance(getComponentType(array), length - 1);
-        System.arraycopy(array, 0, result, 0, index);
-        if (index < length - 1) {
-            System.arraycopy(array, index + 1, result, index, length - index - 1);
+        Object result = null;
+        if (!Objects.isNull(array)) {
+            final int len = length(array);
+            if (index < 0 || index >= len) {
+                result = array;
+            } else {
+                result = newArray(getComponentType(array), len - 1);
+                System.arraycopy(array, 0, result, 0, index);
+                if (index < len - 1) {
+                    System.arraycopy(array, index + 1, result, index, len - index - 1);
+                }
+            }
         }
         return result;
     }
