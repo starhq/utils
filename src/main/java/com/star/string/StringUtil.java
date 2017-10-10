@@ -242,6 +242,17 @@ public final class StringUtil {
     }
 
     /**
+     * 字符串是否以前缀开头
+     *
+     * @param str    字符串
+     * @param prefix 前缀
+     * @return 是否前缀开头
+     */
+    public static boolean startWith(final String str, final String prefix) {
+        return !isBlank(str) && !isBlank(prefix) && str.regionMatches(true, 0, prefix, 0, prefix.length());
+    }
+
+    /**
      * 字符串是否以后缀结尾
      *
      * @param str          字符串
@@ -255,6 +266,18 @@ public final class StringUtil {
     }
 
     /**
+     * 字符串是否以后缀结尾
+     *
+     * @param str    字符串
+     * @param suffix 后缀
+     * @return 是否后缀结尾
+     */
+    public static boolean endWith(final String str, final String suffix) {
+        return !isBlank(str) && !isBlank(suffix) && str.regionMatches(true, str.length() - suffix.length(),
+                suffix, 0, suffix.length());
+    }
+
+    /**
      * 大小写首字母
      *
      * @param str   给定字符串
@@ -262,8 +285,7 @@ public final class StringUtil {
      * @return 修改后的字符串
      */
     public static String upperOrLowerFirst(final String str, final boolean upper) {
-        return isBlank(str) ? EMPTY : upper ? Character.toUpperCase(str.charAt(0)) + str.substring(1)
-                : Character.toLowerCase(str.charAt(0)) + str.substring(1);
+        return isBlank(str) ? EMPTY : toUpperOrLowwer(str.charAt(0), upper) + sub(str, 1);
     }
 
     /**
@@ -475,6 +497,28 @@ public final class StringUtil {
     }
 
     /**
+     * 重复某个字符
+     *
+     * @param cha   被重复的字符
+     * @param count 重复的数目，如果小于等于0则返回""
+     * @return 重复字符字符串
+     */
+    public static String repeat(final char cha, final int count) {
+        String str;
+        if (count <= 0) {
+            str = EMPTY;
+        } else {
+            char[] result = new char[count];
+            for (int i = 0; i < count; i++) {
+                result[i] = cha;
+            }
+            str = new String(result);
+        }
+        return str;
+    }
+
+
+    /**
      * java命名改成带下划线的命名方式
      * <p>
      * HelloWorld-&gt;hello_world
@@ -531,10 +575,15 @@ public final class StringUtil {
         return result;
     }
 
-    private static char toUpperOrLowwer(final char temp, final boolean upper) {
-        return upper ? Character.toUpperCase(temp) : Character.toLowerCase(temp);
+    /**
+     * 编码字符串
+     *
+     * @param str 字符串
+     * @return 编码后的字节码
+     */
+    public static byte[] bytes(final String str) {
+        return bytes(str, CharsetUtil.UTF_8);
     }
-
 
     /**
      * 编码字符串
@@ -556,15 +605,18 @@ public final class StringUtil {
      * @return 编码后的字节码
      */
     public static byte[] bytes(final String str, final Charset charset) {
-        byte[] bytes;
-        if (isBlank(str)) {
-            bytes = new byte[0];
-        } else {
-            bytes = Objects.isNull(charset) ? str.getBytes() : str.getBytes(charset);
-        }
-        return bytes;
+        return isEmpty(str) ? new byte[0] : Objects.isNull(charset) ? str.getBytes() : str.getBytes(charset);
     }
 
+    /**
+     * 对象转字符串
+     *
+     * @param obj 对象
+     * @return 字符串
+     */
+    public static String str(final Object obj) {
+        return str(obj, CharsetUtil.UTF_8);
+    }
 
     /**
      * 对象转字符串
@@ -603,23 +655,45 @@ public final class StringUtil {
     }
 
     /**
-     * byte转string
+     * 字节数组转字符串
+     *
+     * @param data 字节数组
+     * @return 字符串
+     */
+    public static String str(final byte[] data) {
+        return str(data, CharsetUtil.UTF_8);
+    }
+
+    /**
+     * 字节数组转字符串
+     *
+     * @param data    字节数组
+     * @param charset 编码
+     * @return 字符串
      */
     public static String str(final byte[] data, final String charset) {
         return str(data, CharsetUtil.charset(charset));
     }
 
     /**
-     * byte转string
+     * 字节数组转字符串
+     *
+     * @param data    字节数组
+     * @param charset 编码
+     * @return 字符串
      */
     public static String str(final byte[] data, final Charset charset) {
-        String result;
-        if (ArrayUtil.isEmpty(data)) {
-            result = EMPTY;
-        } else {
-            result = Objects.isNull(charset) ? new String(data) : new String(data, charset);
-        }
-        return result;
+        return ArrayUtil.isEmpty(data) ? EMPTY : Objects.isNull(charset) ? new String(data) : new String(data, charset);
+    }
+
+    /**
+     * 将编码的byteBuffer数据转换为字符串
+     *
+     * @param data 数据
+     * @return 字符串
+     */
+    public static String str(final ByteBuffer data) {
+        return str(data, CharsetUtil.UTF_8);
     }
 
     /**
@@ -641,13 +715,7 @@ public final class StringUtil {
      * @return 字符串
      */
     public static String str(final ByteBuffer data, final Charset charset) {
-        String result;
-        if (Objects.isNull(data)) {
-            result = EMPTY;
-        } else {
-            result = CharsetUtil.charset(charset).decode(data).toString();
-        }
-        return result;
+        return Objects.isNull(data) ? EMPTY : CharsetUtil.charset(charset).decode(data).toString();
     }
 
     /**
@@ -691,13 +759,6 @@ public final class StringUtil {
         return getString(joiner, objects, CharsetUtil.charset(CharsetUtil.UTF_8));
     }
 
-    private static String getString(final StringJoiner joiner, final Object[] objects, final Charset charset) {
-        for (final Object obj : objects) {
-            joiner.add(str(obj, charset));
-        }
-        return str(joiner, charset);
-    }
-
 
     /**
      * 按指定格式组装string
@@ -710,10 +771,6 @@ public final class StringUtil {
         return join(EMPTY, EMPTY, delimiter, objects);
     }
 
-    private static StringJoiner joiner(final String start, final String end, final String delimiter) {
-        return new StringJoiner(defaultIfEmpty(delimiter, EMPTY), defaultIfEmpty(start, EMPTY), defaultIfEmpty(end,
-                EMPTY));
-    }
 
     /**
      * 创建StringBuilder对象
@@ -741,8 +798,8 @@ public final class StringUtil {
      */
     public static StringBuilder builder(final String... strings) {
         final StringBuilder builder = builder();
-        for (int i = 0; i < strings.length; i++) {
-            builder.append(strings[i]);
+        for (final String string : strings) {
+            builder.append(string);
         }
         return builder;
     }
@@ -767,4 +824,29 @@ public final class StringUtil {
         return new StringWriter();
     }
 
+    /**
+     * 反转字符串
+     *
+     * @param str 需要反转的字符串
+     * @return 反转后的字符串
+     */
+    public static String reverse(final String str) {
+        return isEmpty(str) ? EMPTY : builder(str).reverse().toString();
+    }
+
+    private static char toUpperOrLowwer(final char temp, final boolean upper) {
+        return upper ? Character.toUpperCase(temp) : Character.toLowerCase(temp);
+    }
+
+    private static String getString(final StringJoiner joiner, final Object[] objects, final Charset charset) {
+        for (final Object obj : objects) {
+            joiner.add(str(obj, charset));
+        }
+        return str(joiner, charset);
+    }
+
+    private static StringJoiner joiner(final String start, final String end, final String delimiter) {
+        return new StringJoiner(defaultIfEmpty(delimiter, EMPTY), defaultIfEmpty(start, EMPTY), defaultIfEmpty(end,
+                EMPTY));
+    }
 }
