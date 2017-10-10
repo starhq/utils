@@ -199,8 +199,6 @@ public final class StringUtil {
     private StringUtil() {
     }
 
-    //+++++++++++++++++++empty and blank++++++++++++++++++++++++++++++
-
     /**
      * 判断字符串是否为空白
      *
@@ -230,11 +228,6 @@ public final class StringUtil {
     public static boolean isEmpty(final CharSequence sequence) {
         return Objects.isNull(sequence) || sequence.length() == 0;
     }
-
-    //+++++++++++++++++++empty and blank++++++++++++++++++++++++++++++
-
-
-    //++++++++++++++++++++prefix & suffix++++++++++++++++++++++++
 
     /**
      * 字符串是否以前缀开头
@@ -294,8 +287,6 @@ public final class StringUtil {
     public static String removeSuffix(final String str, final String suffix, final boolean isIgnorCase) {
         return endWith(str, suffix, isIgnorCase) ? sub(str, str.length() - suffix.length(), str.length()) : str;
     }
-    //++++++++++++++++++++prefix & suffix++++++++++++++++++++++++
-
 
     /**
      * 如果str为空，用默认值defaultstr来替代
@@ -307,10 +298,6 @@ public final class StringUtil {
     public static String defaultIfEmpty(final String str, final String defaultStr) {
         return isEmpty(str) ? defaultStr : str;
     }
-    //++++++++++++++++++++prefix & suffix++++++++++++++++++++++++
-
-
-    //    +++++++++++++++++++++++++split+++++++++++++++++++++++++++++++
 
     /**
      * 切分字符串的plus版本
