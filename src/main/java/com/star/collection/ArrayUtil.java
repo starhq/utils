@@ -13,7 +13,7 @@ import java.util.Objects;
 /**
  * 数组工具类
  * <p>
- * Created by win7 on 2017/5/13.
+ * Created by starhq on 2017/5/13.
  */
 public final class ArrayUtil {
 
@@ -23,6 +23,16 @@ public final class ArrayUtil {
     public static final int INDEX_NOT_FOUND = -1;
 
     private ArrayUtil() {
+    }
+
+    /**
+     * 数组是否为空
+     *
+     * @param obj 需要判断的数组
+     * @return 是否为数组
+     */
+    public static boolean isEmpty(final Object obj) {
+        return Objects.isNull(obj) || (isArray(obj) && 0 == length(obj));
     }
 
     /**
@@ -59,7 +69,7 @@ public final class ArrayUtil {
      */
     public static <T> T[] resize(final T[] buffer, final int newSize, final Class<?> componentType) {
         final T[] newArray = newArray(componentType, newSize);
-        if (isEmpty(buffer)) {
+        if (!isEmpty(buffer)) {
             System.arraycopy(buffer, 0, newArray, 0, Math.min(newSize, buffer.length));
         }
         return newArray;
@@ -172,7 +182,7 @@ public final class ArrayUtil {
     public static <T> int lastIndexOf(final T[] array, final Object value) {
         final int len = array.length;
         int index = INDEX_NOT_FOUND;
-        for (int i = len - 1; i >= 0; i++) {
+        for (int i = len - 1; i >= 0; i--) {
             if (Objects.equals(value, array[i])) {
                 index = i;
                 break;
@@ -190,7 +200,7 @@ public final class ArrayUtil {
      * @return 是否包含
      */
     public static <T> boolean contains(final T[] array, final Object value) {
-        return indexOf(array, value) >= INDEX_NOT_FOUND;
+        return indexOf(array, value) > INDEX_NOT_FOUND;
     }
 
     /**
@@ -287,6 +297,12 @@ public final class ArrayUtil {
         return result;
     }
 
+    /**
+     * 获取对象的componentType
+     *
+     * @param obj 对象
+     * @return componentType
+     */
     private static Class<?> getComponentType(final Object obj) {
         final Class<?> clazz = obj.getClass();
         return clazz.getComponentType();
