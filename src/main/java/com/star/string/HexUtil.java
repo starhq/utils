@@ -2,14 +2,13 @@ package com.star.string;
 
 import com.star.collection.ArrayUtil;
 import com.star.exception.ToolException;
-import com.star.lang.Assert;
 
 import java.util.Objects;
 
 /**
  * 16进制转换
  * <p>
- * Created by win7 on 2017/5/28.
+ * Created by starhq on 2017/5/28.
  */
 public final class HexUtil {
 
@@ -31,12 +30,32 @@ public final class HexUtil {
     /**
      * 将字节数组转换为十六进制字符数组
      *
+     * @param data byte[]
+     * @return 十六进制char[]
+     */
+    public static char[] encode(final byte[] data) {
+        return encode(data, true);
+    }
+
+    /**
+     * 将字节数组转换为十六进制字符数组
+     *
      * @param data        byte[]
      * @param toLowerCase 是否转换大小写
      * @return 十六进制char[]
      */
     public static char[] encode(final byte[] data, final boolean toLowerCase) {
         return encode(data, toLowerCase ? DIGITS_LOWER : DIGITS_UPPER);
+    }
+
+    /**
+     * 将字节数组转换为十六进制字符串
+     *
+     * @param data byte[]
+     * @return 十六进制char[]
+     */
+    public static String encodeToString(final byte[] data) {
+        return encodeToString(data, true);
     }
 
     /**
@@ -57,7 +76,7 @@ public final class HexUtil {
      * @return 字节数组
      */
     public static byte[] decode(final String hex) {
-        return StringUtil.isBlank(hex) ? new byte[0] : decode(hex.toCharArray());
+        return Objects.isNull(hex) ? new byte[0] : decode(hex.toCharArray());
     }
 
     /**
@@ -68,7 +87,9 @@ public final class HexUtil {
      */
     public static byte[] decode(final char... data) {
         final int len = ArrayUtil.isEmpty(data) ? 0 : data.length;
-        Assert.isTrue((len & 0x01) == 0, "Odd number of characters.");
+        if ((len & 0x01) != 0) {
+            throw new ToolException("Odd number of characters.");
+        }
         byte[] out;
         if (len > 0) {
             out = new byte[len >> 1];
