@@ -1,7 +1,7 @@
 package com.star.collection;
 
+import com.star.exception.ToolException;
 import com.star.lang.Filter;
-import com.star.string.StringUtil;
 
 import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
@@ -222,7 +222,40 @@ public final class ArrayUtil {
     public static String toString(final Object obj) {
         String str;
         if (isArray(obj)) {
-            str = StringUtil.join(StringUtil.BRACE_START, StringUtil.BRACE_END, StringUtil.COMMA, (Object[]) obj);
+            try {
+                str = Arrays.deepToString((Object[]) obj);
+            } catch (ClassCastException e) {
+                final String className = obj.getClass().getComponentType().getName();
+                switch (className) {
+                    case "long":
+                        str = Arrays.toString((long[]) obj);
+                        break;
+                    case "int":
+                        str = Arrays.toString((int[]) obj);
+                        break;
+                    case "short":
+                        str = Arrays.toString((short[]) obj);
+                        break;
+                    case "char":
+                        str = Arrays.toString((char[]) obj);
+                        break;
+                    case "byte":
+                        str = Arrays.toString((byte[]) obj);
+                        break;
+                    case "boolean":
+                        str = Arrays.toString((boolean[]) obj);
+                        break;
+                    case "float":
+                        str = Arrays.toString((float[]) obj);
+                        break;
+                    case "double":
+                        str = Arrays.toString((double[]) obj);
+                        break;
+                    default:
+                        throw new ToolException(e.getMessage(), e);
+                }
+
+            }
         } else {
             str = obj.toString();
         }

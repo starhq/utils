@@ -14,8 +14,8 @@ public class ArrayUtilTest {
 
     @Test
     public void testTrimBySubstring() {
-        int[] ints = {1, 2, 3, 4};
-        System.out.println(ArrayUtil.toString(ints));
+        String[] strs = {"1", "2", "3"};
+        System.out.println(ArrayUtil.toString(strs));
 
 
 //        Nano.bench().measurements(measurements).threads(threads).measure("hex new version", () -> {
