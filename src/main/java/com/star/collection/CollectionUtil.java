@@ -2,17 +2,24 @@ package com.star.collection;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * 集合工具类
  */
 public final class CollectionUtil {
+
+    /**
+     * 默认增长因子，当Map的size达到 容量*增长因子时，开始扩充Map
+     */
+    public static final float DEFAULT_LOAD_FACTOR = 0.75f;
 
     private CollectionUtil() {
     }
@@ -58,6 +65,43 @@ public final class CollectionUtil {
     }
 
     /**
+     * 创建新的HashMap
+     *
+     * @param <K> 泛型 键
+     * @param <V> 泛型 值
+     * @return HashMap
+     */
+    public static <K, V> HashMap<K, V> newHashMap() {
+        return new HashMap<>();
+    }
+
+    /**
+     * 创建新的HashMap
+     *
+     * @param size HashMap大小
+     * @param <K>  泛型 键
+     * @param <V>  泛型 值
+     * @return HashMap
+     */
+    public static <K, V> HashMap<K, V> newHashMap(final int size) {
+        return newHashMap(size, false);
+    }
+
+    /**
+     * 创建新的HashMap
+     *
+     * @param size     HashMap大小
+     * @param isSorted 是否排序，排序会返回LinkedHashMap
+     * @param <K>      泛型 键
+     * @param <V>      泛型 值
+     * @return HashMap
+     */
+    public static <K, V> HashMap<K, V> newHashMap(final int size, final boolean isSorted) {
+        final int capacity = (int) (size / DEFAULT_LOAD_FACTOR);
+        return isSorted ? new LinkedHashMap<>(capacity) : new HashMap<>(capacity);
+    }
+
+    /**
      * 可变参数包装成HashSet
      *
      * @param instances 需要包装的参数
@@ -76,12 +120,13 @@ public final class CollectionUtil {
      * @param <T>       范型
      * @return HashSet
      */
+    @SafeVarargs
     public static <T> HashSet<T> newHashSet(final boolean isSorted, final T... instances) {
         HashSet<T> result;
         if (ArrayUtil.isEmpty(instances)) {
             result = isSorted ? new LinkedHashSet<>() : new HashSet<>();
         } else {
-            final int capacity = Math.max((int) (instances.length / .75f) + 1, 16);
+            final int capacity = Math.max((int) (instances.length / DEFAULT_LOAD_FACTOR) + 1, 16);
             result = isSorted ? new LinkedHashSet<>(capacity) : new HashSet<>(capacity);
             for (final T instance : instances) {
                 result.add(instance);
@@ -104,6 +149,18 @@ public final class CollectionUtil {
     /**
      * 集合包装成HashSet
      *
+     * @param isSorted   是否需要排序
+     * @param collection 需要包装的集合
+     * @param <T>        范型
+     * @return HashSet
+     */
+    public static <T> HashSet<T> newHashSet(final boolean isSorted, final Collection<T> collection) {
+        return isSorted ? new LinkedHashSet<>(collection) : new HashSet<>(collection);
+    }
+
+    /**
+     * 集合包装成HashSet
+     *
      * @param isSorted 是否需要排序
      * @param iterator 迭代器
      * @param <T>      范型
@@ -117,18 +174,6 @@ public final class CollectionUtil {
         return result;
     }
 
-    /**
-     * 集合包装成HashSet
-     *
-     * @param isSorted   是否需要排序
-     * @param collection 需要包装的集合
-     * @param <T>        范型
-     * @return HashSet
-     */
-    public static <T> HashSet<T> newHashSet(final boolean isSorted, final Collection<T> collection) {
-        return isSorted ? new LinkedHashSet<>(collection) : new HashSet<>(collection);
-    }
-
 
     /**
      * 可变参数包装成ArrayList
@@ -137,6 +182,7 @@ public final class CollectionUtil {
      * @param values 数组
      * @return ArrayList
      */
+    @SafeVarargs
     public static <T> ArrayList<T> newArrayList(final T... values) {
         ArrayList<T> arrayList;
         if (ArrayUtil.isEmpty(values)) {
@@ -169,7 +215,7 @@ public final class CollectionUtil {
      * @return ArrayList
      */
     public static <T> ArrayList<T> newArrayList(final Iterable<T> iterable) {
-        return Objects.isNull(iterable) ? new ArrayList<>() : newArrayList(iterable.iterator());
+        return isEmpty(iterable) ? new ArrayList<>() : newArrayList(iterable.iterator());
     }
 
     /**
@@ -181,7 +227,7 @@ public final class CollectionUtil {
      */
     public static <T> ArrayList<T> newArrayList(final Iterator<T> iterator) {
         ArrayList<T> arrayList;
-        if (Objects.isNull(iterator)) {
+        if (isEmpty(iterator)) {
             arrayList = new ArrayList<>();
         } else {
             arrayList = new ArrayList<>();
@@ -201,5 +247,17 @@ public final class CollectionUtil {
      */
     public static <T> CopyOnWriteArrayList<T> newCopyOnWriteArrayList(final Collection<T> collection) {
         return isEmpty(collection) ? new CopyOnWriteArrayList<>() : new CopyOnWriteArrayList<>(collection);
+    }
+
+    /**
+     * 集合去重
+     *
+     * @param collection 集合
+     * @param <T>        泛型
+     * @return AArrayList
+     */
+    public static <T> ArrayList<T> distinct(final Collection<T> collection) {
+        return isEmpty(collection) ? new ArrayList<>() : collection instanceof Set ? new ArrayList<>(collection) : new
+                ArrayList<>(new LinkedHashSet<>(collection));
     }
 }
