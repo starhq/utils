@@ -1,4 +1,4 @@
-package com.star.collection;
+package com.star.collection.map;
 
 import com.star.lang.Filter;
 import com.star.object.ObjectUtil;
@@ -144,5 +144,39 @@ public final class MapUtil {
             }
         }
         return result;
+    }
+
+    /**
+     * 创建链接调用map
+     *
+     * @param <K> 泛型 键
+     * @param <V> 泛型 值
+     * @return map创建类
+     */
+    public static <K, V> MapBuilder<K, V> builder() {
+        return builder(newHashMap());
+    }
+
+    /**
+     * 创建链接调用map
+     *
+     * @param <K> 泛型 键
+     * @param <V> 泛型 值
+     * @param map 实际使用的map
+     * @return map创建类
+     */
+    public static <K, V> MapBuilder<K, V> builder(final Map<K, V> map) {
+        return new MapBuilder<>(map);
+    }
+
+    /**
+     * 创建链接调用map
+     *
+     * @param <K> 泛型 键
+     * @param <V> 泛型 值
+     * @return map创建类
+     */
+    public static <K, V> MapBuilder<K, V> builder(final K key, final V value) {
+        return builder(new HashMap<K, V>()).put(key, value);
     }
 }
