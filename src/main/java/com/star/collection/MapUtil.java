@@ -3,6 +3,7 @@ package com.star.collection;
 import com.star.lang.Filter;
 import com.star.object.ObjectUtil;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -119,8 +120,8 @@ public final class MapUtil {
      * @param <V> 泛型 值
      * @return TreeMap
      */
-    public static <K, V> TreeMap<K, V> newTreeMap() {
-        return new TreeMap<>();
+    public static <K, V> TreeMap<K, V> newTreeMap(final Comparator<K> comparator) {
+        return Objects.isNull(comparator) ? new TreeMap<>() : new TreeMap<>(comparator);
     }
 
     /**
