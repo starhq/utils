@@ -2,10 +2,8 @@ package com.star.collection;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -64,42 +62,6 @@ public final class CollectionUtil {
         return iterable == null || isEmpty(iterable.iterator());
     }
 
-    /**
-     * 创建新的HashMap
-     *
-     * @param <K> 泛型 键
-     * @param <V> 泛型 值
-     * @return HashMap
-     */
-    public static <K, V> HashMap<K, V> newHashMap() {
-        return new HashMap<>();
-    }
-
-    /**
-     * 创建新的HashMap
-     *
-     * @param size HashMap大小
-     * @param <K>  泛型 键
-     * @param <V>  泛型 值
-     * @return HashMap
-     */
-    public static <K, V> HashMap<K, V> newHashMap(final int size) {
-        return newHashMap(size, false);
-    }
-
-    /**
-     * 创建新的HashMap
-     *
-     * @param size     HashMap大小
-     * @param isSorted 是否排序，排序会返回LinkedHashMap
-     * @param <K>      泛型 键
-     * @param <V>      泛型 值
-     * @return HashMap
-     */
-    public static <K, V> HashMap<K, V> newHashMap(final int size, final boolean isSorted) {
-        final int capacity = (int) (size / DEFAULT_LOAD_FACTOR);
-        return isSorted ? new LinkedHashMap<>(capacity) : new HashMap<>(capacity);
-    }
 
     /**
      * 可变参数包装成HashSet
