@@ -1,11 +1,12 @@
 package com.star.collection;
 
+import com.star.collection.iter.IterUtil;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -30,36 +31,6 @@ public final class CollectionUtil {
      */
     public static boolean isEmpty(final Collection<?> collection) {
         return collection == null || collection.isEmpty();
-    }
-
-    /**
-     * map是否为空
-     *
-     * @param map map对象
-     * @return 是否为空
-     */
-    public static boolean isEmpty(final Map<?, ?> map) {
-        return map == null || map.isEmpty();
-    }
-
-    /**
-     * 迭代器是否为空
-     *
-     * @param iterator 迭代器
-     * @return 是否为空
-     */
-    public static boolean isEmpty(final Iterator<?> iterator) {
-        return iterator == null || iterator.hasNext();
-    }
-
-    /**
-     * iterable是否为空
-     *
-     * @param iterable iterable对象
-     * @return 是否为空
-     */
-    public static boolean isEmpty(final Iterable<?> iterable) {
-        return iterable == null || isEmpty(iterable.iterator());
     }
 
 
@@ -177,7 +148,7 @@ public final class CollectionUtil {
      * @return ArrayList
      */
     public static <T> ArrayList<T> newArrayList(final Iterable<T> iterable) {
-        return isEmpty(iterable) ? new ArrayList<>() : newArrayList(iterable.iterator());
+        return IterUtil.isEmpty(iterable) ? new ArrayList<>() : newArrayList(iterable.iterator());
     }
 
     /**
@@ -189,7 +160,7 @@ public final class CollectionUtil {
      */
     public static <T> ArrayList<T> newArrayList(final Iterator<T> iterator) {
         ArrayList<T> arrayList;
-        if (isEmpty(iterator)) {
+        if (IterUtil.isEmpty(iterator)) {
             arrayList = new ArrayList<>();
         } else {
             arrayList = new ArrayList<>();

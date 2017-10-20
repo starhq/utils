@@ -845,7 +845,15 @@ public final class StringUtil {
         return str(joiner, charset);
     }
 
-    private static StringJoiner joiner(final String start, final String end, final String delimiter) {
+    /**
+     * 根据开始符，结束符，分隔符来生成StringJoiner
+     *
+     * @param start     开始符
+     * @param end       结束符
+     * @param delimiter 分隔符
+     * @return StringJoiner
+     */
+    public static StringJoiner joiner(final String start, final String end, final String delimiter) {
         return new StringJoiner(defaultIfEmpty(delimiter, EMPTY), defaultIfEmpty(start, EMPTY), defaultIfEmpty(end,
                 EMPTY));
     }
