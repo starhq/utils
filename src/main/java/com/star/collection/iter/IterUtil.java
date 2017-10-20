@@ -85,16 +85,18 @@ public final class IterUtil {
      * @param <T>       泛型
      * @return 封装好的字符串
      */
-    public static <T> Optional<String> join(final Iterator<T> iterator, final String delimiter) {
-        Optional<String> result = Optional.empty();
-        if (!isEmpty(iterator)) {
+    public static <T> String join(final Iterator<T> iterator, final String delimiter) {
+        String result;
+        if (isEmpty(iterator)) {
+            result = StringUtil.EMPTY;
+        } else {
             final StringJoiner joiner = StringUtil.joiner(StringUtil.EMPTY, StringUtil.EMPTY, delimiter);
-            T instance;
+            Object obj;
             while (iterator.hasNext()) {
-                instance = iterator.next();
-                joiner.add(StringUtil.str(instance));
+                obj = iterator.next();
+                joiner.add(StringUtil.str(obj));
             }
-            result = Optional.of(joiner.toString());
+            result = joiner.toString();
         }
         return result;
     }
@@ -107,8 +109,8 @@ public final class IterUtil {
      * @param <T>       泛型
      * @return 封装好的字符串
      */
-    public static <T> Optional<String> join(final Iterable<T> iterable, final String delimiter) {
-        return Objects.isNull(iterable) ? Optional.empty() : join(iterable.iterator(), delimiter);
+    public static <T> String join(final Iterable<T> iterable, final String delimiter) {
+        return Objects.isNull(iterable) ? StringUtil.EMPTY : join(iterable.iterator(), delimiter);
     }
 
     /**
