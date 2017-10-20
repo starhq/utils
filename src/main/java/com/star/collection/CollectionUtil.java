@@ -1,14 +1,9 @@
 package com.star.collection;
 
-import com.star.collection.iter.IterUtil;
-
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * 集合工具类
@@ -108,89 +103,4 @@ public final class CollectionUtil {
     }
 
 
-    /**
-     * 可变参数包装成ArrayList
-     *
-     * @param <T>    集合元素类型
-     * @param values 数组
-     * @return ArrayList
-     */
-    @SafeVarargs
-    public static <T> ArrayList<T> newArrayList(final T... values) {
-        ArrayList<T> arrayList;
-        if (ArrayUtil.isEmpty(values)) {
-            arrayList = new ArrayList<>();
-        } else {
-            arrayList = new ArrayList<>(values.length);
-            for (final T value : values) {
-                arrayList.add(value);
-            }
-        }
-        return arrayList;
-    }
-
-    /**
-     * 集合包装成ArrayList
-     *
-     * @param collection 集合
-     * @param <T>        范型
-     * @return ArrayList
-     */
-    public static <T> ArrayList<T> newArrayList(final Collection<T> collection) {
-        return isEmpty(collection) ? new ArrayList<>() : new ArrayList<>(collection);
-    }
-
-    /**
-     * iterable包装成ArrayList
-     *
-     * @param iterable 迭代器
-     * @param <T>      范型
-     * @return ArrayList
-     */
-    public static <T> ArrayList<T> newArrayList(final Iterable<T> iterable) {
-        return IterUtil.isEmpty(iterable) ? new ArrayList<>() : newArrayList(iterable.iterator());
-    }
-
-    /**
-     * iterator包装成ArrayList
-     *
-     * @param iterator 迭代器
-     * @param <T>      范型
-     * @return ArrayList
-     */
-    public static <T> ArrayList<T> newArrayList(final Iterator<T> iterator) {
-        ArrayList<T> arrayList;
-        if (IterUtil.isEmpty(iterator)) {
-            arrayList = new ArrayList<>();
-        } else {
-            arrayList = new ArrayList<>();
-            while (iterator.hasNext()) {
-                arrayList.add(iterator.next());
-            }
-        }
-        return arrayList;
-    }
-
-    /**
-     * 将集合包装成CopyOnWriteArrayList
-     *
-     * @param collection 集合
-     * @param <T>        泛型
-     * @return CopyOnWriteArrayList
-     */
-    public static <T> CopyOnWriteArrayList<T> newCopyOnWriteArrayList(final Collection<T> collection) {
-        return isEmpty(collection) ? new CopyOnWriteArrayList<>() : new CopyOnWriteArrayList<>(collection);
-    }
-
-    /**
-     * 集合去重
-     *
-     * @param collection 集合
-     * @param <T>        泛型
-     * @return AArrayList
-     */
-    public static <T> ArrayList<T> distinct(final Collection<T> collection) {
-        return isEmpty(collection) ? new ArrayList<>() : collection instanceof Set ? new ArrayList<>(collection) : new
-                ArrayList<>(new LinkedHashSet<>(collection));
-    }
 }
