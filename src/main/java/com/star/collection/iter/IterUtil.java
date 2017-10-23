@@ -28,7 +28,7 @@ public final class IterUtil {
      * @return 是否为空
      */
     public static boolean isEmpty(final Iterator<?> iterator) {
-        return Objects.isNull(iterator) || iterator.hasNext();
+        return Objects.isNull(iterator) || !iterator.hasNext();
     }
 
     /**

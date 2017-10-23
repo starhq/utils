@@ -30,8 +30,7 @@ public final class ListUtil {
      * @param values 数组
      * @return ArrayList
      */
-    @SafeVarargs
-    public static <T> ArrayList<T> newArrayList(final T... values) {
+    public static <T> ArrayList<T> newArrayList(final T[] values) {
         ArrayList<T> arrayList;
         if (ArrayUtil.isEmpty(values)) {
             arrayList = new ArrayList<>();

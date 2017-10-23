@@ -1,5 +1,6 @@
 package com.star.collection;
 
+import com.star.collection.list.ListUtil;
 import com.star.exception.ToolException;
 import com.star.lang.Filter;
 
@@ -142,7 +143,7 @@ public final class ArrayUtil {
      * @return 过滤后的数组
      */
     public static <T> T[] filter(final T[] array, final Filter<T> filter) {
-        final List<T> list = CollectionUtil.newArrayList(array);
+        final List<T> list = ListUtil.newArrayList(array);
         for (final T instance : array) {
             if (filter.accept(instance)) {
                 list.add(instance);

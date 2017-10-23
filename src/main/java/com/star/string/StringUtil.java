@@ -754,7 +754,7 @@ public final class StringUtil {
      * @param objects   需要拼接的对象
      * @return 组装好的字符串
      */
-    public static String join(final String start, final String end, final String delimiter, final Object... objects) {
+    public static String join(final String start, final String end, final String delimiter, final Object[] objects) {
         final StringJoiner joiner = joiner(start, end, delimiter);
         return getString(joiner, objects, CharsetUtil.charset(CharsetUtil.UTF_8));
     }
@@ -767,7 +767,7 @@ public final class StringUtil {
      * @param objects   需要拼接的对象
      * @return 组装好的字符串
      */
-    public static String join(final String delimiter, final Objects... objects) {
+    public static String join(final String delimiter, final Objects[] objects) {
         return join(EMPTY, EMPTY, delimiter, objects);
     }
 
