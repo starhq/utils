@@ -2,6 +2,8 @@ package com.star.collection;
 
 import com.star.collection.iter.IterUtil;
 import com.star.collection.set.SetUtil;
+import com.star.lang.Filter;
+import com.star.object.ObjectUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -171,11 +173,31 @@ public final class CollectionUtil {
      * @return 差集
      */
     public static <T> Collection<T> disjunction(final Collection<T> collection1, final Collection<T> collection2, final
-    Collection<T>... collections) {
+    Collection<T>[] collections) {
         Collection<T> disjunction = disjunction(collection1, collection2);
         for (final Collection<T> collection : collections) {
             disjunction = union(disjunction, collection);
         }
         return disjunction;
+    }
+
+    /**
+     * 过滤集合
+     *
+     * @param collection 集合
+     * @param filter     过滤器
+     * @param <T>        泛型
+     * @return 集合
+     */
+    public static <T> Collection<T> filter(final Collection<T> collection, final Filter<T> filter) {
+        final Collection<T> result = ObjectUtil.clone(collection);
+        result.clear();
+
+        for (final T instance : collection) {
+            if (filter.accept(instance)) {
+                result.add(instance);
+            }
+        }
+        return result;
     }
 }

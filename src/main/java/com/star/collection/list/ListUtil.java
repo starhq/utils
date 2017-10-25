@@ -3,6 +3,7 @@ package com.star.collection.list;
 import com.star.collection.ArrayUtil;
 import com.star.collection.CollectionUtil;
 import com.star.collection.iter.IterUtil;
+import com.star.lang.ItemsProcessor;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -121,7 +122,35 @@ public final class ListUtil {
      * @param <T>      泛型
      * @return ArrayList
      */
-    public static <T> ArrayList<T> newArrayList(int capacity) {
+    public static <T> ArrayList<T> newArrayList(final int capacity) {
         return new ArrayList<>(capacity);
     }
+
+    /**
+     * 切割集合并进行处理
+     *
+     * @param collection 集合
+     * @param size       按size大小切分
+     * @param processors 处理器
+     * @param <T>        输入泛型
+     * @param <R>        输出泛型
+     * @return 按输出泛型定义返回
+     */
+    public static <T, R> R split(final Collection<T> collection, final int size, final ItemsProcessor<T, R>
+            processors) {
+        ArrayList<T> subList = newArrayList(size);
+        for (final T instance : collection) {
+            if (subList.size() > size) {
+                processors.process(subList);
+                subList = newArrayList(size);
+            }
+            subList.add(instance);
+        }
+        if (!CollectionUtil.isEmpty(subList)) {
+            processors.process(subList);
+        }
+        return null;
+    }
+
+
 }
