@@ -5,9 +5,11 @@ import com.star.collection.set.SetUtil;
 import com.star.lang.Editor;
 import com.star.lang.Filter;
 import com.star.object.ObjectUtil;
+import com.star.reflect.ReflectUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -205,10 +207,10 @@ public final class CollectionUtil {
     /**
      * 处理集合中的数据
      *
-     * @param collection
-     * @param editor
-     * @param <T>
-     * @return
+     * @param collection 集合
+     * @param editor     过滤器
+     * @param <T>        泛型
+     * @return 集合
      */
     public static <T> Collection<T> filter(final Collection<T> collection, final Editor<T> editor) {
         final Collection<T> result = ObjectUtil.clone(collection);
@@ -223,5 +225,37 @@ public final class CollectionUtil {
             }
         }
         return result;
+    }
+
+    /**
+     * 提取集合中元素的值封装成集合
+     *
+     * @param iterable 集合
+     * @param editor   过滤器
+     * @return 集合
+     */
+    public static List<Object> extract(final Iterable<?> iterable, final Editor<Object> editor) {
+        final List<Object> fieldValueList = new ArrayList<>();
+        for (final Object bean : iterable) {
+            fieldValueList.add(editor.edit(bean));
+        }
+        return fieldValueList;
+    }
+
+    /**
+     * 提取集合中元素的值封装成集合
+     *
+     * @param collection 集合
+     * @param fieldName  属性名
+     * @return 集合
+     */
+    public static List<Object> getFieldValues(final Iterable<?> collection, final String fieldName) {
+        return extract(collection, bean -> {
+            if (bean instanceof Map) {
+                return ((Map<?, ?>) bean).get(fieldName);
+            } else {
+                return ReflectUtil.getFieldValue(bean, fieldName);
+            }
+        });
     }
 }
