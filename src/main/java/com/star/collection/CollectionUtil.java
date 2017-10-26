@@ -2,6 +2,7 @@ package com.star.collection;
 
 import com.star.collection.iter.IterUtil;
 import com.star.collection.set.SetUtil;
+import com.star.lang.Editor;
 import com.star.lang.Filter;
 import com.star.object.ObjectUtil;
 
@@ -196,6 +197,29 @@ public final class CollectionUtil {
         for (final T instance : collection) {
             if (filter.accept(instance)) {
                 result.add(instance);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 处理集合中的数据
+     *
+     * @param collection
+     * @param editor
+     * @param <T>
+     * @return
+     */
+    public static <T> Collection<T> filter(final Collection<T> collection, final Editor<T> editor) {
+        final Collection<T> result = ObjectUtil.clone(collection);
+        if (!isEmpty(result)) {
+            result.clear();
+            T modified;
+            for (T instance : collection) {
+                modified = editor.edit(instance);
+                if (!Objects.isNull(modified)) {
+                    result.add(modified);
+                }
             }
         }
         return result;

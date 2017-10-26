@@ -2,6 +2,7 @@ package com.star.collection;
 
 import com.star.collection.list.ListUtil;
 import com.star.exception.ToolException;
+import com.star.lang.Editor;
 import com.star.lang.Filter;
 
 import java.lang.reflect.Array;
@@ -146,6 +147,26 @@ public final class ArrayUtil {
         final List<T> list = ListUtil.newArrayList(array);
         for (final T instance : array) {
             if (filter.accept(instance)) {
+                list.add(instance);
+            }
+        }
+        return list.toArray(Arrays.copyOf(array, list.size()));
+    }
+
+    /**
+     * 过滤数组
+     *
+     * @param array  原始数组
+     * @param editor 过滤器
+     * @param <T>    泛型
+     * @return 过滤后的数组
+     */
+    public static <T> T[] filter(final T[] array, final Editor<T> editor) {
+        final List<T> list = ListUtil.newArrayList(array);
+        T modified;
+        for (final T instance : array) {
+            modified = editor.edit(instance);
+            if (!Objects.isNull(modified)) {
                 list.add(instance);
             }
         }

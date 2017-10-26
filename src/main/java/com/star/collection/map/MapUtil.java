@@ -1,5 +1,6 @@
 package com.star.collection.map;
 
+import com.star.lang.Editor;
 import com.star.lang.Filter;
 import com.star.object.ObjectUtil;
 
@@ -140,6 +141,30 @@ public final class MapUtil {
             for (final Map.Entry<K, V> entry : map.entrySet()) {
                 if (filter.accept(entry)) {
                     result.put(entry.getKey(), entry.getValue());
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 过滤Map
+     *
+     * @param map    需要过滤的map
+     * @param editor 过滤器
+     * @param <K>    泛型 键
+     * @param <V>    泛型 值
+     * @return 过滤后的Map
+     */
+    public static <K, V> Map<K, V> filter(final Map<K, V> map, final Editor<Map.Entry<K, V>> editor) {
+        final Map<K, V> result = ObjectUtil.clone(map);
+        if (!isEmpty(result)) {
+            result.clear();
+            Map.Entry<K, V> modified;
+            for (final Map.Entry<K, V> entry : map.entrySet()) {
+                modified = editor.edit(entry);
+                if (!Objects.isNull(modified)) {
+                    result.put(modified.getKey(), modified.getValue());
                 }
             }
         }
