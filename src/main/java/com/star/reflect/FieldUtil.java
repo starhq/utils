@@ -18,6 +18,10 @@ public final class FieldUtil {
 
     /**
      * 直接读取对象属性值,无视private/protected修饰符,不经过getter函数.
+     *
+     * @param object    要读取的对象
+     * @param fieldName 属性名
+     * @return 属性值
      */
     public static Object getFieldValue(final Object object, final String fieldName) {
         final Field field = getDeclaredField(object, fieldName);
@@ -34,6 +38,10 @@ public final class FieldUtil {
 
     /**
      * 直接设置对象属性值,无视private/protected修饰符,不经过setter函数.
+     *
+     * @param object    要设置的对象
+     * @param fieldName 属性名
+     * @param value     属性值
      */
     public static void setFieldValue(final Object object, final String fieldName, final Object value) {
         final Field field = getDeclaredField(object, fieldName);
@@ -48,8 +56,13 @@ public final class FieldUtil {
         }
     }
 
+
     /**
      * 循环向上转型,获取对象的DeclaredField.
+     *
+     * @param object    要获取的属性的对象
+     * @param fieldName 属性名
+     * @return 属性
      */
     public static Field getDeclaredField(final Object object, final String fieldName) {
         return getDeclaredField(object.getClass(), fieldName);
@@ -57,6 +70,10 @@ public final class FieldUtil {
 
     /**
      * 循环向上转型,获取类的DeclaredField.
+     *
+     * @param clazz     要获取的属性的对象
+     * @param fieldName 属性名
+     * @return 属性
      */
     @SuppressWarnings({"rawtypes", "unused"})
     public static Field getDeclaredField(final Class clazz, final String fieldName) {
@@ -73,6 +90,8 @@ public final class FieldUtil {
 
     /**
      * 强制转换fileld可访问.
+     *
+     * @param field 需要转换的属性
      */
     public static void makeAccessible(final Field field) {
         if (!Modifier.isPublic(field.getModifiers()) || !Modifier.isPublic(field.getDeclaringClass().getModifiers())) {
