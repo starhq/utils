@@ -5,7 +5,10 @@ import com.star.exception.ToolException;
 import com.star.reflect.TypeUtil;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * 类工具类
@@ -42,7 +45,7 @@ public final class ClassUtil {
         try {
             T instance;
             if (ArrayUtil.isEmpty(params)) {
-                instance = (T) clazz.newInstance();
+                instance = clazz.newInstance();
             } else {
                 instance = clazz.getDeclaredConstructor(getClasses(params)).newInstance(params);
             }
@@ -78,5 +81,38 @@ public final class ClassUtil {
             return (Class<?>) argumentType;
         }
         return null;
+    }
+
+    /**
+     * 获取类名
+     *
+     * @param clazz    类
+     * @param isSimple 是否全路径
+     * @return 类名
+     */
+    public static Optional<String> getClassName(final Class<?> clazz, final boolean isSimple) {
+        return Objects.isNull(clazz) ? Optional.empty() : Optional.of(isSimple ? clazz.getSimpleName() : clazz
+                .getName());
+    }
+
+    /**
+     * 获取对象的类名
+     *
+     * @param obj      对象
+     * @param isSimple 是否全路径
+     * @return 类名
+     */
+    public static Optional<String> getClassName(final Object obj, final boolean isSimple) {
+        return Objects.isNull(obj) ? Optional.empty() : getClassName(obj.getClass(), isSimple);
+    }
+
+    /**
+     * 获得类的所有公共方法
+     *
+     * @param clazz 类
+     * @return 方法数组
+     */
+    public static Method[] getPublicMethods(final Class<?> clazz) {
+        return clazz.getMethods();
     }
 }
