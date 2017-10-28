@@ -249,7 +249,7 @@ public final class StringUtil {
      * @return 是否前缀开头
      */
     public static boolean startWith(final String str, final String prefix) {
-        return !isBlank(str) && !isBlank(prefix) && str.regionMatches(true, 0, prefix, 0, prefix.length());
+        return startWith(str, prefix, true);
     }
 
     /**
@@ -273,8 +273,7 @@ public final class StringUtil {
      * @return 是否后缀结尾
      */
     public static boolean endWith(final String str, final String suffix) {
-        return !isBlank(str) && !isBlank(suffix) && str.regionMatches(true, str.length() - suffix.length(),
-                suffix, 0, suffix.length());
+        return endWith(str, suffix, true);
     }
 
     /**
@@ -558,7 +557,7 @@ public final class StringUtil {
         Objects.requireNonNull(name, "input string can not be null");
         String result;
         if (name.contains(UNDERLINE)) {
-            final StringBuilder builder = builder(name.length());
+            final StringBuilder builder = builder();
             final char[] chars = name.toCharArray();
             final int len = chars.length;
             for (int i = 0; i < len; i++) {
@@ -754,7 +753,7 @@ public final class StringUtil {
      * @param objects   需要拼接的对象
      * @return 组装好的字符串
      */
-    public static String join(final String start, final String end, final String delimiter, final Object[] objects) {
+    public static String join(final String start, final String end, final String delimiter, final Object... objects) {
         final StringJoiner joiner = joiner(start, end, delimiter);
         return getString(joiner, objects, CharsetUtil.charset(CharsetUtil.UTF_8));
     }
@@ -767,7 +766,7 @@ public final class StringUtil {
      * @param objects   需要拼接的对象
      * @return 组装好的字符串
      */
-    public static String join(final String delimiter, final Objects[] objects) {
+    public static String join(final String delimiter, final Objects... objects) {
         return join(EMPTY, EMPTY, delimiter, objects);
     }
 
