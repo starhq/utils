@@ -115,4 +115,15 @@ public final class ClassUtil {
     public static Method[] getPublicMethods(final Class<?> clazz) {
         return clazz.getMethods();
     }
+
+    /**
+     * 获取对象的componentType
+     *
+     * @param obj 对象
+     * @return componentType
+     */
+    public static Class<?> getComponentType(final Object obj) {
+        final Class<?> clazz = obj.getClass();
+        return clazz.getComponentType();
+    }
 }

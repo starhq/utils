@@ -1,12 +1,13 @@
 package com.star.collection;
 
-import com.star.collection.list.ListUtil;
+import com.star.clazz.ClassUtil;
 import com.star.exception.ToolException;
 import com.star.lang.Editor;
 import com.star.lang.Filter;
 
 import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -22,7 +23,7 @@ public final class ArrayUtil {
     /**
      * 数组中元素未找到的下标，值为-1
      */
-    public static final int INDEX_NOT_FOUND = -1;
+    private static final int INDEX_NOT_FOUND = -1;
 
     private ArrayUtil() {
     }
@@ -34,7 +35,7 @@ public final class ArrayUtil {
      * @return 是否为数组
      */
     public static boolean isEmpty(final Object obj) {
-        return Objects.isNull(obj) || (isArray(obj) && 0 == length(obj));
+        return Objects.isNull(obj) || isArray(obj) && 0 == length(obj);
     }
 
     /**
@@ -44,8 +45,9 @@ public final class ArrayUtil {
      * @param <T>   泛型
      * @return 是否为数组
      */
+    @SafeVarargs
     public static <T> boolean isEmpty(final T... array) {
-        return array == null || array.length <= 0;
+        return Objects.isNull(array) || array.length == 0;
     }
 
     /**
@@ -86,7 +88,7 @@ public final class ArrayUtil {
      * @return 增大后的数组
      */
     public static <T> T[] resize(final T[] buffer, final int newSize) {
-        return resize(buffer, newSize, getComponentType(buffer));
+        return resize(buffer, newSize, ClassUtil.getComponentType(buffer));
     }
 
     /**
@@ -97,6 +99,7 @@ public final class ArrayUtil {
      * @param <T>         泛型
      * @return 插入新元素后的数组
      */
+    @SafeVarargs
     public static <T> T[] append(final T[] buffer, final T... newElements) {
         T[] arrays;
         if (isEmpty(newElements)) {
@@ -115,6 +118,7 @@ public final class ArrayUtil {
      * @param <T>    泛型
      * @return 组合后的数组
      */
+    @SafeVarargs
     public static <T> T[] merge(final T[]... arrays) {
         int len = 0;
         for (final T[] array : arrays) {
@@ -123,7 +127,7 @@ public final class ArrayUtil {
             }
             len += array.length;
         }
-        final T[] result = newArray(getComponentType(arrays).getComponentType(), len);
+        final T[] result = newArray(ClassUtil.getComponentType(arrays).getComponentType(), len);
         len = 0;
         for (final T[] array : arrays) {
             if (isEmpty(array)) {
@@ -144,7 +148,7 @@ public final class ArrayUtil {
      * @return 过滤后的数组
      */
     public static <T> T[] filter(final T[] array, final Filter<T> filter) {
-        final List<T> list = ListUtil.newArrayList(array);
+        final List<T> list = new ArrayList<>();
         for (final T instance : array) {
             if (filter.accept(instance)) {
                 list.add(instance);
@@ -162,7 +166,7 @@ public final class ArrayUtil {
      * @return 过滤后的数组
      */
     public static <T> T[] filter(final T[] array, final Editor<T> editor) {
-        final List<T> list = ListUtil.newArrayList(array);
+        final List<T> list = new ArrayList<>();
         T modified;
         for (final T instance : array) {
             modified = editor.edit(instance);
@@ -247,7 +251,7 @@ public final class ArrayUtil {
             try {
                 str = Arrays.deepToString((Object[]) obj);
             } catch (ClassCastException e) {
-                final String className = obj.getClass().getComponentType().getName();
+                final String className = ClassUtil.getComponentType(obj).getName();
                 switch (className) {
                     case "long":
                         str = Arrays.toString((long[]) obj);
@@ -292,7 +296,7 @@ public final class ArrayUtil {
      * @return 长度
      */
     public static int length(final Object obj) {
-        return Objects.isNull(obj) ? 0 : Array.getLength(obj);
+        return isArray(obj) ? 0 : Array.getLength(obj);
     }
 
     /**
@@ -302,8 +306,9 @@ public final class ArrayUtil {
      * @return 转换好的数组
      */
     public static byte[] toArray(final ByteBuffer byteBuffer) {
+        byte[] result;
         if (byteBuffer.hasArray()) {
-            return Arrays.copyOfRange(byteBuffer.array(), byteBuffer.position(), byteBuffer.limit());
+            result = Arrays.copyOfRange(byteBuffer.array(), byteBuffer.position(), byteBuffer.limit());
         } else {
             final int oldPosition = byteBuffer.position();
             byteBuffer.position(0);
@@ -311,8 +316,9 @@ public final class ArrayUtil {
             final byte[] buffers = new byte[size];
             byteBuffer.get(buffers);
             byteBuffer.position(oldPosition);
-            return buffers;
+            result = buffers;
         }
+        return result;
     }
 
     /**
@@ -336,31 +342,19 @@ public final class ArrayUtil {
      * @return 删除后的数组
      */
     public static Object remove(final Object array, final int index) {
-        Object result = null;
-        if (!Objects.isNull(array)) {
-            final int len = length(array);
-            if (index < 0 || index >= len) {
-                result = array;
-            } else {
-                result = newArray(getComponentType(array), len - 1);
-                System.arraycopy(array, 0, result, 0, index);
-                if (index < len - 1) {
-                    System.arraycopy(array, index + 1, result, index, len - index - 1);
-                }
+        final int length = length(array);
+        Object result;
+        if (index < 0 || index >= length) {
+            result = array;
+        } else {
+            result = newArray(ClassUtil.getComponentType(array), length - 1);
+            System.arraycopy(array, 0, result, 0, index);
+            if (index < length - 1) {
+                System.arraycopy(array, index + 1, result, index, length - index - 1);
             }
         }
         return result;
     }
 
-    /**
-     * 获取对象的componentType
-     *
-     * @param obj 对象
-     * @return componentType
-     */
-    private static Class<?> getComponentType(final Object obj) {
-        final Class<?> clazz = obj.getClass();
-        return clazz.getComponentType();
-    }
 
 }
