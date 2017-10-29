@@ -1,6 +1,6 @@
 package com.star.string;
 
-import com.star.collection.ArrayUtil;
+import com.star.collection.array.ArrayUtil;
 import com.star.io.CharsetUtil;
 
 import java.io.StringReader;
@@ -437,6 +437,7 @@ public final class StringUtil {
      * @param values   要设置的参数
      * @return 格式化好的字符串
      */
+    @SafeVarargs
     public static String format(final String template, final Object... values) {
         String result;
         if (isBlank(template)) {
@@ -738,10 +739,11 @@ public final class StringUtil {
      * @param objects   需要拼接的对象
      * @return 组装好的字符串
      */
+    @SafeVarargs
     public static String join(final String start, final String end, final String delimiter, final Charset charset,
                               final Object... objects) {
         final StringJoiner joiner = joiner(start, end, delimiter);
-        return getString(joiner, objects, charset);
+        return getString(joiner, charset, objects);
     }
 
     /**
@@ -753,9 +755,10 @@ public final class StringUtil {
      * @param objects   需要拼接的对象
      * @return 组装好的字符串
      */
-    public static String join(final String start, final String end, final String delimiter, final Object... objects) {
+    @SafeVarargs
+    public static <T> String join(final String start, final String end, final String delimiter, final T... objects) {
         final StringJoiner joiner = joiner(start, end, delimiter);
-        return getString(joiner, objects, CharsetUtil.charset(CharsetUtil.UTF_8));
+        return getString(joiner, CharsetUtil.charset(CharsetUtil.UTF_8), objects);
     }
 
 
@@ -766,7 +769,8 @@ public final class StringUtil {
      * @param objects   需要拼接的对象
      * @return 组装好的字符串
      */
-    public static String join(final String delimiter, final Objects... objects) {
+    @SafeVarargs
+    public static <T> String join(final String delimiter, final T... objects) {
         return join(EMPTY, EMPTY, delimiter, objects);
     }
 
@@ -795,6 +799,7 @@ public final class StringUtil {
      * @param strings 字符串
      * @return builder
      */
+    @SafeVarargs
     public static StringBuilder builder(final String... strings) {
         final StringBuilder builder = builder();
         for (final String string : strings) {
@@ -837,8 +842,8 @@ public final class StringUtil {
         return upper ? Character.toUpperCase(temp) : Character.toLowerCase(temp);
     }
 
-    private static String getString(final StringJoiner joiner, final Object[] objects, final Charset charset) {
-        for (final Object obj : objects) {
+    private static <T> String getString(final StringJoiner joiner, final Charset charset, final T... objects) {
+        for (final T obj : objects) {
             joiner.add(str(obj, charset));
         }
         return str(joiner, charset);

@@ -1,6 +1,6 @@
 package com.star.string;
 
-import com.star.collection.ArrayUtil;
+import com.star.collection.array.ArrayUtil;
 import com.star.exception.ToolException;
 
 import java.util.Objects;

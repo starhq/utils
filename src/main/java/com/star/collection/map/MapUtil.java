@@ -49,7 +49,7 @@ public final class MapUtil {
      * @param <V> 泛型 值
      * @return HashMap
      */
-    public static <K, V> HashMap<K, V> newHashMap() {
+    public static <K, V> Map<K, V> newHashMap() {
         return new HashMap<>();
     }
 
@@ -62,7 +62,7 @@ public final class MapUtil {
      * @param <V>      泛型 值
      * @return HashMap
      */
-    public static <K, V> HashMap<K, V> newHashMap(final int size, final boolean isSorted) {
+    public static <K, V> Map<K, V> newHashMap(final int size, final boolean isSorted) {
         final int capacity = (int) (size / DEFAULT_FACTOR);
         return isSorted ? new LinkedHashMap<>(capacity) : new HashMap<>(capacity);
     }
@@ -75,7 +75,7 @@ public final class MapUtil {
      * @param <V>  泛型 值
      * @return HashMap
      */
-    public static <K, V> HashMap<K, V> newHashMap(final int size) {
+    public static <K, V> Map<K, V> newHashMap(final int size) {
         return newHashMap(size, false);
     }
 
@@ -87,7 +87,7 @@ public final class MapUtil {
      * @param <V>      泛型 值
      * @return HashMap
      */
-    public static <K, V> HashMap<K, V> newHashMap(final boolean isSorted) {
+    public static <K, V> Map<K, V> newHashMap(final boolean isSorted) {
         return newHashMap(DEFAULT_CAPACITY, isSorted);
     }
 
@@ -98,7 +98,7 @@ public final class MapUtil {
      * @param <V> 泛型 值
      * @return ConcurrentHashMap
      */
-    public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
+    public static <K, V> Map<K, V> newConcurrentHashMap() {
         return new ConcurrentHashMap<>();
     }
 
@@ -110,7 +110,7 @@ public final class MapUtil {
      * @param <V>  泛型 值
      * @return ConcurrentHashMap
      */
-    public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap(final int size) {
+    public static <K, V> Map<K, V> newConcurrentHashMap(final int size) {
         return new ConcurrentHashMap<>(size);
     }
 
@@ -121,8 +121,12 @@ public final class MapUtil {
      * @param <V> 泛型 值
      * @return TreeMap
      */
-    public static <K, V> TreeMap<K, V> newTreeMap(final Comparator<K> comparator) {
-        return Objects.isNull(comparator) ? new TreeMap<>() : new TreeMap<>(comparator);
+    public static <K, V> Map<K, V> newTreeMap(final Map<K, V> map, final Comparator<K> comparator) {
+        final Map<K, V> result = Objects.isNull(comparator) ? new TreeMap<>() : new TreeMap<>(comparator);
+        if (!isEmpty(map)) {
+            result.putAll(map);
+        }
+        return result;
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.star.clazz;
 
-import com.star.collection.ArrayUtil;
+import com.star.collection.array.ArrayUtil;
 import com.star.exception.ToolException;
 import com.star.reflect.TypeUtil;
 

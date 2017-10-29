@@ -1,4 +1,4 @@
-package com.star.collection;
+package com.star.collection.array;
 
 import com.star.clazz.ClassUtil;
 import com.star.exception.ToolException;

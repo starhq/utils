@@ -1,7 +1,7 @@
 package com.star.collection.list;
 
-import com.star.collection.ArrayUtil;
 import com.star.collection.CollectionUtil;
+import com.star.collection.array.ArrayUtil;
 import com.star.collection.iter.IterUtil;
 import com.star.lang.ItemsProcessor;
 
@@ -31,7 +31,8 @@ public final class ListUtil {
      * @param values 数组
      * @return ArrayList
      */
-    public static <T> ArrayList<T> newArrayList(final T[] values) {
+    @SafeVarargs
+    public static <T> ArrayList<T> newArrayList(final T... values) {
         ArrayList<T> arrayList;
         if (ArrayUtil.isEmpty(values)) {
             arrayList = new ArrayList<>();

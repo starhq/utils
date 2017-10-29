@@ -4,7 +4,6 @@ import com.star.collection.map.MapUtil;
 import com.star.string.StringUtil;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
@@ -60,7 +59,7 @@ public final class IterUtil {
      * @return 元素为key，次数为value的Map
      */
     public static <T> Map<T, Integer> countMap(final Iterator<T> iterator) {
-        final HashMap<T, Integer> countMap = MapUtil.newHashMap();
+        final Map<T, Integer> countMap = MapUtil.newHashMap();
         if (!isEmpty(iterator)) {
             Integer count;
             T instance;

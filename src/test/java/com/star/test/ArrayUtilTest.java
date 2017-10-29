@@ -1,7 +1,7 @@
 package com.star.test;
 
 import com.alisoft.nano.bench.Nano;
-import com.star.collection.ArrayUtil;
+import com.star.collection.array.ArrayUtil;
 import org.junit.Test;
 
 public class ArrayUtilTest {

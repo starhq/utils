@@ -1,12 +1,15 @@
 package com.star.collection.set;
 
-import com.star.collection.ArrayUtil;
 import com.star.collection.CollectionUtil;
+import com.star.collection.array.ArrayUtil;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 import java.util.TreeSet;
 
 /**
@@ -31,7 +34,8 @@ public final class SetUtil {
      * @param <T>       范型
      * @return HashSet
      */
-    public static <T> HashSet<T> newHashSet(final T... instances) {
+    @SafeVarargs
+    public static <T> Set<T> newHashSet(final T... instances) {
         return newHashSet(false, instances);
     }
 
@@ -44,7 +48,7 @@ public final class SetUtil {
      * @return HashSet
      */
     @SafeVarargs
-    public static <T> HashSet<T> newHashSet(final boolean isSorted, final T... instances) {
+    public static <T> Set<T> newHashSet(final boolean isSorted, final T... instances) {
         HashSet<T> result;
         if (ArrayUtil.isEmpty(instances)) {
             result = isSorted ? new LinkedHashSet<>() : new HashSet<>();
@@ -65,7 +69,7 @@ public final class SetUtil {
      * @param <T>        范型
      * @return HashSet
      */
-    public static <T> HashSet<T> newHashSet(final Collection<T> collection) {
+    public static <T> Set<T> newHashSet(final Collection<T> collection) {
         return newHashSet(false, collection);
     }
 
@@ -77,7 +81,7 @@ public final class SetUtil {
      * @param <T>        范型
      * @return HashSet
      */
-    public static <T> HashSet<T> newHashSet(final boolean isSorted, final Collection<T> collection) {
+    public static <T> Set<T> newHashSet(final boolean isSorted, final Collection<T> collection) {
         return isSorted ? new LinkedHashSet<>(collection) : new HashSet<>(collection);
     }
 
@@ -89,7 +93,7 @@ public final class SetUtil {
      * @param <T>      范型
      * @return HashSet
      */
-    public static <T> HashSet<T> newHashSet(final boolean isSorted, final Iterator<T> iterator) {
+    public static <T> Set<T> newHashSet(final boolean isSorted, final Iterator<T> iterator) {
         final HashSet<T> result = isSorted ? new LinkedHashSet<>() : new HashSet<>();
         while (iterator.hasNext()) {
             result.add(iterator.next());
@@ -104,8 +108,12 @@ public final class SetUtil {
      * @param <T>        范型
      * @return TreeSet
      */
-    public static <T> TreeSet<T> newTreeSet(final Collection<T> collection) {
-        return CollectionUtil.isEmpty(collection) ? new TreeSet<>() : new TreeSet<>(collection);
+    public static <T> Set<T> newTreeSet(final Collection<T> collection, final Comparator<T> comparator) {
+        final TreeSet<T> treeSet = Objects.isNull(comparator) ? new TreeSet<>() : new TreeSet<>(comparator);
+        if (!CollectionUtil.isEmpty(collection)) {
+            treeSet.addAll(collection);
+        }
+        return treeSet;
     }
 
 }
