@@ -76,7 +76,7 @@ public final class FieldUtil {
      * @return 属性
      */
     @SuppressWarnings({"rawtypes", "unused"})
-    public static Field getDeclaredField(final Class clazz, final String fieldName) {
+    public static Field getDeclaredField(final Class<?> clazz, final String fieldName) {
         for (Class superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
             try {
                 return superClass.getDeclaredField(fieldName);

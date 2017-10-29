@@ -437,7 +437,6 @@ public final class StringUtil {
      * @param values   要设置的参数
      * @return 格式化好的字符串
      */
-    @SafeVarargs
     public static String format(final String template, final Object... values) {
         String result;
         if (isBlank(template)) {
@@ -740,8 +739,8 @@ public final class StringUtil {
      * @return 组装好的字符串
      */
     @SafeVarargs
-    public static String join(final String start, final String end, final String delimiter, final Charset charset,
-                              final Object... objects) {
+    public static <T> String join(final String start, final String end, final String delimiter, final Charset charset,
+                                  final T... objects) {
         final StringJoiner joiner = joiner(start, end, delimiter);
         return getString(joiner, charset, objects);
     }
@@ -799,7 +798,6 @@ public final class StringUtil {
      * @param strings 字符串
      * @return builder
      */
-    @SafeVarargs
     public static StringBuilder builder(final String... strings) {
         final StringBuilder builder = builder();
         for (final String string : strings) {

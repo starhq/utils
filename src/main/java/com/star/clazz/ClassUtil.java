@@ -2,11 +2,9 @@ package com.star.clazz;
 
 import com.star.collection.array.ArrayUtil;
 import com.star.exception.ToolException;
-import com.star.reflect.TypeUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -76,10 +74,10 @@ public final class ClassUtil {
      * @return {@link Class}
      */
     public static Class<?> getTypeArgument(Class<?> clazz, int index) {
-        final Type argumentType = TypeUtil.getTypeArgument(clazz, index);
-        if (null != argumentType && argumentType instanceof Class) {
-            return (Class<?>) argumentType;
-        }
+//        final Type argumentType = TypeUtil.getTypeArgument(clazz, index);
+//        if (null != argumentType && argumentType instanceof Class) {
+//            return (Class<?>) argumentType;
+//        }
         return null;
     }
 
