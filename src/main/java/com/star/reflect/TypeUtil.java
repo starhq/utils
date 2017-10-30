@@ -18,16 +18,14 @@ public final class TypeUtil {
     }
 
     /**
-     * 获得type的原始类
+     * 获得Type的原始类
      *
-     * @param type 要被获得的type
+     * @param type 要查询的type
      * @return 原始类
      */
     public static Optional<Class<?>> getClass(final Type type) {
         Optional<Class<?>> result;
-        if (Objects.isNull(type)) {
-            result = Optional.empty();
-        } else if (type instanceof Class) {
+        if (type instanceof Class) {
             result = Optional.of((Class<?>) type);
         } else if (type instanceof ParameterizedType) {
             result = Optional.of((Class<?>) ((ParameterizedType) type).getRawType());
@@ -55,6 +53,16 @@ public final class TypeUtil {
     }
 
     /**
+     * 获得属性的原始类
+     *
+     * @param field 属性
+     * @return 原始类
+     */
+    public static Optional<Class<?>> getClass(final Field field) {
+        return Objects.isNull(field) ? Optional.empty() : Optional.of(field.getType());
+    }
+
+    /**
      * 获取方法的第一个参数类型
      *
      * @param method 方法
@@ -62,6 +70,16 @@ public final class TypeUtil {
      */
     public static Optional<Type> getParamType(final Method method) {
         return getParamType(method, 0);
+    }
+
+    /**
+     * 获取方法的第一个参数类
+     *
+     * @param method 方法
+     * @return Class
+     */
+    public static Optional<Class<?>> getParamClass(final Method method) {
+        return getParamClass(method, 0);
     }
 
     /**
@@ -73,7 +91,19 @@ public final class TypeUtil {
      */
     public static Optional<Type> getParamType(final Method method, final int index) {
         final Type[] types = getParamTypes(method);
-        return ArrayUtil.isEmpty(types) ? Optional.empty() : Optional.of(types[index]);
+        return ArrayUtil.isEmpty(types) && types.length <= index ? Optional.empty() : Optional.of(types[index]);
+    }
+
+    /**
+     * 获取方法的第index个参数类
+     *
+     * @param method 方法
+     * @param index  第index个
+     * @return Class
+     */
+    public static Optional<Class<?>> getParamClass(final Method method, final int index) {
+        final Class<?>[] classes = getParamClasses(method);
+        return ArrayUtil.isEmpty(classes) && classes.length <= index ? Optional.empty() : Optional.of(classes[index]);
     }
 
     /**
@@ -87,6 +117,16 @@ public final class TypeUtil {
     }
 
     /**
+     * 获得方法的参数类列表
+     *
+     * @param method 方法
+     * @return 参数类列表
+     */
+    public static Class<?>[] getParamClasses(final Method method) {
+        return Objects.isNull(method) ? new Class<?>[0] : method.getParameterTypes();
+    }
+
+    /**
      * 获取方法的参数类型列表
      *
      * @param method 方法
@@ -97,20 +137,30 @@ public final class TypeUtil {
     }
 
     /**
+     * 获取方法的参数类列表
+     *
+     * @param method 方法
+     * @return Type
+     */
+    public static Optional<Class<?>> getReturnClass(final Method method) {
+        return Objects.isNull(method) ? Optional.empty() : Optional.of(method.getReturnType());
+    }
+
+    /**
      * 获得给定类的第一个泛型参数
      *
      * @param clazz 被检查的类，必须是已经确定泛型类型的类
      * @return Type
      */
     public static Optional<Type> getTypeArgument(final Class<?> clazz) {
-        return getTypeArgument(clazz.getGenericSuperclass(), 0);
+        return getTypeArgument(clazz, 0);
     }
 
     /**
-     * 获得给定类的泛型参数
+     * 获得给定类的第index个泛型参数
      *
      * @param clazz 被检查的类，必须是已经确定泛型类型的类
-     * @param index 泛型类型的索引号，既第几个泛型类型
+     * @param index 第index个
      * @return Type
      */
     public static Optional<Type> getTypeArgument(final Class<?> clazz, final int index) {
@@ -136,7 +186,8 @@ public final class TypeUtil {
      */
     public static Optional<Type> getTypeArgument(final Type type, final int index) {
         final Type[] typeArguments = getTypeArguments(type);
-        return !ArrayUtil.isEmpty(typeArguments) && typeArguments.length > index ? Optional.of(typeArguments[index]) : Optional.empty();
+        return !ArrayUtil.isEmpty(typeArguments) && typeArguments.length > index ? Optional.of(typeArguments[index])
+                : Optional.empty();
     }
 
     /**
