@@ -1,11 +1,16 @@
 package com.star.reflect;
 
 import com.star.collection.array.ArrayUtil;
+import com.star.collection.list.ListUtil;
+import com.star.exception.ToolException;
+import com.star.string.StringUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -36,6 +41,27 @@ public final class TypeUtil {
     }
 
     /**
+     * 获得指定类的父类的泛型参数的第一个实际类型
+     *
+     * @param clazz 要查询的类
+     * @return 实际类型
+     */
+    public static Optional<Type> getSuperClassGenricType(final Class<?> clazz) {
+        return getTypeArgument(clazz.getGenericSuperclass(), 0);
+    }
+
+    /**
+     * 获得指定类的父类的泛型参数的第index个实际类型
+     *
+     * @param clazz 要查询的类
+     * @param index 第index个
+     * @return 实际类型
+     */
+    public static Optional<Type> getSuperClassGenricType(final Class<?> clazz, final int index) {
+        return getTypeArgument(clazz.getGenericSuperclass(), index);
+    }
+
+    /**
      * 获得属性的Type类型
      *
      * @param field 属性
@@ -50,6 +76,27 @@ public final class TypeUtil {
             result = Objects.isNull(type) ? Optional.of(field.getType()) : Optional.of(type);
         }
         return result;
+    }
+
+    /**
+     * 获得属性的第1个泛型参数实际类型
+     *
+     * @param field 属性
+     * @return 实际类型
+     */
+    public static Optional<Type> getFieldGenericType(final Field field) {
+        return getFieldGenericType(field, 0);
+    }
+
+    /**
+     * 获得属性的第index个泛型参数实际类型
+     *
+     * @param field 属性
+     * @param index 第index个
+     * @return 实际类型
+     */
+    public static Optional<Type> getFieldGenericType(final Field field, final int index) {
+        return getTypeArgument(field.getGenericType(), index);
     }
 
     /**
@@ -107,6 +154,28 @@ public final class TypeUtil {
     }
 
     /**
+     * 获得方法返回值泛型参数的第一个实际类型
+     *
+     * @param method 方法
+     * @return 实际类型
+     */
+    public static Optional<Type> getMethodGenericReturnType(final Method method) {
+        return getMethodGenericReturnType(method, 0);
+    }
+
+    /**
+     * 获得方法返回值泛型参数的第index个实际类型
+     *
+     * @param method 方法
+     * @param index  第index个
+     * @return 实际类型
+     */
+    public static Optional<Type> getMethodGenericReturnType(final Method method, final int index) {
+        return getTypeArgument(method.getGenericReturnType(), index);
+    }
+
+
+    /**
      * 获取方法的参数类型列表
      *
      * @param method 方法
@@ -144,6 +213,34 @@ public final class TypeUtil {
      */
     public static Optional<Class<?>> getReturnClass(final Method method) {
         return Objects.isNull(method) ? Optional.empty() : Optional.of(method.getReturnType());
+    }
+
+    /**
+     * 获得方法签名泛型参数的第一个实际类型列表
+     *
+     * @param method 方法
+     * @return 实际类型列表
+     */
+    public static List<Type> getMethodGenericParameterTypes(final Method method) {
+        return getMethodGenericParameterTypes(method, 0);
+    }
+
+    /**
+     * 获得方法签名泛型参数的第index个实际类型列表
+     *
+     * @param method 方法
+     * @param index  第index个
+     * @return 实际类型列表
+     */
+    public static List<Type> getMethodGenericParameterTypes(final Method method, final int index) {
+        final Type[] parameterTypes = method.getGenericParameterTypes();
+        if (index >= parameterTypes.length || index < 0) {
+            throw new ToolException(StringUtil.format("get method's generic type failure:the index you input {}",
+                    index < 0 ? "must not less than zero" : "bigger than field's count"));
+        }
+        final Type[] parameterArgTypes = getTypeArguments(parameterTypes[index]);
+        return ArrayUtil.isEmpty(parameterArgTypes) ? Collections.emptyList() : ListUtil.newArrayList
+                (parameterArgTypes);
     }
 
     /**
@@ -186,8 +283,9 @@ public final class TypeUtil {
      */
     public static Optional<Type> getTypeArgument(final Type type, final int index) {
         final Type[] typeArguments = getTypeArguments(type);
-        return !ArrayUtil.isEmpty(typeArguments) && typeArguments.length > index ? Optional.of(typeArguments[index])
-                : Optional.empty();
+        return ArrayUtil.isEmpty(typeArguments) && typeArguments.length <= index ? Optional.empty() : Optional.of
+                (typeArguments[index])
+                ;
     }
 
     /**
