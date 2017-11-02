@@ -2,14 +2,48 @@ package com.star.cache;
 
 import com.star.exception.CacheException;
 
+/**
+ * 缓存接口库
+ *
+ * @param <K> 键
+ * @param <V> 值
+ * @author starhq
+ */
 public interface Cache<K, V> {
 
-    <K, V> V get(K key) throws CacheException;
+    /**
+     * 从缓存中获得值
+     *
+     * @param key 键
+     * @return 值
+     * @throws CacheException
+     */
+    V get(K key) throws CacheException;
 
-    <K, V> V put(K key, V value) throws CacheException;
+    /**
+     * 数据存入缓存
+     *
+     * @param key   键
+     * @param value 值
+     * @return 值
+     * @throws CacheException
+     */
+    V put(K key, V value) throws CacheException;
 
-    <K, V> V remove(K Key) throws CacheException;
+    /**
+     * 删除缓存
+     *
+     * @param key 键
+     * @return 从缓存删除的值
+     * @throws CacheException
+     */
+    V remove(K key) throws CacheException;
 
+    /**
+     * 清空缓存
+     *
+     * @throws CacheException
+     */
     void clear() throws CacheException;
 
 }
