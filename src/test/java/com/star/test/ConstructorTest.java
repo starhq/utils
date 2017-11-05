@@ -13,14 +13,16 @@ public class ConstructorTest {
 
     private static int SerialTimes = 1000; // 每个线程执行序列化次数
 
+    Date date = new Date();
+
 
     @Test
     public void testTrimBySubstring() {
         Nano.bench().measurements(measurements).threads(threads).measure("jdk version", () -> {
             for (int i = 0; i < SerialTimes; i++) {
                 try {
-                    Date.class.getDeclaredConstructor(String.class);
-                } catch (NoSuchMethodException e) {
+                    Date.class.getDeclaredField("fastTime");
+                } catch (NoSuchFieldException e) {
                     e.printStackTrace();
                 }
             }
@@ -31,7 +33,6 @@ public class ConstructorTest {
     public void testTrimByJDK() {
         Nano.bench().measurements(measurements).threads(threads).measure("classvalue version", () -> {
             for (int i = 0; i < SerialTimes; i++) {
-                com.star.reflect.ConstructorUtil.getConstructor(Date.class, String.class);
             }
         });
     }
