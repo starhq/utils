@@ -1,6 +1,7 @@
 package com.star.reflect;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -49,17 +50,29 @@ public final class ConstructorUtil {
      * @param <T>            泛型
      * @return 构造函数
      */
+    @SuppressWarnings("unchecked")
     public static <T> Optional<Constructor<T>> getConstructor(final Class<T> beanClass, final Class<?>... parameterTypes) {
         final Constructor[] constructors = getConstructors(beanClass);
         Class<?>[] pts;
-        final Optional<Constructor<T>> result = Optional.empty();
+        Optional<Constructor<T>> result = Optional.empty();
         for (final Constructor constructor : constructors) {
             pts = constructor.getParameterTypes();
             if (Arrays.deepEquals(pts, parameterTypes)) {
-                Optional.of(constructor);
+                result = Optional.of(constructor);
                 break;
             }
         }
         return result;
+    }
+
+    /**
+     * 强制转换constructor可访问.
+     *
+     * @param constructor 需要转换的构造函数
+     */
+    public static void makeAccessible(final Constructor<?> constructor) {
+        if (!Modifier.isPublic(constructor.getModifiers()) || !Modifier.isPublic(constructor.getDeclaringClass().getModifiers())) {
+            constructor.setAccessible(true);
+        }
     }
 }
