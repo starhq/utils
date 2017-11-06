@@ -2,6 +2,7 @@ package com.star.clazz;
 
 import com.star.collection.array.ArrayUtil;
 import com.star.exception.ToolException;
+import com.star.string.StringUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -19,6 +20,40 @@ public final class ClassUtil {
     }
 
     /**
+     * 获取对象类型
+     *
+     * @param obj 对象
+     * @param <T> 泛型
+     * @return 类型
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> Optional<Class<T>> getClass(final T obj) {
+        return Objects.isNull(obj) ? Optional.empty() : Optional.of((Class<T>) obj.getClass());
+    }
+
+    /**
+     * 获取类名
+     *
+     * @param clazz    类
+     * @param isSimple 是否全路径
+     * @return 类名
+     */
+    public static String getClassName(final Class<?> clazz, final boolean isSimple) {
+        return Objects.isNull(clazz) ? StringUtil.EMPTY : isSimple ? clazz.getSimpleName() : clazz.getName();
+    }
+
+    /**
+     * 获取对象的类名
+     *
+     * @param obj      对象
+     * @param isSimple 是否全路径
+     * @return 类名
+     */
+    public static String getClassName(final Object obj, final boolean isSimple) {
+        return Objects.isNull(obj) ? StringUtil.EMPTY : getClassName(obj.getClass(), isSimple);
+    }
+
+    /**
      * 获得对象数组的类数组
      *
      * @param objects 实例数组
@@ -27,7 +62,7 @@ public final class ClassUtil {
     public static Class<?>[] getClasses(final Object... objects) {
         Class<?>[] clazzs = new Class<?>[objects.length];
         for (int i = 0; i < objects.length; i++) {
-            clazzs[i] = objects[i].getClass();
+            clazzs[i] = getClass(objects[i]).orElse(Object.class);
         }
         return clazzs;
     }
@@ -81,28 +116,6 @@ public final class ClassUtil {
         return null;
     }
 
-    /**
-     * 获取类名
-     *
-     * @param clazz    类
-     * @param isSimple 是否全路径
-     * @return 类名
-     */
-    public static Optional<String> getClassName(final Class<?> clazz, final boolean isSimple) {
-        return Objects.isNull(clazz) ? Optional.empty() : Optional.of(isSimple ? clazz.getSimpleName() : clazz
-                .getName());
-    }
-
-    /**
-     * 获取对象的类名
-     *
-     * @param obj      对象
-     * @param isSimple 是否全路径
-     * @return 类名
-     */
-    public static Optional<String> getClassName(final Object obj, final boolean isSimple) {
-        return Objects.isNull(obj) ? Optional.empty() : getClassName(obj.getClass(), isSimple);
-    }
 
     /**
      * 获得类的所有公共方法

@@ -5,7 +5,7 @@ import com.star.collection.set.SetUtil;
 import com.star.lang.Editor;
 import com.star.lang.Filter;
 import com.star.object.ObjectUtil;
-import com.star.reflect.ReflectUtil;
+import com.star.reflect.FieldUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -226,7 +226,7 @@ public final class CollectionUtil {
             if (bean instanceof Map) {
                 return ((Map<?, ?>) bean).get(fieldName);
             } else {
-                return ReflectUtil.getFieldValue(bean, fieldName);
+                return FieldUtil.getFieldValue(bean, fieldName);
             }
         });
     }

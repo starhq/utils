@@ -154,7 +154,7 @@ public final class MethodUtil {
             return (T) method.invoke(Modifier.isStatic(method.getModifiers()) ? null : obj, args);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             throw new ToolException(StringUtil.format("invoke class {}'s method {} failue,the reason is: {}",
-                    ClassUtil.getClassName(obj, true).orElse(UNKNOWN), method.getName(), e.getMessage()), e);
+                    ClassUtil.getClassName(obj, true), method.getName(), e.getMessage()), e);
         }
     }
 
