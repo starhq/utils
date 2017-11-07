@@ -32,7 +32,7 @@ public final class MethodUtil {
     /**
      * 缓存
      */
-    public static final ClassValue<Method[]> CACHE = new ClassValue<Method[]>() {
+    public static final ClassValue<Method[]> DECLAREDMETHOD = new ClassValue<Method[]>() {
         /**
          * 获取类的所有方法
          * @param clazz 类
@@ -66,8 +66,8 @@ public final class MethodUtil {
      * @param beanClass 类
      * @return 方法列表
      */
-    public static Method[] getMethods(final Class<?> beanClass) {
-        return CACHE.get(beanClass);
+    public static Method[] getDeclardMethods(final Class<?> beanClass) {
+        return DECLAREDMETHOD.get(beanClass);
     }
 
     /**
@@ -77,8 +77,8 @@ public final class MethodUtil {
      * @param methodFilter 类过滤器
      * @return 方法列表
      */
-    public static Method[] getMethods(final Class<?> beanClass, final Filter<Method> methodFilter) {
-        Method[] methods = getMethods(beanClass);
+    public static Method[] getDeclardMethods(final Class<?> beanClass, final Filter<Method> methodFilter) {
+        Method[] methods = getDeclardMethods(beanClass);
         if (!Objects.isNull(methodFilter)) {
             final List<Method> methodList = new ArrayList<>();
             for (final Method method : methods) {
@@ -97,8 +97,8 @@ public final class MethodUtil {
      * @param clazz 类
      * @return 方法集合
      */
-    public static Set<String> getMethodNames(final Class<?> clazz) {
-        final Method[] methods = getMethods(clazz);
+    public static Set<String> getDeclaredMethodNames(final Class<?> clazz) {
+        final Method[] methods = getDeclardMethods(clazz);
         final Set<String> methodSet = new HashSet<>();
         for (final Method method : methods) {
             methodSet.add(method.getName());
@@ -114,8 +114,8 @@ public final class MethodUtil {
      * @param paramTypes 参数类型
      * @return 方法
      */
-    public static Optional<Method> getMethod(final Class<?> clazz, final String name, final Class<?>... paramTypes) {
-        final Method[] methods = getMethods(clazz);
+    public static Optional<Method> getDeclaredMethod(final Class<?> clazz, final String name, final Class<?>... paramTypes) {
+        final Method[] methods = getDeclardMethods(clazz);
         Optional<Method> result = Optional.empty();
         for (final Method method : methods) {
             if (name.equals(method.getName()) && ArrayUtil.isEmpty(paramTypes) || Arrays.equals(method.getParameterTypes(), paramTypes)) {
@@ -134,8 +134,8 @@ public final class MethodUtil {
      * @param args   参数书列表
      * @return 方法
      */
-    public static Optional<Method> getMethod(final Object object, final String name, final Object... args) {
-        return getMethod(object.getClass(), name, ClassUtil.getClasses(args));
+    public static Optional<Method> getDeclaredMethod(final Object object, final String name, final Object... args) {
+        return getDeclaredMethod(ClassUtil.getClass(object).orElse(Object.class), name, ClassUtil.getClasses(args));
     }
 
     /**
@@ -169,7 +169,7 @@ public final class MethodUtil {
      */
     @SuppressWarnings("unchecked")
     public static <T> T invoke(final Object obj, final String methodName, final Object... args) {
-        final Method method = getMethod(obj, methodName, args).orElseThrow(ToolException::new);
+        final Method method = getDeclaredMethod(obj, methodName, args).orElseThrow(ToolException::new);
         return invoke(obj, method, args);
     }
 
