@@ -24,15 +24,11 @@ import java.util.Set;
  */
 public final class MethodUtil {
 
-    /**
-     * 获取不到类名用未知来替代
-     */
-    private static final String UNKNOWN = "unknown";
 
     /**
      * 缓存
      */
-    public static final ClassValue<Method[]> DECLAREDMETHOD = new ClassValue<Method[]>() {
+    public static final ClassValue<Method[]> CACHE = new ClassValue<Method[]>() {
         /**
          * 获取类的所有方法
          * @param clazz 类
@@ -66,8 +62,26 @@ public final class MethodUtil {
      * @param beanClass 类
      * @return 方法列表
      */
-    public static Method[] getDeclardMethods(final Class<?> beanClass) {
-        return DECLAREDMETHOD.get(beanClass);
+    public static Method[] getMethods(final Class<?> beanClass) {
+        return CACHE.get(beanClass);
+    }
+
+    /**
+     * 获得类的公共方法列表
+     *
+     * @param beanClass 类
+     * @return 方法列表
+     */
+    public static Method[] getPublicMethods(final Class<?> beanClass) {
+        Method[] methods = CACHE.get(beanClass);
+        final List<Method> methodList = new ArrayList<>();
+        for (final Method method : methods) {
+            if (isPublic(method)) {
+                methodList.add(method);
+            }
+        }
+        methods = methodList.toArray(new Method[methodList.size()]);
+        return methods;
     }
 
     /**
@@ -77,19 +91,23 @@ public final class MethodUtil {
      * @param methodFilter 类过滤器
      * @return 方法列表
      */
-    public static Method[] getDeclardMethods(final Class<?> beanClass, final Filter<Method> methodFilter) {
-        Method[] methods = getDeclardMethods(beanClass);
-        if (!Objects.isNull(methodFilter)) {
-            final List<Method> methodList = new ArrayList<>();
-            for (final Method method : methods) {
-                if (methodFilter.accept(method)) {
-                    methodList.add(method);
-                }
-            }
-            methods = methodList.toArray(new Method[methodList.size()]);
-        }
-        return methods;
+    public static Method[] getMethods(final Class<?> beanClass, final Filter<Method> methodFilter) {
+        Method[] methods = getMethods(beanClass);
+        return getMethods(methodFilter, methods);
     }
+
+    /**
+     * 获得类的公共方法列表,按过滤器过滤
+     *
+     * @param beanClass    类
+     * @param methodFilter 类过滤器
+     * @return 方法列表
+     */
+    public static Method[] getPublicMethods(final Class<?> beanClass, final Filter<Method> methodFilter) {
+        Method[] methods = getPublicMethods(beanClass);
+        return getMethods(methodFilter, methods);
+    }
+
 
     /**
      * 获得方法名
@@ -97,11 +115,28 @@ public final class MethodUtil {
      * @param clazz 类
      * @return 方法集合
      */
-    public static Set<String> getDeclaredMethodNames(final Class<?> clazz) {
-        final Method[] methods = getDeclardMethods(clazz);
+    public static Set<String> getMethodNames(final Class<?> clazz) {
+        final Method[] methods = getMethods(clazz);
         final Set<String> methodSet = new HashSet<>();
         for (final Method method : methods) {
             methodSet.add(method.getName());
+        }
+        return methodSet;
+    }
+
+    /**
+     * 获得公共方法名
+     *
+     * @param clazz 类
+     * @return 方法集合
+     */
+    public static Set<String> getPublicMethodNames(final Class<?> clazz) {
+        final Method[] methods = getMethods(clazz);
+        final Set<String> methodSet = new HashSet<>();
+        for (final Method method : methods) {
+            if (isPublic(method)) {
+                methodSet.add(method.getName());
+            }
         }
         return methodSet;
     }
@@ -114,8 +149,28 @@ public final class MethodUtil {
      * @param paramTypes 参数类型
      * @return 方法
      */
-    public static Optional<Method> getDeclaredMethod(final Class<?> clazz, final String name, final Class<?>... paramTypes) {
-        final Method[] methods = getDeclardMethods(clazz);
+    public static Optional<Method> getMethod(final Class<?> clazz, final String name, final Class<?>... paramTypes) {
+        final Method[] methods = getMethods(clazz);
+        Optional<Method> result = Optional.empty();
+        for (final Method method : methods) {
+            if (name.equals(method.getName()) && ArrayUtil.isEmpty(paramTypes) || Arrays.equals(method.getParameterTypes(), paramTypes)) {
+                result = Optional.of(method);
+                break;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 根据name和参数类型获得公开方法
+     *
+     * @param clazz      类
+     * @param name       方法名
+     * @param paramTypes 参数类型
+     * @return 方法
+     */
+    public static Optional<Method> getPublicMethod(final Class<?> clazz, final String name, final Class<?>... paramTypes) {
+        final Method[] methods = getPublicMethods(clazz);
         Optional<Method> result = Optional.empty();
         for (final Method method : methods) {
             if (name.equals(method.getName()) && ArrayUtil.isEmpty(paramTypes) || Arrays.equals(method.getParameterTypes(), paramTypes)) {
@@ -134,8 +189,8 @@ public final class MethodUtil {
      * @param args   参数书列表
      * @return 方法
      */
-    public static Optional<Method> getDeclaredMethod(final Object object, final String name, final Object... args) {
-        return getDeclaredMethod(ClassUtil.getClass(object).orElse(Object.class), name, ClassUtil.getClasses(args));
+    public static Optional<Method> getMethod(final Object object, final String name, final Object... args) {
+        return getMethod(ClassUtil.getClass(object).orElse(Object.class), name, ClassUtil.getClasses(args));
     }
 
     /**
@@ -169,7 +224,7 @@ public final class MethodUtil {
      */
     @SuppressWarnings("unchecked")
     public static <T> T invoke(final Object obj, final String methodName, final Object... args) {
-        final Method method = getDeclaredMethod(obj, methodName, args).orElseThrow(ToolException::new);
+        final Method method = getMethod(obj, methodName, args).orElseThrow(ToolException::new);
         return invoke(obj, method, args);
     }
 
@@ -182,5 +237,35 @@ public final class MethodUtil {
         if (!Modifier.isPublic(method.getModifiers()) || !Modifier.isPublic(method.getDeclaringClass().getModifiers())) {
             method.setAccessible(true);
         }
+    }
+
+    /**
+     * 是不是public方法
+     *
+     * @param method 方法
+     * @return 是不是public
+     */
+    public static boolean isPublic(final Method method) {
+        return !Objects.isNull(method) && !Modifier.isPublic(method.getModifiers()) || !Modifier.isPublic(method.getDeclaringClass().getModifiers());
+    }
+
+    /**
+     * 过滤方法
+     *
+     * @param methodFilter 过滤器
+     * @param methods      要过滤的方法数组
+     * @return 过滤后的方法
+     */
+    private static Method[] getMethods(Filter<Method> methodFilter, Method[] methods) {
+        if (!Objects.isNull(methodFilter)) {
+            final List<Method> methodList = new ArrayList<>();
+            for (final Method method : methods) {
+                if (methodFilter.accept(method)) {
+                    methodList.add(method);
+                }
+            }
+            methods = methodList.toArray(new Method[methodList.size()]);
+        }
+        return methods;
     }
 }
