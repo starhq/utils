@@ -1,6 +1,7 @@
 package com.star.test;
 
 import com.alisoft.nano.bench.Nano;
+import com.star.collection.array.ArrayUtil;
 import org.junit.Test;
 
 import java.util.Date;
@@ -18,15 +19,17 @@ public class ConstructorTest {
 
     @Test
     public void testTrimBySubstring() {
-        Nano.bench().measurements(measurements).threads(threads).measure("jdk version", () -> {
-            for (int i = 0; i < SerialTimes; i++) {
-                try {
-                    Date.class.getDeclaredField("fastTime");
-                } catch (NoSuchFieldException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        System.out.println(ArrayUtil.toString(MethodUtil.getMethods(Date.class)));
+        System.out.println(ArrayUtil.toString(Date.class.getMethods()));
+//        Nano.bench().measurements(measurements).threads(threads).measure("jdk version", () -> {
+//            for (int i = 0; i < SerialTimes; i++) {
+//                try {
+//                    Date.class.getDeclaredField("fastTime");
+//                } catch (NoSuchFieldException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
     }
 
     @Test
@@ -36,4 +39,12 @@ public class ConstructorTest {
             }
         });
     }
+
+    private class Demo {
+
+        public void test() {
+
+        }
+    }
 }
+

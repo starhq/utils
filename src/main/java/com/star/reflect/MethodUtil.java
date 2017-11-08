@@ -66,23 +66,6 @@ public final class MethodUtil {
         return CACHE.get(beanClass);
     }
 
-    /**
-     * 获得类的公共方法列表
-     *
-     * @param beanClass 类
-     * @return 方法列表
-     */
-    public static Method[] getPublicMethods(final Class<?> beanClass) {
-        Method[] methods = CACHE.get(beanClass);
-        final List<Method> methodList = new ArrayList<>();
-        for (final Method method : methods) {
-            if (isPublic(method)) {
-                methodList.add(method);
-            }
-        }
-        methods = methodList.toArray(new Method[methodList.size()]);
-        return methods;
-    }
 
     /**
      * 获得类的方法列表,按过滤器过滤
@@ -93,18 +76,6 @@ public final class MethodUtil {
      */
     public static Method[] getMethods(final Class<?> beanClass, final Filter<Method> methodFilter) {
         Method[] methods = getMethods(beanClass);
-        return getMethods(methodFilter, methods);
-    }
-
-    /**
-     * 获得类的公共方法列表,按过滤器过滤
-     *
-     * @param beanClass    类
-     * @param methodFilter 类过滤器
-     * @return 方法列表
-     */
-    public static Method[] getPublicMethods(final Class<?> beanClass, final Filter<Method> methodFilter) {
-        Method[] methods = getPublicMethods(beanClass);
         return getMethods(methodFilter, methods);
     }
 
@@ -124,22 +95,6 @@ public final class MethodUtil {
         return methodSet;
     }
 
-    /**
-     * 获得公共方法名
-     *
-     * @param clazz 类
-     * @return 方法集合
-     */
-    public static Set<String> getPublicMethodNames(final Class<?> clazz) {
-        final Method[] methods = getMethods(clazz);
-        final Set<String> methodSet = new HashSet<>();
-        for (final Method method : methods) {
-            if (isPublic(method)) {
-                methodSet.add(method.getName());
-            }
-        }
-        return methodSet;
-    }
 
     /**
      * 根据name和参数类型获得方法
@@ -153,7 +108,8 @@ public final class MethodUtil {
         final Method[] methods = getMethods(clazz);
         Optional<Method> result = Optional.empty();
         for (final Method method : methods) {
-            if (name.equals(method.getName()) && ArrayUtil.isEmpty(paramTypes) || Arrays.equals(method.getParameterTypes(), paramTypes)) {
+            if (name.equals(method.getName()) && ArrayUtil.isEmpty(paramTypes) || Arrays.equals(method
+                    .getParameterTypes(), paramTypes)) {
                 result = Optional.of(method);
                 break;
             }
@@ -161,25 +117,6 @@ public final class MethodUtil {
         return result;
     }
 
-    /**
-     * 根据name和参数类型获得公开方法
-     *
-     * @param clazz      类
-     * @param name       方法名
-     * @param paramTypes 参数类型
-     * @return 方法
-     */
-    public static Optional<Method> getPublicMethod(final Class<?> clazz, final String name, final Class<?>... paramTypes) {
-        final Method[] methods = getPublicMethods(clazz);
-        Optional<Method> result = Optional.empty();
-        for (final Method method : methods) {
-            if (name.equals(method.getName()) && ArrayUtil.isEmpty(paramTypes) || Arrays.equals(method.getParameterTypes(), paramTypes)) {
-                result = Optional.of(method);
-                break;
-            }
-        }
-        return result;
-    }
 
     /**
      * 根据name和参数类型获得对象方法
@@ -234,7 +171,8 @@ public final class MethodUtil {
      * @param method 需要转换的方法
      */
     public static void makeAccessible(final Method method) {
-        if (!Modifier.isPublic(method.getModifiers()) || !Modifier.isPublic(method.getDeclaringClass().getModifiers())) {
+        if (!Modifier.isPublic(method.getModifiers()) || !Modifier.isPublic(method.getDeclaringClass().getModifiers()
+        )) {
             method.setAccessible(true);
         }
     }
@@ -246,7 +184,8 @@ public final class MethodUtil {
      * @return 是不是public
      */
     public static boolean isPublic(final Method method) {
-        return !Objects.isNull(method) && !Modifier.isPublic(method.getModifiers()) || !Modifier.isPublic(method.getDeclaringClass().getModifiers());
+        return !Objects.isNull(method) && Modifier.isPublic(method.getModifiers()) && Modifier.isPublic(method
+                .getDeclaringClass().getModifiers());
     }
 
     /**
