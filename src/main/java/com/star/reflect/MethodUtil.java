@@ -10,7 +10,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -24,15 +23,15 @@ import java.util.Set;
  */
 public final class MethodUtil {
 
-
     /**
-     * 缓存
+     * 包括父类的所有方法的缓存（public和private）
      */
-    public static final ClassValue<Method[]> CACHE = new ClassValue<Method[]>() {
+    private static final ClassValue<Method[]> ALL = new ClassValue<Method[]>() {
+
         /**
-         * 获取类的所有方法
-         * @param clazz 类
-         * @return 方法数组
+         *获取类和父类的所有方法
+         * @param clazz 当前类
+         * @return 方法列表
          */
         @Override
         protected Method[] computeValue(final Class<?> clazz) {
@@ -49,7 +48,39 @@ public final class MethodUtil {
                 searchType = searchType.getSuperclass();
             }
             return allMethods;
+        }
+    };
 
+    /**
+     * 类的所有方法的缓存（public和private）
+     */
+    private static final ClassValue<Method[]> DECLARED = new ClassValue<Method[]>() {
+
+        /**
+         *获取类的所有方法
+         * @param clazz 当前类
+         * @return 方法列表
+         */
+        @Override
+        protected Method[] computeValue(final Class<?> clazz) {
+            return clazz.getDeclaredMethods();
+        }
+    };
+
+    /**
+     * 类和父类的的所有public方法的缓存
+     */
+    private static final ClassValue<Method[]> PUBLIC = new ClassValue<Method[]>() {
+
+        /**
+         * 获取类和弗雷的所有public方法
+         *
+         * @param clazz 当前类
+         * @return 方法列表
+         */
+        @Override
+        protected Method[] computeValue(final Class<?> clazz) {
+            return clazz.getMethods();
         }
     };
 
@@ -59,35 +90,56 @@ public final class MethodUtil {
     /**
      * 获得类的方法列表
      *
+     * @param beanClass             类
+     * @param withSuperClassMethods 是否包含父类
+     * @return 方法列表
+     */
+    public static Method[] getMethods(final Class<?> beanClass, final boolean withSuperClassMethods) {
+        return withSuperClassMethods ? ALL.get(beanClass) : DECLARED.get(beanClass);
+    }
+
+    /**
+     * 获得类的public方法列表
+     *
      * @param beanClass 类
      * @return 方法列表
      */
-    public static Method[] getMethods(final Class<?> beanClass) {
-        return CACHE.get(beanClass);
+    public static Method[] getPublicMethods(final Class<?> beanClass) {
+        return PUBLIC.get(beanClass);
     }
-
 
     /**
      * 获得类的方法列表,按过滤器过滤
      *
-     * @param beanClass    类
-     * @param methodFilter 类过滤器
+     * @param beanClass 类
+     * @param filter    类过滤器
      * @return 方法列表
      */
-    public static Method[] getMethods(final Class<?> beanClass, final Filter<Method> methodFilter) {
-        Method[] methods = getMethods(beanClass);
-        return getMethods(methodFilter, methods);
+    public static Method[] getMethods(final Class<?> beanClass, final Filter<Method> filter) {
+        final Method[] methods = getMethods(beanClass, true);
+        return getMethods(filter, methods);
     }
 
+    /**
+     * 获得类的方法列表,按过滤器过滤
+     *
+     * @param beanClass 类
+     * @param filter    类过滤器
+     * @return 方法列表
+     */
+    public static Method[] getPublicMethods(final Class<?> beanClass, final Filter<Method> filter) {
+        final Method[] methods = getPublicMethods(beanClass);
+        return getMethods(filter, methods);
+    }
 
     /**
      * 获得方法名
      *
-     * @param clazz 类
+     * @param beanClass 类
      * @return 方法集合
      */
-    public static Set<String> getMethodNames(final Class<?> clazz) {
-        final Method[] methods = getMethods(clazz);
+    public static Set<String> getMethodNames(final Class<?> beanClass) {
+        final Method[] methods = getMethods(beanClass, true);
         final Set<String> methodSet = new HashSet<>();
         for (final Method method : methods) {
             methodSet.add(method.getName());
@@ -95,28 +147,49 @@ public final class MethodUtil {
         return methodSet;
     }
 
+    /**
+     * 获得普遍立车方法名
+     *
+     * @param beanClass 类
+     * @return 方法集合
+     */
+    public static Set<String> getPublicMethodNames(final Class<?> beanClass) {
+        final Method[] methods = getPublicMethods(beanClass);
+        final Set<String> methodSet = new HashSet<>();
+        for (final Method method : methods) {
+            methodSet.add(method.getName());
+        }
+        return methodSet;
+    }
 
     /**
      * 根据name和参数类型获得方法
      *
-     * @param clazz      类
+     * @param beanClass  类
      * @param name       方法名
      * @param paramTypes 参数类型
      * @return 方法
      */
-    public static Optional<Method> getMethod(final Class<?> clazz, final String name, final Class<?>... paramTypes) {
-        final Method[] methods = getMethods(clazz);
-        Optional<Method> result = Optional.empty();
-        for (final Method method : methods) {
-            if (name.equals(method.getName()) && ArrayUtil.isEmpty(paramTypes) || Arrays.equals(method
-                    .getParameterTypes(), paramTypes)) {
-                result = Optional.of(method);
-                break;
-            }
-        }
-        return result;
+    public static Optional<Method> getMethod(final Class<?> beanClass, final String name, final Class<?>...
+            paramTypes) {
+        final Method[] methods = getMethods(beanClass, true);
+        return getMethod(name, methods, paramTypes);
     }
 
+
+    /**
+     * 根据name和参数类型获得public方法
+     *
+     * @param beanClass  类
+     * @param name       方法名
+     * @param paramTypes 参数类型
+     * @return 方法
+     */
+    public static Optional<Method> getPublicMethod(final Class<?> beanClass, final String name, final Class<?>...
+            paramTypes) {
+        final Method[] methods = getPublicMethods(beanClass);
+        return getMethod(name, methods, paramTypes);
+    }
 
     /**
      * 根据name和参数类型获得对象方法
@@ -128,6 +201,18 @@ public final class MethodUtil {
      */
     public static Optional<Method> getMethod(final Object object, final String name, final Object... args) {
         return getMethod(ClassUtil.getClass(object).orElse(Object.class), name, ClassUtil.getClasses(args));
+    }
+
+    /**
+     * 根据name和参数类型获得对象公共方法
+     *
+     * @param object 对象
+     * @param name   方法名
+     * @param args   参数书列表
+     * @return 方法
+     */
+    public static Optional<Method> getPublicMethod(final Object object, final String name, final Object... args) {
+        return getPublicMethod(ClassUtil.getClass(object).orElse(Object.class), name, ClassUtil.getClasses(args));
     }
 
     /**
@@ -161,7 +246,7 @@ public final class MethodUtil {
      */
     @SuppressWarnings("unchecked")
     public static <T> T invoke(final Object obj, final String methodName, final Object... args) {
-        final Method method = getMethod(obj, methodName, args).orElseThrow(ToolException::new);
+        final Method method = getMethod(obj, methodName, args).orElseThrow(NullPointerException::new);
         return invoke(obj, method, args);
     }
 
@@ -191,20 +276,43 @@ public final class MethodUtil {
     /**
      * 过滤方法
      *
-     * @param methodFilter 过滤器
-     * @param methods      要过滤的方法数组
+     * @param filter  过滤器
+     * @param methods 要过滤的方法数组
      * @return 过滤后的方法
      */
-    private static Method[] getMethods(Filter<Method> methodFilter, Method[] methods) {
-        if (!Objects.isNull(methodFilter)) {
+    private static Method[] getMethods(final Filter<Method> filter, final Method... methods) {
+        Method[] result;
+        if (Objects.isNull(filter)) {
+            result = new Method[0];
+        } else {
             final List<Method> methodList = new ArrayList<>();
             for (final Method method : methods) {
-                if (methodFilter.accept(method)) {
+                if (filter.accept(method)) {
                     methodList.add(method);
                 }
             }
-            methods = methodList.toArray(new Method[methodList.size()]);
+            result = methodList.toArray(new Method[methodList.size()]);
         }
-        return methods;
+        return result;
+    }
+
+    /**
+     * 获得指定方法
+     *
+     * @param name       方法名
+     * @param methods    方法集合
+     * @param paramTypes 参数集合
+     * @return 方法
+     */
+    private static Optional<Method> getMethod(final String name, final Method[] methods, final Class<?>... paramTypes) {
+        Optional<Method> result = Optional.empty();
+        for (final Method method : methods) {
+            if (name.equals(method.getName()) && (ArrayUtil.isEmpty(paramTypes) || ClassUtil.isAllAssignableFrom(method
+                    .getParameterTypes(), paramTypes))) {
+                result = Optional.of(method);
+                break;
+            }
+        }
+        return result;
     }
 }

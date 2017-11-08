@@ -1,7 +1,7 @@
 package com.star.test;
 
 import com.alisoft.nano.bench.Nano;
-import com.star.collection.array.ArrayUtil;
+import com.star.reflect.MethodUtil;
 import org.junit.Test;
 
 import java.util.Date;
@@ -19,8 +19,8 @@ public class ConstructorTest {
 
     @Test
     public void testTrimBySubstring() {
-//        System.out.println(ArrayUtil.toString(MethodUtil.getMethods(Date.class)));
-        System.out.println(ArrayUtil.toString(Date.class.getMethods()));
+        System.out.println(MethodUtil.getMethod(Date.class, "before", Date.class));
+        System.out.println(MethodUtil.getPublicMethod(Date.class, "before", Date.class));
 //        Nano.bench().measurements(measurements).threads(threads).measure("jdk version", () -> {
 //            for (int i = 0; i < SerialTimes; i++) {
 //                try {
@@ -40,11 +40,5 @@ public class ConstructorTest {
         });
     }
 
-    private class Demo {
-
-        public void test() {
-
-        }
-    }
 }
 

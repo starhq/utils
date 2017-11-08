@@ -193,4 +193,26 @@ public final class ClassUtil {
         }
         return values;
     }
+
+    /**
+     * 比较判断types1和types2两组类，如果types1中所有的类都与types2对应位置的类相同，或者是其父类或接口，则返回<code>true</code>
+     *
+     * @param types1 类组1
+     * @param types2 类组2
+     * @return 是否相同、父类或接口
+     */
+    public static boolean isAllAssignableFrom(Class<?>[] types1, Class<?>[] types2) {
+        if (ArrayUtil.isEmpty(types1) && ArrayUtil.isEmpty(types2)) {
+            return true;
+        }
+        if (types1.length == types2.length) {
+            for (int i = 0; i < types1.length; i++) {
+                if (false == types1[i].isAssignableFrom(types2[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 }
