@@ -351,4 +351,5 @@ public final class ClassUtil {
         final Class<?> clazz = obj.getClass();
         return clazz.getComponentType();
     }
+
 }
