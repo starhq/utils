@@ -2,15 +2,14 @@ package com.star.clazz;
 
 import com.star.collection.array.ArrayUtil;
 import com.star.exception.ToolException;
+import com.star.io.ResourceUtil;
 import com.star.reflect.ConstructorUtil;
-import com.star.reflect.TypeUtil;
 import com.star.string.StringUtil;
 import com.sun.xml.internal.ws.util.UtilException;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -108,6 +107,31 @@ public final class ClassUtil {
     }
 
     /**
+     * 获得ClassPath
+     *
+     * @return ClassPath
+     */
+    public static String getClassPath() {
+        return getClassPathURL().getPath();
+    }
+
+    /**
+     * 获得ClassPath URL
+     *
+     * @return ClassPath URL
+     */
+    public static URL getClassPathURL() {
+        return ResourceUtil.getResource(StringUtil.EMPTY);
+    }
+
+    /**
+     * @return 获得Java ClassPath路径，不包括 jre
+     */
+    public static String[] getJavaClassPaths() {
+        return System.getProperty("java.class.path").split(System.getProperty("path.separator"));
+    }
+
+    /**
      * 实例化对象
      *
      * @param <T>   对象类型
@@ -122,7 +146,6 @@ public final class ClassUtil {
             throw new ToolException(String.format("instance class {} failure,the reason is: {}", clazz, e.getMessage()),
                     e);
         }
-
     }
 
     /**
@@ -139,7 +162,8 @@ public final class ClassUtil {
             if (ArrayUtil.isEmpty(params)) {
                 instance = clazz.newInstance();
             } else {
-                instance = ConstructorUtil.getConstructor(clazz, ClassUtil.getClasses(params)).orElseThrow(ToolException::new).newInstance(params);
+                instance = ConstructorUtil.getConstructor(clazz, getClasses(params)).orElseThrow
+                        (NullPointerException::new).newInstance(params);
             }
             return instance;
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
@@ -165,10 +189,11 @@ public final class ClassUtil {
         for (final Constructor<T> constructor : constructors) {
             parameterTypes = constructor.getParameterTypes();
             try {
-                result = Optional.of(constructor.newInstance(ClassUtil.getDefaultValues(parameterTypes)));
+                result = Optional.of(constructor.newInstance(getDefaultValues(parameterTypes)));
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                 throw new ToolException(
-                        String.format("instance class {} failure,the reason is: {}", beanClass.getSimpleName(), e.getMessage()),
+                        String.format("instance class {} failure,the reason is: {}", beanClass.getSimpleName(), e
+                                .getMessage()),
                         e);
             }
         }
@@ -225,23 +250,34 @@ public final class ClassUtil {
     }
 
     /**
-     * 获取指定类型分的默认值<br>
-     * <p>
-     * 默认值规则为：
-     * <p>
-     * <pre>
+     * 获得给定类所在包的名称
      *
-     * 1、如果为原始类型，返回0
+     * @param clazz 类
+     * @return 包名
+     */
+    public static String getPackage(final Class<?> clazz) {
+        final String name = getClassName(clazz, false);
+        final int packageEndIndex = name.lastIndexOf(StringUtil.C_DOT);
+        return packageEndIndex == -1 ? name : StringUtil.sub(name, 0, packageEndIndex);
+    }
+
+    /**
+     * 获得给定类所在包的路径<
      *
-     * 2、非原始类型返回{@code null}
-     *
-     * </pre>
+     * @param clazz 类
+     * @return 包名
+     */
+    public static String getPackagePath(final Class<?> clazz) {
+        return getPackage(clazz).replace(StringUtil.C_DOT, StringUtil.C_SLASH);
+    }
+
+    /**
+     * 获取指定类型分的默认值
      *
      * @param clazz 类
      * @return 默认值
-     * @since 3.0.8
      */
-    public static Object getDefaultValue(Class<?> clazz) {
+    public static Object getDefaultValue(final Class<?> clazz) {
         if (clazz.isPrimitive()) {
             if (long.class == clazz) {
                 return 0L;
@@ -261,7 +297,6 @@ public final class ClassUtil {
                 return false;
             }
         }
-
         return null;
     }
 
@@ -272,7 +307,7 @@ public final class ClassUtil {
      * @return 默认值列表
      * @since 3.0.9
      */
-    public static Object[] getDefaultValues(Class<?>... classes) {
+    public static Object[] getDefaultValues(final Class<?>... classes) {
         final Object[] values = new Object[classes.length];
         for (int i = 0; i < classes.length; i++) {
             values[i] = getDefaultValue(classes[i]);
@@ -280,66 +315,6 @@ public final class ClassUtil {
         return values;
     }
 
-    /**
-     * 获得给定类的第一个泛型参数
-     *
-     * @param clazz 被检查的类，必须是已经确定泛型类型的类
-     * @return {@link Class}
-     */
-    public static Class<?> getTypeArgument(Class<?> clazz) {
-        return getTypeArgument(clazz, 0);
-    }
-
-    /**
-     * 获得给定类的泛型参数
-     *
-     * @param clazz 被检查的类，必须是已经确定泛型类型的类
-     * @param index 泛型类型的索引号，既第几个泛型类型
-     * @return {@link Class}
-     */
-    public static Class<?> getTypeArgument(Class<?> clazz, int index) {
-        final Type argumentType = TypeUtil.getTypeArgument(clazz, index).orElseThrow(NullPointerException::new);
-        if (null != argumentType && argumentType instanceof Class) {
-            return (Class<?>) argumentType;
-        }
-        return null;
-    }
-
-    /**
-     * 获得给定类所在包的名称<br>
-     * <p>
-     * 例如：<br>
-     * <p>
-     * com.xiaoleilu.hutool.util.ClassUtil =》 com.xiaoleilu.hutool.util
-     *
-     * @param clazz 类
-     * @return 包名
-     */
-    public static String getPackage(Class<?> clazz) {
-        if (clazz == null) {
-            return StringUtil.EMPTY;
-        }
-        final String className = clazz.getName();
-        int packageEndIndex = className.lastIndexOf(StringUtil.DOT);
-        if (packageEndIndex == -1) {
-            return StringUtil.EMPTY;
-        }
-        return className.substring(0, packageEndIndex);
-    }
-
-    /**
-     * 获得给定类所在包的路径<br>
-     * <p>
-     * 例如：<br>
-     * <p>
-     * com.xiaoleilu.hutool.util.ClassUtil =》 com/xiaoleilu/hutool/util
-     *
-     * @param clazz 类
-     * @return 包名
-     */
-    public static String getPackagePath(Class<?> clazz) {
-        return getPackage(clazz).replace(StringUtil.C_DOT, StringUtil.C_SLASH);
-    }
 
     /**
      * 获取对象的componentType

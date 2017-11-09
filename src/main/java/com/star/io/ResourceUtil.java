@@ -15,6 +15,27 @@ public class ResourceUtil {
 
 
     /**
+     * 获得资源的URL<br>
+     * <p>
+     * 路径用/分隔，例如:
+     * <p>
+     * <pre>
+     *
+     * config/a/db.config
+     *
+     * spring/xml/test.xml
+     *
+     * </pre>
+     *
+     * @param resource 资源（相对Classpath的路径）
+     * @return 资源URL
+     */
+    public static URL getResource(String resource) {
+        return getResource(resource, null);
+    }
+
+
+    /**
      * 获取指定路径下的资源列表<br>
      * <p>
      * 路径格式必须为目录格式,用/分隔，例如:
@@ -52,6 +73,7 @@ public class ResourceUtil {
      * @return {@link URL}
      */
     public static URL getResource(String resource, Class<?> baseClass) {
-        return (null != baseClass) ? baseClass.getResource(resource) : ClassLoaderUtil.getClassLoader().getResource(resource);
+        return (null != baseClass) ? baseClass.getResource(resource) : ClassLoaderUtil.getClassLoader().getResource
+                (resource);
     }
 }
