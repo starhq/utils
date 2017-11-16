@@ -1,8 +1,14 @@
 package com.star.clazz;
 
+import com.star.exception.ToolException;
+import com.star.string.StringUtil;
+
 import java.util.Objects;
 
-public class ClassLoaderUtil {
+public final class ClassLoaderUtil {
+
+    private ClassLoaderUtil() {
+    }
 
     /**
      * 获取当前线程的classloader
@@ -22,5 +28,33 @@ public class ClassLoaderUtil {
     public static ClassLoader getClassLoader() {
         final ClassLoader classLoader = getContextClassLoader();
         return Objects.isNull(classLoader) ? ClassLoaderUtil.class.getClassLoader() : classLoader;
+    }
+
+
+    /**
+     * 加载类
+     *
+     * @param className     全路径类名
+     * @param isInitialized 是否初始化
+     * @return 实体对象
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> Class<T> loadClass(final String className, final boolean isInitialized) {
+        try {
+            return (Class<T>) Class.forName(className, isInitialized, getClassLoader());
+        } catch (ClassNotFoundException e) {
+            throw new ToolException(
+                    StringUtil.format(" {} load class failure,the reasone is: {}", className, e.getMessage()), e);
+        }
+    }
+
+    /**
+     * 加载类并初始化
+     *
+     * @param className 全路径类名
+     * @return 实体对象
+     */
+    public static <T> Class<T> loadClass(final String className) {
+        return loadClass(className, true);
     }
 }
