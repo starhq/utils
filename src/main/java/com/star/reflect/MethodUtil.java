@@ -231,7 +231,7 @@ public final class MethodUtil {
             return (T) method.invoke(Modifier.isStatic(method.getModifiers()) ? null : obj, args);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             throw new ToolException(StringUtil.format("invoke class {}'s method {} failue,the reason is: {}",
-                    ClassUtil.getClassName(obj, true), method.getName(), e.getMessage()), e);
+                    ClassUtil.getClassName(obj.getClass(), true), method.getName(), e.getMessage()), e);
         }
     }
 
@@ -305,14 +305,15 @@ public final class MethodUtil {
      * @return 方法
      */
     private static Optional<Method> getMethod(final String name, final Method[] methods, final Class<?>... paramTypes) {
-        Optional<Method> result = Optional.empty();
-        for (final Method method : methods) {
-            if (name.equals(method.getName()) && (ArrayUtil.isEmpty(paramTypes) || ClassUtil.isAllAssignableFrom(method
-                    .getParameterTypes(), paramTypes))) {
-                result = Optional.of(method);
-                break;
-            }
-        }
-        return result;
+//        Optional<Method> result = Optional.empty();
+//        for (final Method method : methods) {
+//            if (name.equals(method.getName()) && (ArrayUtil.isEmpty(paramTypes) || ClassUtil.isAllAssignableFrom(method
+//                    .getParameterTypes(), paramTypes))) {
+//                result = Optional.of(method);
+//                break;
+//            }
+//        }
+//        return result;
+        return null;
     }
 }

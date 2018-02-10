@@ -1,7 +1,6 @@
 package com.star.test;
 
 import com.star.clazz.ClassUtil;
-import com.star.collection.array.ArrayUtil;
 import org.junit.Test;
 
 public class ClassUtilTest {
@@ -14,7 +13,7 @@ public class ClassUtilTest {
 
     @Test
     public void test() {
-        System.out.println(ArrayUtil.toString(ClassUtil.getJavaClassPaths()));
+        System.out.println(ClassUtil.getClassPath());
 //        Nano.bench().measurements(measurements).threads(threads).measure("caset version version", () -> {
 //            for (int i = 0; i < SerialTimes; i++) {
 //
