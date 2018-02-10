@@ -17,9 +17,12 @@ public class BeanUtilTest {
     public void testCache() {
         Demo demo = new Demo();
         demo.setName("hello");
+
         Demo demo1 = new Demo();
-        BeanUtil.copyProperties(demo, demo1);
+
+        BeanUtil.copyProperties(demo, demo1, null);
         System.out.println(demo1.getName());
+
 
 //        Nano.bench().measurements(measurements).threads(threads).measure("test cache version", () -> {
 //            for (int i = 0; i < SerialTimes; i++) {
@@ -36,15 +39,4 @@ public class BeanUtilTest {
         });
     }
 
-    class Demo {
-        private String name;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
 }
