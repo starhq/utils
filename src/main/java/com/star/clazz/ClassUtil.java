@@ -174,33 +174,6 @@ public final class ClassUtil {
     }
 
     /**
-     * 加载类
-     *
-     * @param className     全路径类名
-     * @param isInitialized 是否初始化
-     * @return 实体对象
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> Class<T> loadClass(final String className, final boolean isInitialized) {
-        try {
-            return (Class<T>) Class.forName(className, isInitialized, ClassLoaderUtil.getClassLoader());
-        } catch (ClassNotFoundException e) {
-            throw new ToolException(
-                    StringUtil.format(" {} load class failure,the reasone is: {}", className, e.getMessage()), e);
-        }
-    }
-
-    /**
-     * 加载类并初始化
-     *
-     * @param className 全路径类名
-     * @return 实体对象
-     */
-    public static <T> Class<T> loadClass(final String className) {
-        return loadClass(className, true);
-    }
-
-    /**
      * 获得给定类所在包的名称
      *
      * @param clazz 类

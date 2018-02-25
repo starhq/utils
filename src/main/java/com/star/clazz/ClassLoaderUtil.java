@@ -5,6 +5,9 @@ import com.star.string.StringUtil;
 
 import java.util.Objects;
 
+/**
+ * ClassLoader工具类
+ */
 public final class ClassLoaderUtil {
 
     private ClassLoaderUtil() {
