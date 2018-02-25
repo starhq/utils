@@ -31,16 +31,6 @@ public final class ArrayUtil {
     /**
      * 数组是否为空
      *
-     * @param obj 需要判断的数组
-     * @return 是否为数组
-     */
-    public static boolean isEmpty(final Object obj) {
-        return Objects.isNull(obj) || isArray(obj) && 0 == length(obj);
-    }
-
-    /**
-     * 数组是否为空
-     *
      * @param array 需要判断的数组
      * @param <T>   泛型
      * @return 是否为数组
@@ -48,6 +38,16 @@ public final class ArrayUtil {
     @SafeVarargs
     public static <T> boolean isEmpty(final T... array) {
         return Objects.isNull(array) || array.length == 0;
+    }
+
+    /**
+     * 数组是否为空
+     *
+     * @param obj 需要判断的数组
+     * @return 是否为数组
+     */
+    public static boolean isEmpty(final Object obj) {
+        return Objects.isNull(obj) || isArray(obj) && 0 == getLength(obj);
     }
 
     /**
@@ -148,7 +148,7 @@ public final class ArrayUtil {
      * @return 过滤后的数组
      */
     public static <T> T[] filter(final T[] array, final Filter<T> filter) {
-        final List<T> list = new ArrayList<>();
+        final List<T> list = new ArrayList<>(array.length);
         for (final T instance : array) {
             if (filter.accept(instance)) {
                 list.add(instance);
@@ -166,7 +166,7 @@ public final class ArrayUtil {
      * @return 过滤后的数组
      */
     public static <T> T[] filter(final T[] array, final Editor<T> editor) {
-        final List<T> list = new ArrayList<>();
+        final List<T> list = new ArrayList<>(array.length);
         T modified;
         for (final T instance : array) {
             modified = editor.edit(instance);
@@ -288,14 +288,13 @@ public final class ArrayUtil {
         return str;
     }
 
-
     /**
      * 获取数组的长度
      *
      * @param obj 数组
      * @return 长度
      */
-    public static int length(final Object obj) {
+    public static int getLength(final Object obj) {
         return isArray(obj) ? 0 : Array.getLength(obj);
     }
 
@@ -342,7 +341,7 @@ public final class ArrayUtil {
      * @return 删除后的数组
      */
     public static Object remove(final Object array, final int index) {
-        final int length = length(array);
+        final int length = getLength(array);
         Object result;
         if (index < 0 || index >= length) {
             result = array;
@@ -355,6 +354,4 @@ public final class ArrayUtil {
         }
         return result;
     }
-
-
 }

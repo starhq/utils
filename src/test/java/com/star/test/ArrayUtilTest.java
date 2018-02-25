@@ -1,6 +1,7 @@
 package com.star.test;
 
 import com.alisoft.nano.bench.Nano;
+import com.star.clazz.ClassUtil;
 import com.star.collection.array.ArrayUtil;
 import org.junit.Test;
 
@@ -17,6 +18,8 @@ public class ArrayUtilTest {
 
     @Test
     public void testTrimBySubstring() {
+        Class<?> clazz = ClassUtil.getComponentType(array);
+        System.out.println(clazz);
         Nano.bench().measurements(measurements).threads(threads).measure("caset version version", () -> {
             for (int i = 0; i < SerialTimes; i++) {
 
