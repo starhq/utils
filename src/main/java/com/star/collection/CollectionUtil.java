@@ -189,7 +189,7 @@ public final class CollectionUtil {
         if (!isEmpty(result)) {
             result.clear();
             T modified;
-            for (T instance : collection) {
+            for (final T instance : collection) {
                 modified = editor.edit(instance);
                 if (!Objects.isNull(modified)) {
                     result.add(modified);
@@ -231,7 +231,7 @@ public final class CollectionUtil {
         });
     }
 
-    private static <T> void getCollection(Collection<T> collection1, Collection<T> collection2, ArrayList<T> list) {
+    private static <T> void getCollection(final Collection<T> collection1, final Collection<T> collection2, final ArrayList<T> list) {
         final Map<T, Integer> map1 = IterUtil.countMap(collection1);
         final Map<T, Integer> map2 = IterUtil.countMap(collection2);
         final Set<T> sets = SetUtil.newHashSet(collection2);
@@ -241,7 +241,7 @@ public final class CollectionUtil {
             final int count1 = Objects.isNull(map1.get(instance)) ? 0 : map1.get(instance);
             final int count2 = Objects.isNull(map2.get(instance)) ? 0 : map2.get(instance);
 
-            flag = Math.min(count1, count2);
+            flag = Math.max(count1, count2);
             for (int i = 0; i < flag; i++) {
                 list.add(instance);
             }
