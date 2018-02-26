@@ -19,20 +19,6 @@ import java.util.Set;
  */
 public final class CollectionUtil {
 
-
-    private CollectionUtil() {
-    }
-
-    /**
-     * 集合是否为空
-     *
-     * @param collection 集合
-     * @return 是否为空
-     */
-    public static boolean isEmpty(final Collection<?> collection) {
-        return collection == null || collection.isEmpty();
-    }
-
     /**
      * 两个集合去并集
      *
@@ -48,7 +34,37 @@ public final class CollectionUtil {
         } else if (isEmpty(collection2)) {
             list.addAll(collection1);
         } else {
-            getCollection(collection1, collection2, list);
+            getCollection(collection1, collection2, list, TypeEnum.UNION);
+        }
+        return list;
+    }
+
+
+    private CollectionUtil() {
+    }
+
+    /**
+     * 集合是否为空
+     *
+     * @param collection 集合
+     * @return 是否为空
+     */
+    public static boolean isEmpty(final Collection<?> collection) {
+        return collection == null || collection.isEmpty();
+    }
+
+    /**
+     * 多个集合取交集
+     *
+     * @param collection1 集合1
+     * @param collection2 集合2
+     * @param <T>         泛型
+     * @return 交集
+     */
+    public static <T> Collection<T> intersection(final Collection<T> collection1, final Collection<T> collection2) {
+        final ArrayList<T> list = new ArrayList<>();
+        if (!isEmpty(collection1) && !isEmpty(collection2)) {
+            getCollection(collection1, collection2, list, TypeEnum.INTERSECTION);
         }
         return list;
     }
@@ -74,17 +90,17 @@ public final class CollectionUtil {
     }
 
     /**
-     * 多个集合取交集
+     * 多个集合取差集
      *
      * @param collection1 集合1
      * @param collection2 集合2
      * @param <T>         泛型
-     * @return 交集
+     * @return 差集
      */
-    public static <T> Collection<T> intersection(final Collection<T> collection1, final Collection<T> collection2) {
+    public static <T> Collection<T> disjunction(final Collection<T> collection1, final Collection<T> collection2) {
         final ArrayList<T> list = new ArrayList<>();
         if (!isEmpty(collection1) && !isEmpty(collection2)) {
-            getCollection(collection1, collection2, list);
+            getCollection(collection1, collection2, list, TypeEnum.DISJUNCTION);
         }
         return list;
     }
@@ -108,33 +124,33 @@ public final class CollectionUtil {
         return intersection;
     }
 
-    /**
-     * 多个集合取差集
-     *
-     * @param collection1 集合1
-     * @param collection2 集合2
-     * @param <T>         泛型
-     * @return 差集
-     */
-    public static <T> Collection<T> disjunction(final Collection<T> collection1, final Collection<T> collection2) {
-        final ArrayList<T> list = new ArrayList<>();
-        if (!isEmpty(collection1) && !isEmpty(collection2)) {
-            final Map<T, Integer> map1 = IterUtil.countMap(collection1);
-            final Map<T, Integer> map2 = IterUtil.countMap(collection2);
-            final Set<T> sets = SetUtil.newHashSet(collection2);
-            sets.addAll(collection2);
-            int flag;
-            for (final T instance : sets) {
-                final int count1 = Objects.isNull(map1.get(instance)) ? 0 : map1.get(instance);
-                final int count2 = Objects.isNull(map2.get(instance)) ? 0 : map2.get(instance);
+    private static <T> void getCollection(final Collection<T> collection1, final Collection<T> collection2, final ArrayList<T> list, final TypeEnum
+            typeEnum) {
+        final Map<T, Integer> map1 = IterUtil.countMap(collection1);
+        final Map<T, Integer> map2 = IterUtil.countMap(collection2);
+        final Set<T> sets = SetUtil.newHashSet(collection2);
+        sets.addAll(collection1);
+        int flag;
+        for (final T instance : sets) {
+            final int count1 = Objects.isNull(map1.get(instance)) ? 0 : map1.get(instance);
+            final int count2 = Objects.isNull(map2.get(instance)) ? 0 : map2.get(instance);
 
-                flag = Math.abs(count1 - count2);
-                for (int i = 0; i < flag; i++) {
-                    list.add(instance);
-                }
+            switch (typeEnum) {
+                case UNION:
+                    flag = Math.max(count1, count2);
+                    break;
+                case INTERSECTION:
+                    flag = Math.min(count1, count2);
+                    break;
+                default:
+                    flag = Math.abs(count1 - count2);
+                    break;
+            }
+
+            for (int i = 0; i < flag; i++) {
+                list.add(instance);
             }
         }
-        return list;
     }
 
     /**
@@ -231,20 +247,10 @@ public final class CollectionUtil {
         });
     }
 
-    private static <T> void getCollection(final Collection<T> collection1, final Collection<T> collection2, final ArrayList<T> list) {
-        final Map<T, Integer> map1 = IterUtil.countMap(collection1);
-        final Map<T, Integer> map2 = IterUtil.countMap(collection2);
-        final Set<T> sets = SetUtil.newHashSet(collection2);
-        sets.addAll(collection1);
-        int flag;
-        for (final T instance : sets) {
-            final int count1 = Objects.isNull(map1.get(instance)) ? 0 : map1.get(instance);
-            final int count2 = Objects.isNull(map2.get(instance)) ? 0 : map2.get(instance);
-
-            flag = Math.max(count1, count2);
-            for (int i = 0; i < flag; i++) {
-                list.add(instance);
-            }
-        }
+    /**
+     * 交，并，补
+     */
+    enum TypeEnum {
+        UNION, INTERSECTION, DISJUNCTION
     }
 }

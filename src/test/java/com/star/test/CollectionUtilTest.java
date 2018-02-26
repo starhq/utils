@@ -32,7 +32,7 @@ public class CollectionUtilTest {
         list2.add("c");
         list2.add("c");
 
-        System.out.println(CollectionUtil.union(list1, list2));
+        System.out.println(CollectionUtil.disjunction(list1, list2));
 
 
 //        Nano.bench().measurements(measurements).threads(threads).measure("test cache version", () -> {
