@@ -121,6 +121,17 @@ public final class MapUtil {
      * @param <V> 泛型 值
      * @return TreeMap
      */
+    public static <K, V> Map<K, V> newTreeMap(final Comparator<K> comparator) {
+        return Objects.isNull(comparator) ? new TreeMap<>() : new TreeMap<>(comparator);
+    }
+
+    /**
+     * 初始化TreeMap
+     *
+     * @param <K> 泛型 键
+     * @param <V> 泛型 值
+     * @return TreeMap
+     */
     public static <K, V> Map<K, V> newTreeMap(final Map<K, V> map, final Comparator<K> comparator) {
         final Map<K, V> result = Objects.isNull(comparator) ? new TreeMap<>() : new TreeMap<>(comparator);
         if (!isEmpty(map)) {
