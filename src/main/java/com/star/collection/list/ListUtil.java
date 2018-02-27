@@ -11,8 +11,12 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * 集合工具类
@@ -32,7 +36,7 @@ public final class ListUtil {
      * @return ArrayList
      */
     @SafeVarargs
-    public static <T> ArrayList<T> newArrayList(final T... values) {
+    public static <T> List<T> newArrayList(final T... values) {
         ArrayList<T> arrayList;
         if (ArrayUtil.isEmpty(values)) {
             arrayList = new ArrayList<>();
@@ -50,7 +54,7 @@ public final class ListUtil {
      * @param <T>        范型
      * @return ArrayList
      */
-    public static <T> ArrayList<T> newArrayList(final Collection<T> collection) {
+    public static <T> List<T> newArrayList(final Collection<T> collection) {
         return CollectionUtil.isEmpty(collection) ? new ArrayList<>() : new ArrayList<>(collection);
     }
 
@@ -61,7 +65,7 @@ public final class ListUtil {
      * @param <T>      范型
      * @return ArrayList
      */
-    public static <T> ArrayList<T> newArrayList(final Iterable<T> iterable) {
+    public static <T> List<T> newArrayList(final Iterable<T> iterable) {
         return IterUtil.isEmpty(iterable) ? new ArrayList<>() : newArrayList(iterable.iterator());
     }
 
@@ -72,7 +76,7 @@ public final class ListUtil {
      * @param <T>      范型
      * @return ArrayList
      */
-    public static <T> ArrayList<T> newArrayList(final Iterator<T> iterator) {
+    public static <T> List<T> newArrayList(final Iterator<T> iterator) {
         final ArrayList<T> arrayList = new ArrayList<>();
         if (!IterUtil.isEmpty(iterator)) {
             while (iterator.hasNext()) {
@@ -95,13 +99,25 @@ public final class ListUtil {
     }
 
     /**
+     * 创建定长队列
+     *
+     * @param capacity 队列大小
+     * @param isLinked 是否有界
+     * @param <T>      泛型
+     * @return 队列
+     */
+    public static <T> BlockingQueue<T> newBlockingQueue(final int capacity, final boolean isLinked) {
+        return isLinked ? new LinkedBlockingQueue<>(capacity) : new ArrayBlockingQueue<>(capacity);
+    }
+
+    /**
      * 集合去重
      *
      * @param collection 集合
      * @param <T>        泛型
      * @return AArrayList
      */
-    public static <T> ArrayList<T> distinct(final Collection<T> collection) {
+    public static <T> List<T> distinct(final Collection<T> collection) {
         return CollectionUtil.isEmpty(collection) ? new ArrayList<>() : collection instanceof Set ? new ArrayList<>
                 (collection) : new ArrayList<>(new LinkedHashSet<>(collection));
     }
@@ -112,7 +128,7 @@ public final class ListUtil {
      * @param <T> 泛型
      * @return LinkedList
      */
-    public static <T> LinkedList<T> newLinkedList() {
+    public static <T> List<T> newLinkedList() {
         return new LinkedList<>();
     }
 
@@ -123,7 +139,7 @@ public final class ListUtil {
      * @param <T>      泛型
      * @return ArrayList
      */
-    public static <T> ArrayList<T> newArrayList(final int capacity) {
+    public static <T> List<T> newArrayList(final int capacity) {
         return new ArrayList<>(capacity);
     }
 
@@ -135,13 +151,12 @@ public final class ListUtil {
      * @param processors 处理器
      * @param <T>        输入泛型
      * @param <R>        输出泛型
-     * @return 按输出泛型定义返回
      */
-    public static <T, R> R split(final Collection<T> collection, final int size, final ItemsProcessor<T, R>
+    public static <T, R> void batchProcess(final Collection<T> collection, final int size, final ItemsProcessor<T, R>
             processors) {
-        ArrayList<T> subList = newArrayList(size);
+        List<T> subList = newArrayList(size);
         for (final T instance : collection) {
-            if (subList.size() > size) {
+            if (subList.size() >= size) {
                 processors.process(subList);
                 subList = newArrayList(size);
             }
@@ -150,7 +165,6 @@ public final class ListUtil {
         if (!CollectionUtil.isEmpty(subList)) {
             processors.process(subList);
         }
-        return null;
     }
 
 
