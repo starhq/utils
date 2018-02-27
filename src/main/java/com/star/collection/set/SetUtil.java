@@ -3,6 +3,7 @@ package com.star.collection.set;
 import com.star.collection.CollectionUtil;
 import com.star.collection.array.ArrayUtil;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -55,9 +56,7 @@ public final class SetUtil {
         } else {
             final int capacity = Math.max((int) (instances.length / DEFAULT_LOAD_FACTOR) + 1, 16);
             result = isSorted ? new LinkedHashSet<>(capacity) : new HashSet<>(capacity);
-            for (final T instance : instances) {
-                result.add(instance);
-            }
+            result.addAll(Arrays.asList(instances));
         }
         return result;
     }
@@ -94,12 +93,18 @@ public final class SetUtil {
      * @return HashSet
      */
     public static <T> Set<T> newHashSet(final boolean isSorted, final Iterator<T> iterator) {
-        final HashSet<T> result = isSorted ? new LinkedHashSet<>() : new HashSet<>();
-        while (iterator.hasNext()) {
-            result.add(iterator.next());
+        Set<T> result;
+        if (iterator == null) {
+            result = newHashSet(isSorted, (T[]) null);
+        } else {
+            result = isSorted ? new LinkedHashSet<>() : new HashSet<>();
+            while (iterator.hasNext()) {
+                result.add(iterator.next());
+            }
         }
         return result;
     }
+
 
     /**
      * 集合包装成TreeSet
