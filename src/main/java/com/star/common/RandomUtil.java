@@ -26,6 +26,9 @@ public final class RandomUtil {
      */
     private static final String ALL = NUMBER + LETTER;
 
+    /**
+     * 初始化random
+     */
     private final static ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
 
     private RandomUtil() {
