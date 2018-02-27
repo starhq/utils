@@ -124,7 +124,7 @@ public final class CollectionUtil {
         return intersection;
     }
 
-    private static <T> void getCollection(final Collection<T> collection1, final Collection<T> collection2, final ArrayList<T> list, final TypeEnum
+    private static <T> void getCollection(final Collection<T> collection1, final Collection<T> collection2, final List<T> list, final TypeEnum
             typeEnum) {
         final Map<T, Integer> map1 = IterUtil.countMap(collection1);
         final Map<T, Integer> map2 = IterUtil.countMap(collection2);
@@ -182,11 +182,12 @@ public final class CollectionUtil {
      */
     public static <T> Collection<T> filter(final Collection<T> collection, final Filter<T> filter) {
         final Collection<T> result = ObjectUtil.clone(collection);
-        result.clear();
-
-        for (final T instance : collection) {
-            if (filter.accept(instance)) {
-                result.add(instance);
+        if (!isEmpty(result)) {
+            result.clear();
+            for (final T instance : collection) {
+                if (filter.accept(instance)) {
+                    result.add(instance);
+                }
             }
         }
         return result;
