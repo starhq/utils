@@ -295,7 +295,7 @@ public final class ArrayUtil {
      * @return 长度
      */
     public static int getLength(final Object obj) {
-        return isArray(obj) ? 0 : Array.getLength(obj);
+        return isArray(obj) ? Array.getLength(obj) : 0;
     }
 
     /**
