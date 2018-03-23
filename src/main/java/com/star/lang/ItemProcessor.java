@@ -5,16 +5,15 @@ package com.star.lang;
  *
  * @param <T> 输入泛型
  * @param <R> 返回值泛型
+ * @author star
  */
-public interface ItemProcessor<T, R> {
+public interface ItemProcessor<R, T> {
 
     /**
      * 处理
      *
      * @param instance 需要处理的数据
-     * @param <T>      输入泛型
-     * @param <R>      返回值泛型
      * @return 返回值
      */
-    <T, R> R process(T instance);
+    R process(T instance);
 }

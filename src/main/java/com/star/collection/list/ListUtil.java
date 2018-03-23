@@ -150,10 +150,9 @@ public final class ListUtil {
      * @param size       按size大小切分
      * @param processors 处理器
      * @param <T>        输入泛型
-     * @param <R>        输出泛型
      */
-    public static <T, R> void batchProcess(final Collection<T> collection, final int size, final ItemsProcessor<T, R>
-            processors) {
+    @SuppressWarnings("unchecked")
+    public static <T> void batchProcess(final Collection<T> collection, final int size, final ItemsProcessor processors) {
         List<T> subList = newArrayList(size);
         for (final T instance : collection) {
             if (subList.size() >= size) {

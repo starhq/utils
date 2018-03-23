@@ -7,16 +7,16 @@ import java.util.Collection;
  *
  * @param <T> 输入泛型
  * @param <R> 返回值泛型
+ * @author starhq
  */
-public interface ItemsProcessor<T, R> {
+@FunctionalInterface
+public interface ItemsProcessor<R, T> {
 
     /**
      * 处理
      *
      * @param instances 需要处理的数据
-     * @param <T>       输入泛型
-     * @param <R>       返回值泛型
      * @return 返回值
      */
-    <T, R> R process(Collection<T> instances);
+    R process(Collection<T> instances);
 }

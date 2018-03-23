@@ -58,4 +58,27 @@ public final class CharsetUtil {
     public static Charset charset(final Charset charset) {
         return Objects.isNull(charset) ? DEFAULT : charset;
     }
+
+    /**
+     * @param source      字符串
+     * @param srcCharset  源字符集，默认ISO-8859-1
+     * @param destCharset 目标字符集，默认UTF-8
+     * @return 转换后的字符集
+     */
+    public static String convert(final String source, final Charset srcCharset, final Charset destCharset) {
+        final Charset src = Objects.isNull(srcCharset) ? CHARSET_8859 : srcCharset;
+        final Charset dest = Objects.isNull(destCharset) ? CHARSET_UTF_8 : destCharset;
+        return StringUtil.isBlank(source) || src.equals(dest) ? source
+                : StringUtil.str(source.getBytes(src), dest);
+    }
+
+    /**
+     * @param source      字符串
+     * @param srcCharset  源字符集，默认ISO-8859-1
+     * @param destCharset 目标字符集，默认UTF-8
+     * @return 转换后的字符集
+     */
+    public static String convert(final String source, final String srcCharset, final String destCharset) {
+        return convert(source, charset(srcCharset), charset(destCharset));
+    }
 }
