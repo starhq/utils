@@ -97,7 +97,7 @@ public class FastByteArrayOutputStream extends OutputStream {
      *
      * @param ops 输出流
      */
-    public void writeTo(OutputStream ops) throws IORuntimeException {
+    public void writeTo(OutputStream ops) {
         final int idx = buffer.getIndex();
         byte[] buf;
         try {
@@ -107,7 +107,7 @@ public class FastByteArrayOutputStream extends OutputStream {
             }
             ops.write(buffer.getArray(idx), 0, buffer.getOffset());
         } catch (IOException e) {
-            throw new RuntimeException(StringUtil
+            throw new IORuntimeException(StringUtil
                     .format("fast byte buffer write to output stream failue,the reason is: {}", e.getMessage()), e);
         }
     }
@@ -128,7 +128,7 @@ public class FastByteArrayOutputStream extends OutputStream {
      */
     @Override
     public String toString() {
-        return StringUtil.str(toByteArray());
+        return new String(toByteArray());
     }
 
     /**
