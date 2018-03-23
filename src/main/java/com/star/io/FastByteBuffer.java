@@ -224,9 +224,9 @@ public class FastByteBuffer {
     /**
      * 返回缓冲集中的数据
      *
-     * @param start
-     * @param len
-     * @return
+     * @param start 缓冲区起始位置
+     * @param len   长度
+     * @return 字节数组
      */
     public byte[] toArray(final int start, final int len) {
         final byte[] array = new byte[len];
