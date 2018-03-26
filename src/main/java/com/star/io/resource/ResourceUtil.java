@@ -1,4 +1,4 @@
-package com.star.io;
+package com.star.io.resource;
 
 
 import com.star.clazz.ClassLoaderUtil;
@@ -11,8 +11,15 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-public class ResourceUtil {
+/**
+ * ClassPath资源工具类
+ *
+ * @author Looly
+ */
+public final class ResourceUtil {
 
+    private ResourceUtil() {
+    }
 
     /**
      * 获得资源的URL<br>
@@ -30,7 +37,7 @@ public class ResourceUtil {
      * @param resource 资源（相对Classpath的路径）
      * @return 资源URL
      */
-    public static URL getResource(String resource) {
+    public static URL getResource(final String resource) {
         return getResource(resource, null);
     }
 
@@ -51,7 +58,7 @@ public class ResourceUtil {
      * @param resource 资源路径
      * @return 资源列表
      */
-    public static List<URL> getResources(String resource) {
+    public static List<URL> getResources(final String resource) {
         final Enumeration<URL> resources;
         try {
             resources = ClassLoaderUtil.getClassLoader().getResources(resource);
@@ -72,7 +79,7 @@ public class ResourceUtil {
      * @param baseClass 基准Class，获得的相对路径相对于此Class所在路径，如果为{@code null}则相对ClassPath
      * @return {@link URL}
      */
-    public static URL getResource(String resource, Class<?> baseClass) {
+    public static URL getResource(final String resource, final Class<?> baseClass) {
         return (null != baseClass) ? baseClass.getResource(resource) : ClassLoaderUtil.getClassLoader().getResource
                 (resource);
     }

@@ -4,10 +4,10 @@ import com.star.collection.array.ArrayUtil;
 import com.star.exception.IORuntimeException;
 import com.star.io.CharsetUtil;
 import com.star.io.IoUtil;
-import com.star.io.ResourceUtil;
 import com.star.io.file.filevisitor.CopyDirVisitor;
 import com.star.io.file.filevisitor.DeleteDirVisitor;
 import com.star.io.file.filevisitor.MoveDirVisitor;
+import com.star.io.resource.ResourceUtil;
 import com.star.lang.Filter;
 import com.star.lang.LineHandler;
 import com.star.string.StringUtil;
@@ -758,6 +758,21 @@ public final class PathUtil {
         } finally {
             IoUtil.close(input);
             IoUtil.close(output);
+        }
+    }
+
+    /**
+     * 根据url定位文件
+     *
+     * @param url url
+     * @return 文件
+     */
+    public static Path getPath(final URL url) {
+        try {
+            return Paths.get(url.toURI());
+        } catch (URISyntaxException e) {
+            throw new IORuntimeException(
+                    StringUtil.format("url to path failure,the reason is: {}", e.getMessage()), e);
         }
     }
 }

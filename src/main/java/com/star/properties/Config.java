@@ -1,7 +1,7 @@
 package com.star.properties;
 
 import com.star.exception.IORuntimeException;
-import com.star.io.ResourceUtil;
+import com.star.io.resource.ResourceUtil;
 import com.star.string.StringUtil;
 
 import java.io.File;

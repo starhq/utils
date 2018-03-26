@@ -3,7 +3,7 @@ package com.star.clazz;
 import com.star.collection.array.ArrayUtil;
 import com.star.collection.map.MapUtil;
 import com.star.exception.ToolException;
-import com.star.io.ResourceUtil;
+import com.star.io.resource.ResourceUtil;
 import com.star.reflect.ConstructorUtil;
 import com.star.string.StringUtil;
 import com.sun.xml.internal.ws.util.UtilException;
