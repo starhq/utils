@@ -1,6 +1,7 @@
 package com.star.test;
 
 import com.alisoft.nano.bench.Nano;
+import com.star.io.CharsetUtil;
 import com.star.io.file.PathUtil;
 import org.junit.Test;
 
@@ -16,13 +17,13 @@ public class PathUtilTest {
 
     private static int SerialTimes = 1000; // 每个线程执行序列化次数
 
-    Path path = Paths.get("I:\\d3d");
+    Path path = Paths.get("I:\\d3d\\123.txt");
     File file = new File("I:\\d3d");
 
 
     @Test
     public void testNioEmpty() {
-        System.out.println(PathUtil.subPath(Paths.get("d:/aaa/bbb"), Paths.get("d:/aaa/bbb/ccc")));
+        System.out.println(PathUtil.readString(path, CharsetUtil.CHARSET_UTF_8));
 //        Nano.bench().measurements(measurements).threads(threads).measure("nio dir emtpy", () -> {
 //            for (int i = 0; i < SerialTimes; i++) {
 //                PathUtil.loopFiles(path, null, null);

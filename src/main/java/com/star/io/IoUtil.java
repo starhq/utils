@@ -119,7 +119,7 @@ public final class IoUtil {
         int count = 0;
         int readSize;
         try {
-            while ((readSize = inputStream.read(buffer)) != -EOF) {
+            while ((readSize = inputStream.read(buffer)) != EOF) {
                 outputStream.write(buffer, 0, readSize);
                 count += readSize;
                 outputStream.flush();
@@ -490,7 +490,7 @@ public final class IoUtil {
      * @param collection  返回集合
      * @return 内容
      */
-    public <T extends Collection<String>> T readUTF8Lines(final InputStream inputStream, final T collection) {
+    public static <T extends Collection<String>> T readUTF8Lines(final InputStream inputStream, final T collection) {
         return readLines(getReader(getReader(inputStream, CharsetUtil.CHARSET_UTF_8)), collection);
     }
 
@@ -502,7 +502,7 @@ public final class IoUtil {
      * @param collection  返回集合
      * @return 内容
      */
-    public <T extends Collection<String>> T readLines(final InputStream inputStream, final String charset, final T collection) {
+    public static <T extends Collection<String>> T readLines(final InputStream inputStream, final String charset, final T collection) {
         return readLines(getReader(getReader(inputStream, CharsetUtil.charset(charset))), collection);
     }
 
@@ -514,7 +514,7 @@ public final class IoUtil {
      * @param collection  返回集合
      * @return 内容
      */
-    public <T extends Collection<String>> T readLines(final InputStream inputStream, final Charset charset, final T collection) {
+    public static <T extends Collection<String>> T readLines(final InputStream inputStream, final Charset charset, final T collection) {
         return readLines(getReader(getReader(inputStream, charset)), collection);
     }
 
@@ -525,7 +525,7 @@ public final class IoUtil {
      * @param collection 返回集合
      * @return 内容
      */
-    public <T extends Collection<String>> T readLines(final Reader reader, final T collection) {
+    public static <T extends Collection<String>> T readLines(final Reader reader, final T collection) {
         readLines(reader, (LineHandler) line -> collection.add(line));
         return collection;
     }
@@ -536,7 +536,7 @@ public final class IoUtil {
      * @param inputStream   输入流
      * @param itemProcessor 处理器
      */
-    public void readUTF8Lines(final InputStream inputStream, final LineHandler itemProcessor) {
+    public static void readUTF8Lines(final InputStream inputStream, final LineHandler itemProcessor) {
         readLines(getReader(inputStream, CharsetUtil.CHARSET_UTF_8), itemProcessor);
     }
 
@@ -547,7 +547,7 @@ public final class IoUtil {
      * @param charset       字符集
      * @param itemProcessor 处理器
      */
-    public void readLines(final InputStream inputStream, final Charset charset, final LineHandler itemProcessor) {
+    public static void readLines(final InputStream inputStream, final Charset charset, final LineHandler itemProcessor) {
         readLines(getReader(inputStream, charset), itemProcessor);
     }
 
@@ -557,7 +557,7 @@ public final class IoUtil {
      * @param reader        reader
      * @param itemProcessor 处理器
      */
-    public void readLines(final Reader reader, final LineHandler itemProcessor) {
+    public static void readLines(final Reader reader, final LineHandler itemProcessor) {
         final BufferedReader bufferedReader = getReader(reader);
         String line;
         try {
@@ -568,5 +568,6 @@ public final class IoUtil {
             throw new IORuntimeException(StringUtil.format("read lines from reader and handle it failure,the reason is {}", e.getMessage()), e);
         }
     }
+
 
 }
