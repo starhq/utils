@@ -12,6 +12,7 @@ import com.star.lang.Filter;
 import com.star.lang.LineHandler;
 import com.star.string.StringUtil;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -711,6 +712,9 @@ public final class PathUtil {
 
     /**
      * 文件大小可读
+     *
+     * @param size 文件大小
+     * @return 类似于 1MB
      */
     public static String readableFileSize(final long size) {
         String result;
@@ -723,5 +727,37 @@ public final class PathUtil {
             result = "0";
         }
         return result;
+    }
+
+    /**
+     * 生成文件的下载流
+     *
+     * @param path        文件路径
+     * @param contentType 下载类型
+     * @param response    响应
+     */
+    public static void makeStreamFile(final Path path, final HttpServletResponse response, final String contentType) {
+        BufferedOutputStream output = null;
+        BufferedInputStream input = null;
+        try {
+            response.reset();
+            response.setCharacterEncoding(CharsetUtil.UTF_8);
+
+            response.setHeader("Content-disposition", "attachment; filename=" + path.getFileName());
+            response.setContentType(contentType);
+            response.setContentLength((int) Files.size(path));
+
+            output = new BufferedOutputStream(response.getOutputStream());
+            input = getInputStream(path);
+
+            IoUtil.copy(input, output, 4096);
+
+        } catch (IOException e) {
+            throw new IORuntimeException(
+                    StringUtil.format("make file's download stream failure,the reason is: {}", e.getMessage()), e);
+        } finally {
+            IoUtil.close(input);
+            IoUtil.close(output);
+        }
     }
 }
