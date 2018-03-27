@@ -31,7 +31,7 @@ public class SqlRunner {
      * @return 查询对象
      */
     public <T> T query(final Connection conn, final String sql, final ResultSetHandler<T> rsh) {
-        return query(conn, sql, rsh, false);
+        return query(conn, sql, rsh, false, (Object[]) null);
     }
 
     /**
@@ -87,7 +87,7 @@ public class SqlRunner {
      * @return 更新的行数
      */
     public int update(final Connection conn, final String sql) {
-        return update(conn, sql, false);
+        return update(conn, sql, false, (Object[]) null);
     }
 
     /**
