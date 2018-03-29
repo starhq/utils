@@ -74,6 +74,9 @@ public class Config {
             } catch (IOException e) {
                 throw new IORuntimeException(StringUtil.format("read properties file failure: {}", e.getMessage()), e);
             }
+        } else {
+            //20180329新添加，这样就算没有配置文件也能运行
+            props = new Properties();
         }
     }
 

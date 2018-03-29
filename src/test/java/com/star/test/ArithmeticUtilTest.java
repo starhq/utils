@@ -2,10 +2,7 @@ package com.star.test;
 
 import com.alisoft.nano.bench.Nano;
 import com.star.collection.array.ArrayUtil;
-import com.star.math.ArithmeticUtil;
 import org.junit.Test;
-
-import java.math.BigDecimal;
 
 public class ArithmeticUtilTest {
 
@@ -20,7 +17,6 @@ public class ArithmeticUtilTest {
 
     @Test
     public void testTrimBySubstring() {
-        System.out.println(ArithmeticUtil.add(2, new BigDecimal("1"), null, new BigDecimal("3")));
 //        Class<?> clazz = ClassUtil.getComponentType(array);
 //        System.out.println(clazz);
 //        Nano.bench().measurements(measurements).threads(threads).measure("caset version version", () -> {
