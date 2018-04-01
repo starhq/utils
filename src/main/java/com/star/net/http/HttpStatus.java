@@ -2,8 +2,9 @@ package com.star.net.http;
 
 /**
  * http状态码
- *
+ * 
  * @author http://git.oschina.net/loolly/hutool
+ *
  */
 public enum HttpStatus {
 

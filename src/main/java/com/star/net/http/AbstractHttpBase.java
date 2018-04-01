@@ -38,6 +38,30 @@ public abstract class AbstractHttpBase<T> {
     protected transient String body;
 
     /**
+     * http版本常量
+     */
+    enum HttpVersion {
+        HTTP_1_0("HTTP/1.0"), HTTP_1_1("HTTP/1.1");
+
+        /**
+         * http版本字符串
+         */
+        private String value;
+
+        HttpVersion(final String value) {
+            this.value = value;
+        }
+
+        /**
+         * 这都要注释啊，满刚的
+         */
+        @Override
+        public String toString() {
+            return value;
+        }
+    }
+
+    /**
      * 空构造方法
      */
     protected AbstractHttpBase() {
@@ -140,30 +164,6 @@ public abstract class AbstractHttpBase<T> {
                 .append(StringUtil.CRLF);
 
         return stringBuilder.toString();
-    }
-
-    /**
-     * http版本常量
-     */
-    enum HttpVersion {
-        HTTP_1_0("HTTP/1.0"), HTTP_1_1("HTTP/1.1");
-
-        /**
-         * http版本字符串
-         */
-        private String value;
-
-        HttpVersion(final String value) {
-            this.value = value;
-        }
-
-        /**
-         * 这都要注释啊，满刚的
-         */
-        @Override
-        public String toString() {
-            return value;
-        }
     }
 
 }

@@ -3,23 +3,24 @@ package com.star.net.http;
 import com.star.collection.array.ArrayUtil;
 import com.star.collection.iter.IterUtil;
 import com.star.collection.map.MapUtil;
+import com.star.exception.HttpException;
 import com.star.io.CharsetUtil;
 import com.star.io.IoUtil;
-import com.star.lang.Assert;
 import com.star.net.URLUtil;
 import com.star.regex.RegexUtil;
-import com.star.regex.Validator;
 import com.star.string.StringUtil;
-import com.sun.xml.internal.ws.util.UtilException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -102,7 +103,7 @@ public final class HttpUtil {
         try {
             input = URLUtil.url(url).openStream();
         } catch (IOException e) {
-            throw new UtilException(StringUtil.format("open stream from url failure,the reason is: {}", e.getMessage()),
+            throw new HttpException(StringUtil.format("open stream from url failure,the reason is: {}", e.getMessage()),
                     e);
         }
         try {
@@ -123,7 +124,7 @@ public final class HttpUtil {
             output = new FileOutputStream(file);
             return IoUtil.copy(input, output, 0);
         } catch (IOException e) {
-            throw new UtilException(StringUtil.format("download faile failure,the reason is: {}", e.getMessage()), e);
+            throw new HttpException(StringUtil.format("download faile failure,the reason is: {}", e.getMessage()), e);
         } finally {
             IoUtil.close(input);
             IoUtil.close(output);
@@ -169,7 +170,7 @@ public final class HttpUtil {
 
             final String[] kvPairs = url.split("&");
 
-            params = new LinkedHashMap<String, List<String>>(kvPairs.length);
+            params = new LinkedHashMap<>(kvPairs.length);
 
             for (final String kv : kvPairs) {
                 if (kv.indexOf('=') == -1) {
@@ -184,62 +185,7 @@ public final class HttpUtil {
 
         return params;
 
-        // 按字符串一个个解析
-        // Map<String, List<String>> params;
-        //
-        // if (StringUtil.isBlank(paramsStr)) {
-        // params = Collections.emptyMap();
-        // } else {
-        //
-        // // 去掉Path部分
-        //
-        // final int pathEndPos = paramsStr.indexOf('?');
-        //
-        // String url = pathEndPos > 0 ? paramsStr.substring(pathEndPos + 1) :
-        // paramsStr;
-        //
-        // url = URLUtil.decode(url, charset);
-        //
-        // params = new LinkedHashMap<String, List<String>>();
-        // String name = null;
-        // int pos = 0; // 未处理字符开始位置
-        //
-        // int flag; // 未处理字符结束位置
-        //
-        // for (flag = 0; flag < url.length(); flag++) {
-        // final char current = url.charAt(flag);
-        // if ('=' == current && name == null) { // 键值对的分界点
-        //
-        // if (pos != flag) {
-        // name = url.substring(pos, flag);
-        // }
-        // pos = flag + 1;
-        // } else if ('&' == current || ';' == current) { // 参数对的分界点
-        //
-        // if (name == null && pos != flag) {
-        // // 对于像&a&这类无参数值的字符串，我们将name为a的值设为""
-        //
-        // addParam(params, url.substring(pos, flag), "");
-        // } else if (name != null) {
-        // addParam(params, name, url.substring(pos, flag));
-        // name = null;
-        // }
-        // pos = flag + 1;
-        // }
-        // }
-        //
-        // if (pos != flag) {
-        // if (name == null) {
-        // addParam(params, url.substring(pos, flag), "");
-        // } else {
-        // addParam(params, name, url.substring(pos, flag));
-        // }
-        // } else if (name != null) {
-        // addParam(params, name, "");
-        // }
-        // }
-        //
-        // return params;
+
     }
 
     /**
@@ -279,8 +225,6 @@ public final class HttpUtil {
      * 从多级反向代理中获得第一个非unknown IP地址
      */
     public static String getMultistageReverseProxyIp(final String ipStr) {
-        Assert.isTrue(!StringUtil.isBlank(ipStr) && ipStr.matches(Validator.IPV4),
-                "get real ip from proxy failure,the ip is not invalid");
         String resultIp = "";
         if (ipStr != null && ipStr.indexOf(',') > 0) {
             final String[] ips = ipStr.split(",");
@@ -302,56 +246,54 @@ public final class HttpUtil {
     }
 
     /**
-     *
      * 从流中读取内容
-     *
+     * <p>
      * reponse读的时候需要依赖这方法，但传入inputstream就得不到页面的charset了
-     *
+     * <p>
      * 修改下，单纯的通过input和charset来得到string
-     *
      */
-    // public static String getString(final URL url, final String charset, final
-    // boolean useContentCharset) {
-    // HttpURLConnection connection;
-    // InputStream input;
-    //
-    // try {
-    // connection = (HttpURLConnection) url.openConnection();
-    // input = connection.getInputStream();
-    // } catch (IOException e1) {
-    // throw new ToolException(StringUtil.format("获取url输入流失败: {}",
-    // e1.getMessage()), e1);
-    // }
-    //
-    // String result;
-    //
-    // if (useContentCharset) {
-    // final String charsetInContent = getCharset(connection);
-    //
-    // final StringBuilder content = new StringBuilder();
-    //
-    // final BufferedReader reader = IoUtil.getReader(input,
-    // StringUtil.isBlank(charsetInContent)
-    // ? Charset.defaultCharset() : Charset.forName(charsetInContent));
-    //
-    // String line = null;
-    //
-    // try {
-    // while ((line = reader.readLine()) != null) {
-    // content.append(line).append('\n');
-    // }
-    // } catch (IOException e) {
-    // throw new ToolException(StringUtil.format("获取url输入流中的字符串失败: {}",
-    // e.getMessage()), e);
-    // } finally {
-    // IoUtil.close(reader);
-    // }
-    // result = content.toString();
-    // } else {
-    // result = IoUtil.read(input, charset);
-    // }
-    // return result;
-    // }
+    public static String getString(final URL url, final String charset, final
+    boolean useContentCharset) {
+        HttpURLConnection connection;
+        InputStream input;
+
+        try {
+            connection = (HttpURLConnection) url.openConnection();
+            input = connection.getInputStream();
+        } catch (IOException e1) {
+            throw new HttpException(StringUtil.format("获取url输入流失败: {}",
+                    e1.getMessage()), e1);
+        }
+
+        String result;
+
+        if (useContentCharset) {
+            final String charsetInContent = getCharset(connection);
+
+            final StringBuilder content = new StringBuilder();
+
+            final BufferedReader reader = IoUtil.getReader(input,
+                    StringUtil.isBlank(charsetInContent)
+                            ? Charset.defaultCharset() : Charset.forName(charsetInContent));
+
+            String line = null;
+
+            try {
+                while ((line = reader.readLine()) != null) {
+                    content.append(line).append('\n');
+                }
+            } catch (IOException e) {
+                throw new HttpException(StringUtil.format("获取url输入流中的字符串失败: {}",
+                        e.getMessage()), e);
+            } finally {
+                IoUtil.close(reader);
+            }
+            result = content.toString();
+        } else {
+            result = IoUtil.read(input, charset);
+        }
+        return result;
+    }
 
     /**
      * 根据文件扩展名获得MimeType
@@ -366,7 +308,7 @@ public final class HttpUtil {
     private static boolean addParam(final Map<String, List<String>> params, final String name, final String value) {
         List<String> values = params.get(name);
         if (values == null) {
-            values = new ArrayList<String>(1); // 一般是一个参数
+            values = new ArrayList<>(1); // 一般是一个参数
 
             params.put(name, values);
         }

@@ -9,6 +9,7 @@ import com.star.io.CharsetUtil;
 import com.star.string.StringUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
@@ -18,6 +19,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
@@ -35,6 +37,11 @@ import java.util.stream.Collectors;
  * Created by starhq on 2016/10/31.
  */
 public final class HttpUtil {
+
+    /**
+     * 缺省超时时间 单位：ms
+     */
+    private static final int MAX_TIMEOUT = 60000;
 
 
     private HttpUtil() {
@@ -286,6 +293,21 @@ public final class HttpUtil {
         return execute(httpPut);
     }
 
+    /**
+     * 通过连接池获取 httpclient
+     */
+    private static CloseableHttpClient getHttpClient() {
+        final RequestConfig requestConfig = RequestConfig.custom()
+//                建立连接超时时间（毫秒）
+                .setConnectTimeout(MAX_TIMEOUT)
+//                读取数据超时时间（毫秒）
+                .setSocketTimeout(MAX_TIMEOUT)
+                // 从连接池获取连接的等待时间（毫秒）
+                .setConnectionRequestTimeout(MAX_TIMEOUT)
+                .build();
+        return HttpClients.custom().setConnectionManager(HttpConnectionManagerSingleton.INSTANCE.getConnectionManager()).setDefaultRequestConfig(requestConfig).build();
+    }
+
 
     /**
      * 创建带参数的 URL
@@ -334,7 +356,7 @@ public final class HttpUtil {
      * @return String
      */
     private static String execute(final HttpRequestBase request) {
-        final CloseableHttpClient httpClient = HttpConnectionManagerSingleton.INSTANCE.getHttpClient();
+        final CloseableHttpClient httpClient = getHttpClient();
         try (CloseableHttpResponse response = httpClient.execute(request)) {
             final HttpEntity entity = response.getEntity();
             return Objects.isNull(entity) ? StringUtil.EMPTY : EntityUtils.toString(entity, CharsetUtil.CHARSET_UTF_8);
@@ -342,4 +364,5 @@ public final class HttpUtil {
             throw new HttpException(StringUtil.format("execute http request failure,the reason is {}", e.getMessage()), e);
         }
     }
+
 }

@@ -2,8 +2,9 @@ package com.star.net.http;
 
 /**
  * http头
- *
+ * 
  * @author http://git.oschina.net/loolly/hutool
+ *
  */
 public enum HttpHeader {
     // ------------------------------------------------------------- 通用头域

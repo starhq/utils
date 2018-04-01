@@ -66,6 +66,7 @@ public final class CookieUtil {
     public static void setCookie(final HttpServletResponse response, final String name, final String value,
                                  final int maxAge, final String domain) {
 
+
         String val = value;
         if (StringUtil.isBlank(val)) {
             val = "";

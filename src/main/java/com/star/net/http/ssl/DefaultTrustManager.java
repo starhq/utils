@@ -5,8 +5,9 @@ import java.security.cert.X509Certificate;
 
 /**
  * 证书管理
- *
+ * 
  * @author http://git.oschina.net/loolly/hutool
+ *
  */
 public class DefaultTrustManager implements X509TrustManager {
 

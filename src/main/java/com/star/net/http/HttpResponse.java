@@ -1,6 +1,6 @@
 package com.star.net.http;
 
-import com.star.exception.ToolException;
+import com.star.exception.HttpException;
 import com.star.io.CharsetUtil;
 import com.star.io.FastByteArrayOutputStream;
 import com.star.io.IoUtil;
@@ -126,7 +126,7 @@ public class HttpResponse extends AbstractHttpBase<HttpResponse> {
         try {
             input = isGzip() ? new GZIPInputStream(inputStream) : inputStream;
         } catch (IOException e) {
-            throw new ToolException(
+            throw new HttpException(
                     StringUtil.format("read response's stream failure,the reason is: {}", e.getMessage()), e);
         }
 

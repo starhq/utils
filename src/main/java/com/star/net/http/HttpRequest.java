@@ -3,10 +3,10 @@ package com.star.net.http;
 import com.star.collection.array.ArrayUtil;
 import com.star.collection.iter.IterUtil;
 import com.star.collection.map.MapUtil;
+import com.star.exception.HttpException;
 import com.star.io.IoUtil;
 import com.star.string.StringUtil;
 import com.star.uuid.NessUUID;
-import com.sun.xml.internal.ws.util.UtilException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,14 +55,7 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
      * 不知道派啥用处，好像是文件上传下载描述用的
      */
     private static final String CT_FILE_TEMPLATE = "Content-Type: {}\r\n\r\n";
-    /**
-     * 存储表单数据
-     */
-    protected transient Map<String, Object> form;
-    /**
-     * 文件表单对象，用于文件上传
-     */
-    protected transient Map<String, File> fileForm;
+
     /**
      * 地址
      */
@@ -75,6 +68,15 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
      * 默认超时
      */
     private transient int timeout = -1;
+    /**
+     * 存储表单数据
+     */
+    protected transient Map<String, Object> form;
+    /**
+     * 文件表单对象，用于文件上传
+     */
+    protected transient Map<String, File> fileForm;
+
     /**
      * 连接对象
      */
@@ -89,18 +91,18 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
     }
 
     /**
-     * new 请求，同时设置方法
-     */
-    public static HttpRequest getRequest(final String url, final HttpMethod method) {
-        return new HttpRequest(url).setMethod(method);
-    }
-
-    /**
      * 设置请求方法
      */
     public HttpRequest setMethod(final HttpMethod method) {
         this.method = method;
         return this;
+    }
+
+    /**
+     * new 请求，同时设置方法
+     */
+    public static HttpRequest getRequest(final String url, final HttpMethod method) {
+        return new HttpRequest(url).setMethod(method);
     }
 
     /**
@@ -181,19 +183,12 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
             }
 
             if (MapUtil.isEmpty(fileForm)) {
-                fileForm = new HashMap<>();
+                fileForm = new HashMap<String, File>();
             }
             // 文件对象
             this.fileForm.put(name, file);
         }
         return this;
-    }
-
-    /**
-     * 获取表单数据
-     */
-    public Map<String, Object> getForm() {
-        return form;
     }
 
     /**
@@ -204,6 +199,13 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
             setForm(entry.getKey(), entry.getValue());
         }
         return this;
+    }
+
+    /**
+     * 获取表单数据
+     */
+    public Map<String, Object> getForm() {
+        return form;
     }
 
     /**
@@ -242,7 +244,7 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
                 this.httpConnection.connect();
             }
         } catch (IOException e) {
-            throw new UtilException(StringUtil.format("send request failue,the reason is: {}", e.getMessage()), e);
+            throw new HttpException(StringUtil.format("send request failue,the reason is: {}", e.getMessage()), e);
         }
 
         final HttpResponse httpResponse = HttpResponse.readResponse(httpConnection);
@@ -260,7 +262,7 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
         try {
             base64 = new String(Base64.getDecoder().decode(data), charset);
         } catch (UnsupportedEncodingException e) {
-            throw new UtilException(StringUtil.format("basic verify failue,system not supports {} charset", charset),
+            throw new HttpException(StringUtil.format("basic verify failue,system not supports {} charset", charset),
                     e);
         }
         setHeader("Authorization", "Basic " + base64, true);
@@ -276,7 +278,7 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
             final String content = StringUtil.isBlank(this.body) ? HttpUtil.toParams(this.form) : this.body;
             final OutputStream output = this.httpConnection.getOutputStream();
             try {
-                IoUtil.write(output, this.charset, true, content);
+                IoUtil.write(output, this.charset, false, content);
             } finally {
                 IoUtil.close(output);
             }
@@ -297,7 +299,7 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
             writeForm(out);
             formEnd(out);
         } catch (IOException e) {
-            throw new UtilException(
+            throw new HttpException(
                     StringUtil.format("send mltipart request failure,the reason is: {}", e.getMessage()), e);
         } finally {
             IoUtil.close(out);
@@ -333,7 +335,7 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
             try {
                 IoUtil.copy(new FileInputStream(file), output, 0);
             } catch (FileNotFoundException e) {
-                throw new UtilException(
+                throw new HttpException(
                         StringUtil.format("send form object failure,the file {} not exists", file.getName()), e);
             }
             IoUtil.write(output, this.charset, true, StringUtil.CRLF);
@@ -349,7 +351,7 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
             output.write(BOUNDARY_END);
             output.flush();
         } catch (IOException e) {
-            throw new UtilException(StringUtil.format("upload file failure,the reason is: {}", e.getMessage()), e);
+            throw new HttpException(StringUtil.format("upload file failure,the reason is: {}", e.getMessage()), e);
         }
     }
 

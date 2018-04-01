@@ -2,12 +2,11 @@ package com.star.net.http;
 
 import com.star.collection.array.ArrayUtil;
 import com.star.collection.map.MapUtil;
-import com.star.exception.ToolException;
+import com.star.exception.HttpException;
 import com.star.net.URLUtil;
 import com.star.net.http.ssl.DefaultTrustManager;
 import com.star.net.http.ssl.TrustAnyHostnameVerifier;
 import com.star.string.StringUtil;
-import com.sun.xml.internal.ws.util.UtilException;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -35,17 +34,19 @@ import java.util.Objects;
 public class HttpConnection {
 
     /**
-     * 链接的连接对象
-     */
-    private final transient HttpURLConnection conn;
-    /**
      * 链接
      */
     private URL url;
+
     /**
      * http方法
      */
     private transient HttpMethod httpMethod;
+    /**
+     * 链接的连接对象
+     */
+    private final transient HttpURLConnection conn;
+
     /**
      * https用
      */
@@ -74,7 +75,7 @@ public class HttpConnection {
         try {
             this.conn.setRequestMethod(httpMethod.toString());
         } catch (ProtocolException e) {
-            throw new ToolException(StringUtil.format("set http method failue,the reason is: {}", e.getMessage()), e);
+            throw new HttpException(StringUtil.format("set http method failue,the reason is: {}", e.getMessage()), e);
         }
         this.conn.setDoInput(true);
         if (this.httpMethod.equals(HttpMethod.POST)) {
@@ -278,7 +279,7 @@ public class HttpConnection {
         try {
             return Objects.isNull(this.conn) ? null : this.conn.getInputStream();
         } catch (IOException e) {
-            throw new UtilException(StringUtil.format("从url链接中获取输入流失败: {}", e.getMessage()), e);
+            throw new HttpException(StringUtil.format("从url链接中获取输入流失败: {}", e.getMessage()), e);
         }
     }
 
@@ -296,7 +297,7 @@ public class HttpConnection {
         try {
             return Objects.isNull(this.conn) ? null : this.conn.getOutputStream();
         } catch (IOException e) {
-            throw new UtilException(
+            throw new HttpException(
                     StringUtil.format("get outputstream from httpconeection failue,the reason is: {}", e.getMessage()),
                     e);
         }
@@ -309,7 +310,7 @@ public class HttpConnection {
         try {
             return Objects.isNull(this.conn) ? 0 : this.conn.getResponseCode();
         } catch (IOException e) {
-            throw new UtilException(
+            throw new HttpException(
                     StringUtil.format("get response code from connction failure,the reason is: {}", e.getMessage()), e);
         }
     }
@@ -328,7 +329,7 @@ public class HttpConnection {
         try {
             return (HttpURLConnection) url.openConnection();
         } catch (IOException e) {
-            throw new UtilException(
+            throw new HttpException(
                     StringUtil.format("open http url connection failure,the reason is: {}", e.getMessage()), e);
         }
     }
@@ -351,7 +352,7 @@ public class HttpConnection {
 
             return httpsConnection;
         } catch (KeyManagementException | NoSuchAlgorithmException | IOException e) {
-            throw new UtilException(
+            throw new HttpException(
                     StringUtil.format("open https url connection failure,the reason is: {}", e.getMessage()), e);
         }
     }

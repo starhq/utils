@@ -5,8 +5,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * cookie池 做缓存用
- *
+ * 
  * @author http://git.oschina.net/loolly/hutool
+ *
  */
 public final class CookiePool {
 
