@@ -316,4 +316,7 @@ public final class MethodUtil {
 //        return result;
         return null;
     }
+
+    public static Method findDeclaredMethod(Class<? extends Cloneable> aClass, String clone) {
+    }
 }
