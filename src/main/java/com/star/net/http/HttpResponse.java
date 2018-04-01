@@ -131,7 +131,7 @@ public class HttpResponse extends AbstractHttpBase<HttpResponse> {
         }
 
         final String length = getHeader(HttpHeader.CONTENT_LENGTH);
-        final int contentLength = StringUtil.isBlank(length) ? 0 : Integer.valueOf(length);
+        final int contentLength = StringUtil.isBlank(length) ? 0 : Integer.parseInt(length);
         this.output = contentLength > 0 ? new FastByteArrayOutputStream(contentLength)
                 : new FastByteArrayOutputStream();
         IoUtil.copy(input, output, 0);

@@ -604,7 +604,7 @@ public final class StringUtil {
      * @return 编码后的字节码
      */
     public static byte[] bytes(final String str, final Charset charset) {
-        return isEmpty(str) ? new byte[0] : Objects.isNull(charset) ? str.getBytes() : str.getBytes(charset);
+        return isEmpty(str) ? new byte[0] : Objects.isNull(charset) ? str.getBytes(CharsetUtil.DEFAULT) : str.getBytes(charset);
     }
 
     /**
@@ -682,7 +682,7 @@ public final class StringUtil {
      * @return 字符串
      */
     public static String str(final byte[] data, final Charset charset) {
-        return ArrayUtil.isEmpty(data) ? EMPTY : Objects.isNull(charset) ? new String(data) : new String(data, charset);
+        return ArrayUtil.isEmpty(data) ? EMPTY : Objects.isNull(charset) ? new String(data, CharsetUtil.DEFAULT) : new String(data, charset);
     }
 
     /**

@@ -2,10 +2,12 @@ package com.star.exception;
 
 import com.star.clazz.ClassUtil;
 import com.star.collection.map.MapUtil;
+import com.star.io.CharsetUtil;
 import com.star.io.FastByteArrayOutputStream;
 import com.star.string.StringUtil;
 
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.util.HashMap;
@@ -120,7 +122,11 @@ public final class ExceptionUtil {
      */
     public static String stacktraceToString(final Throwable throwable, final int limit, final Map<Character, String> replaceCharToStrMap) {
         final FastByteArrayOutputStream baos = new FastByteArrayOutputStream();
-        throwable.printStackTrace(new PrintStream(baos));
+        try {
+            throwable.printStackTrace(new PrintStream(baos, false, CharsetUtil.UTF_8));
+        } catch (UnsupportedEncodingException e) {
+            throw new IORuntimeException(StringUtil.format("throwable print stacktrace failure,the reason is {}", e.getMessage()), e);
+        }
         String exceptionStr = baos.toString();
         int length = exceptionStr.length();
         if (limit > 0 && limit < length) {

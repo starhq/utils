@@ -128,7 +128,7 @@ public class FastByteArrayOutputStream extends OutputStream {
      */
     @Override
     public String toString() {
-        return new String(toByteArray());
+        return toString(Charset.defaultCharset());
     }
 
     /**

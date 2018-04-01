@@ -1,7 +1,6 @@
 package com.star.test;
 
 import com.alisoft.nano.bench.Nano;
-import com.star.net.httpcomponent.HttpConnectionManagerSingleton;
 import org.junit.Test;
 
 public class HttpComponentUtilTest {
@@ -15,8 +14,7 @@ public class HttpComponentUtilTest {
 
     @Test
     public void testNioEmpty() {
-        HttpConnectionManagerSingleton.INSTANCE.getHttpClient();
-        HttpConnectionManagerSingleton.INSTANCE.getHttpClient();
+
 //        Nano.bench().measurements(measurements).threads(threads).measure("nio dir emtpy", () -> {
 //            for (int i = 0; i < SerialTimes; i++) {
 //                PathUtil.loopFiles(path, null, null);

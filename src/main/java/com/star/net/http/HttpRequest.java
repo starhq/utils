@@ -4,6 +4,7 @@ import com.star.collection.array.ArrayUtil;
 import com.star.collection.iter.IterUtil;
 import com.star.collection.map.MapUtil;
 import com.star.exception.HttpException;
+import com.star.io.CharsetUtil;
 import com.star.io.IoUtil;
 import com.star.string.StringUtil;
 import com.star.uuid.NessUUID;
@@ -38,7 +39,7 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
     /**
      * 分隔文本的结束 上传用
      */
-    private static final byte[] BOUNDARY_END = StringUtil.format("--{}--\r\n", BOUNDARY).getBytes();
+    private static final byte[] BOUNDARY_END = StringUtil.format("--{}--\r\n", BOUNDARY).getBytes(CharsetUtil.DEFAULT);
     /**
      * 不知道派啥用处，好像是文件上传下载描述用的
      */
@@ -298,9 +299,6 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
             writeFileForm(out);
             writeForm(out);
             formEnd(out);
-        } catch (IOException e) {
-            throw new HttpException(
-                    StringUtil.format("send mltipart request failure,the reason is: {}", e.getMessage()), e);
         } finally {
             IoUtil.close(out);
         }

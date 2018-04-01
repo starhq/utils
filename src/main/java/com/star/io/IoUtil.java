@@ -206,7 +206,7 @@ public final class IoUtil {
      * @return BufferedReader
      */
     public static BufferedReader getReader(final InputStream inputStream, final Charset charset) {
-        final InputStreamReader reader = Objects.isNull(charset) ? new InputStreamReader(inputStream)
+        final InputStreamReader reader = Objects.isNull(charset) ? new InputStreamReader(inputStream, CharsetUtil.DEFAULT)
                 : new InputStreamReader(inputStream, charset);
         return new BufferedReader(reader);
     }
@@ -241,7 +241,7 @@ public final class IoUtil {
      * @return BufferedWriter
      */
     public static BufferedWriter getWriter(final OutputStream outputStream, final Charset charset) {
-        final OutputStreamWriter writer = Objects.isNull(charset) ? new OutputStreamWriter(outputStream)
+        final OutputStreamWriter writer = Objects.isNull(charset) ? new OutputStreamWriter(outputStream, CharsetUtil.DEFAULT)
                 : new OutputStreamWriter(outputStream, charset);
         return new BufferedWriter(writer);
     }

@@ -164,7 +164,7 @@ public final class PathUtil {
      */
     public static Path mkParentDirs(final Path path) {
         final Path parent = path.getParent();
-        if (!Files.exists(parent)) {
+        if (!Objects.isNull(parent) && !Files.exists(parent)) {
             try {
                 Files.createDirectories(parent);
             } catch (IOException e) {
