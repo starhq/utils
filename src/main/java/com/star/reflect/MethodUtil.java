@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -305,18 +306,15 @@ public final class MethodUtil {
      * @return 方法
      */
     private static Optional<Method> getMethod(final String name, final Method[] methods, final Class<?>... paramTypes) {
-//        Optional<Method> result = Optional.empty();
-//        for (final Method method : methods) {
-//            if (name.equals(method.getName()) && (ArrayUtil.isEmpty(paramTypes) || ClassUtil.isAllAssignableFrom(method
-//                    .getParameterTypes(), paramTypes))) {
-//                result = Optional.of(method);
-//                break;
-//            }
-//        }
-//        return result;
-        return null;
+        Optional<Method> result = Optional.empty();
+        for (final Method method : methods) {
+            if (name.equals(method.getName()) && (ArrayUtil.isEmpty(paramTypes) || Arrays.deepEquals(method
+                    .getParameterTypes(), paramTypes))) {
+                result = Optional.of(method);
+                break;
+            }
+        }
+        return result;
     }
 
-    public static Method findDeclaredMethod(Class<? extends Cloneable> aClass, String clone) {
-    }
 }

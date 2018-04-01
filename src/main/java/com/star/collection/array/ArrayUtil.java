@@ -354,4 +354,47 @@ public final class ArrayUtil {
         }
         return result;
     }
+
+    /**
+     * 克隆数组，如果非数组返回<code>null</code>
+     *
+     * @param <T> 数组元素类型
+     * @param obj 数组对象
+     * @return 克隆后的数组对象
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T clone(final T obj) {
+        if (null == obj) {
+            return null;
+        }
+        if (isArray(obj)) {
+            final Object result;
+            final Class<?> componentType = obj.getClass().getComponentType();
+            if (componentType.isPrimitive()) {
+                int length = Array.getLength(obj);
+                result = Array.newInstance(componentType, length);
+                while (length-- > 0) {
+                    Array.set(result, length, Array.get(obj, length));
+                }
+            } else {
+                result = ((Object[]) obj).clone();
+            }
+            return (T) result;
+        }
+        return null;
+    }
+
+    /**
+     * 克隆数组
+     *
+     * @param <T>   数组元素类型
+     * @param array 被克隆的数组
+     * @return 新数组
+     */
+    public static <T> T[] clone(T[] array) {
+        if (array == null) {
+            return null;
+        }
+        return array.clone();
+    }
 }
