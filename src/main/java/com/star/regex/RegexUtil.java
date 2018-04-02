@@ -1,6 +1,7 @@
 package com.star.regex;
 
 import com.star.collection.array.ArrayUtil;
+import com.star.string.StringUtil;
 
 import java.util.Collection;
 import java.util.regex.Matcher;
@@ -17,7 +18,7 @@ public final class RegexUtil {
     /**
      * 正则中需要被转义的关键字
      */
-    public final static Character[] CHARS = {'$', '(', ')', '*', '+', '.', '[', ']', '?', '\\', '^', '{', '}', '|'};
+    private final static Character[] CHARS = {'$', '(', ')', '*', '+', '.', '[', ']', '?', '\\', '^', '{', '}', '|'};
 
 
     private RegexUtil() {
@@ -29,7 +30,7 @@ public final class RegexUtil {
      */
     public static String get(final Pattern pattern, final String content, final int groupIndex) {
         final Matcher matcher = pattern.matcher(content);
-        return matcher.find() ? matcher.group(groupIndex) : "";
+        return matcher.find() ? matcher.group(groupIndex) : StringUtil.EMPTY;
     }
 
     /**
@@ -50,8 +51,7 @@ public final class RegexUtil {
     /**
      * 表达式中提取信息到集合中
      */
-    public static <T extends Collection<String>> T findAll(final Pattern pattern, final String content, final int group,
-                                                           final T collections) {
+    public static <T extends Collection<String>> T findAll(final Pattern pattern, final String content, final int group, final T collections) {
         final Matcher matcher = pattern.matcher(content);
         while (matcher.find()) {
             collections.add(matcher.group(group));
@@ -68,12 +68,10 @@ public final class RegexUtil {
         for (int i = 0; i < content.length(); i++) {
             current = content.charAt(i);
             if (ArrayUtil.contains(CHARS, current)) {
-                builder.append('\\');
+                builder.append(StringUtil.C_BACKSLASH);
             }
             builder.append(current);
         }
         return builder.toString();
     }
-
-
 }
