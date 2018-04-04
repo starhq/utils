@@ -4,10 +4,10 @@ import com.star.collection.array.ArrayUtil;
 import com.star.collection.iter.IterUtil;
 import com.star.collection.map.MapUtil;
 import com.star.exception.HttpException;
+import com.star.id.NessUUID;
 import com.star.io.CharsetUtil;
 import com.star.io.IoUtil;
 import com.star.string.StringUtil;
-import com.star.uuid.NessUUID;
 
 import java.io.File;
 import java.io.FileInputStream;

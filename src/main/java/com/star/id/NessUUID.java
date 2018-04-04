@@ -1,4 +1,4 @@
-package com.star.uuid;
+package com.star.id;
 
 import com.star.string.HexUtil;
 
@@ -154,4 +154,12 @@ public final class NessUUID {
         return new String(uuidChars);
     }
 
+    /**
+     * 方便使用
+     *
+     * @return uuid字符串
+     */
+    public static String getId() {
+        return toString(UUID.randomUUID());
+    }
 }
