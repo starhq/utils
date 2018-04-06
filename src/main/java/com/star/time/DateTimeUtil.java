@@ -108,6 +108,16 @@ public final class DateTimeUtil {
     //=================================convert==============================================
 
     /**
+     * 获得年
+     *
+     * @param ldt 时间
+     * @return 年
+     */
+    public static int getYear(final LocalDateTime ldt) {
+        return Objects.isNull(ldt) ? LocalDateTime.now().getYear() : ldt.getYear();
+    }
+
+    /**
      * 获得月份
      *
      * @param ldt 时间
