@@ -41,7 +41,7 @@ public class AsymmetricCrypto extends BaseAsymmetric<AsymmetricCrypto> {
      * @param algorithm {@link ALGORITHM}
      */
     public AsymmetricCrypto(ALGORITHM algorithm) {
-        this(algorithm, null, null);
+        this(algorithm, (byte[]) null, null);
     }
 
     /**
@@ -50,7 +50,7 @@ public class AsymmetricCrypto extends BaseAsymmetric<AsymmetricCrypto> {
      * @param algorithm 算法
      */
     public AsymmetricCrypto(String algorithm) {
-        this(algorithm, null, null);
+        this(algorithm, (byte[]) null, null);
     }
 
     /**

@@ -44,7 +44,7 @@ public class BaseAsymmetric<T extends BaseAsymmetric<T>> {
      * @param algorithm 算法
      */
     public BaseAsymmetric(String algorithm) {
-        this(algorithm, null, null);
+        this(algorithm, (byte[]) null, null);
     }
 
     /**
