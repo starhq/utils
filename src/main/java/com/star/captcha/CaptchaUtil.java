@@ -16,7 +16,7 @@ public class CaptchaUtil {
      * @return {@link LineCaptcha}
      */
     public static LineCaptcha createLineCaptcha(int width, int height) {
-        return new LineCaptcha(width, height).;
+        return new LineCaptcha(width, height);
     }
 
     /**
