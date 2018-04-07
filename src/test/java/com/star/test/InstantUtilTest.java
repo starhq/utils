@@ -1,14 +1,15 @@
 package com.star.test;
 
-import com.star.time.DateTimeUtil;
 import org.junit.Test;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class InstantUtilTest {
 
     @Test
     public void test() {
-        System.out.println(DateTimeUtil.getEndOfMonth(LocalDateTime.now()));
+        LocalDate localDate = LocalDate.of(1998, 4, 7);
+        System.out.println(localDate.until(LocalDate.now(), ChronoUnit.YEARS));
     }
 }

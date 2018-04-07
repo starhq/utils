@@ -1,6 +1,10 @@
 package com.star.regex;
 
 import com.star.string.StringUtil;
+import com.star.time.DateTimeUtil;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * 验证器
@@ -125,6 +129,39 @@ public final class Validator {
      */
     public static boolean isMactchRegex(final String regex, final String value) {
         return StringUtil.isBlank(regex) || (!StringUtil.isBlank(value) && value.matches(regex));
+    }
+
+    /**
+     * 验证是否为生日<br>
+     *
+     * @param year  年
+     * @param month 月
+     * @param day   日
+     * @return 是否为生日
+     */
+    public static boolean isBirthday(int year, int month, int day) {
+        // 验证年
+        int thisYear = DateTimeUtil.getYear(LocalDateTime.now());
+        if (year < 1930 || year > thisYear) {
+            return false;
+        }
+
+        // 验证月
+        if (month < 1 || month > 12) {
+            return false;
+        }
+
+        // 验证日
+        if (day < 1 || day > 31) {
+            return false;
+        }
+        if ((month == 4 || month == 6 || month == 9 || month == 11) && day == 31) {
+            return false;
+        }
+        if (month == 2) {
+            return day <= 29 && (day != 29 || LocalDate.of(year, month, day).isLeapYear());
+        }
+        return true;
     }
 
 }
