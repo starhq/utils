@@ -290,8 +290,9 @@ public final class StringUtil {
     /**
      * 删除前缀
      *
-     * @param str    指定字符串
-     * @param prefix 前缀
+     * @param str          指定字符串
+     * @param prefix       前缀
+     * @param isIgnoreCase 忽略大小写
      * @return 修改后的字符串
      */
     public static String removePrefix(final String str, final String prefix, final boolean isIgnoreCase) {
@@ -301,8 +302,9 @@ public final class StringUtil {
     /**
      * 删除后缀
      *
-     * @param str    指定字符串
-     * @param suffix 后缀
+     * @param str         指定字符串
+     * @param suffix      后缀
+     * @param isIgnorCase 忽略大小写
      * @return 修改后的字符串
      */
     public static String removeSuffix(final String str, final String suffix, final boolean isIgnorCase) {
@@ -736,6 +738,7 @@ public final class StringUtil {
      * @param delimiter 分隔符
      * @param charset   编码
      * @param objects   需要拼接的对象
+     * @param <T>       范型
      * @return 组装好的字符串
      */
     @SafeVarargs
@@ -752,6 +755,7 @@ public final class StringUtil {
      * @param end       结尾符
      * @param delimiter 分隔符
      * @param objects   需要拼接的对象
+     * @param <T>       范型
      * @return 组装好的字符串
      */
     @SafeVarargs
@@ -766,6 +770,7 @@ public final class StringUtil {
      *
      * @param delimiter 分隔符
      * @param objects   需要拼接的对象
+     * @param <T>       范型
      * @return 组装好的字符串
      */
     @SafeVarargs
@@ -786,6 +791,7 @@ public final class StringUtil {
     /**
      * 创建StringBuilder对象
      *
+     * @param capacity 大小
      * @return StringBuilder对象
      */
     public static StringBuilder builder(final int capacity) {

@@ -6,7 +6,6 @@ import com.star.io.serializer.JavaSerializer;
 import com.star.io.serializer.Serializer;
 import com.star.reflect.MethodUtil;
 import com.star.string.StringUtil;
-import com.sun.xml.internal.ws.util.UtilException;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -69,7 +68,7 @@ public final class ObjectUtil {
      * @param <T> 对象类型
      * @param obj 被克隆对象
      * @return 克隆后的对象
-     * @throws UtilException IO异常和ClassNotFoundException封装
+     * @throws ToolException IO异常和ClassNotFoundException封装
      */
     @SuppressWarnings("unchecked")
     public static <T> T cloneByStream(final T obj) {

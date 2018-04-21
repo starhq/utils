@@ -13,6 +13,9 @@ public final class ColumnUtil {
 
     /**
      * 得到JSR303 bean validation的验证表达式
+     *
+     * @param column 列
+     * @return 验证表达式
      */
     public static String getHibernateValidatorExpression(final Column column) {
         if (!column.getIsPK() && !column.getIsNullable()) {

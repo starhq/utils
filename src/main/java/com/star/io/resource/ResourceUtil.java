@@ -92,7 +92,6 @@ public final class ResourceUtil {
      * 获得资源的URL<br>
      * <p>
      * 路径用/分隔，例如:
-     * <p>
      * <pre>
      *
      * config/a/db.config
@@ -113,7 +112,6 @@ public final class ResourceUtil {
      * 获取指定路径下的资源列表<br>
      * <p>
      * 路径格式必须为目录格式,用/分隔，例如:
-     * <p>
      * <pre>
      *
      * config/a

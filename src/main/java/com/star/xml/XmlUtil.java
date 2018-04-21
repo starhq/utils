@@ -47,6 +47,9 @@ public final class XmlUtil {
 
     /**
      * 读取解析XML文件
+     *
+     * @param path 路径
+     * @return xml对象
      */
     public static Document readXML(final Path path) {
         final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -61,6 +64,9 @@ public final class XmlUtil {
 
     /**
      * 将String类型的XML转换为XML文档
+     *
+     * @param xmlStr xml字符串
+     * @return xml字符串
      */
     public static Document parseXml(final String xmlStr) {
         final String xml = cleanInvalid(xmlStr);
@@ -76,6 +82,10 @@ public final class XmlUtil {
 
     /**
      * 将XML文档转换为String
+     *
+     * @param doc     xml对象
+     * @param charset 编码
+     * @return xml字符串
      */
     public static String toStr(final Document doc, final String charset) {
         final StringWriter writer = new StringWriter();
@@ -93,6 +103,10 @@ public final class XmlUtil {
 
     /**
      * 将XML文档写入到文件
+     *
+     * @param doc     xml字符串
+     * @param path    路径
+     * @param charset 编码
      */
     public static void toFile(final Document doc, final Path path, final String charset) {
         String tmp = charset;
@@ -121,6 +135,9 @@ public final class XmlUtil {
 
     /**
      * 创建XML文档,添加根节点
+     *
+     * @param rootElementName xml字符串
+     * @return xml对象
      */
     public static Document createXml(final String rootElementName) {
         final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -139,6 +156,10 @@ public final class XmlUtil {
 
     /**
      * 根据节点名获得子节点列表
+     *
+     * @param element 元素
+     * @param tagName 标签名
+     * @return 元素集合
      */
     public static List<Element> getElements(final Element element, final String tagName) {
         final NodeList nodeList = element.getElementsByTagName(tagName);
@@ -147,6 +168,10 @@ public final class XmlUtil {
 
     /**
      * 根据节点名获得第一个子节点
+     *
+     * @param element 元素
+     * @param tagName 标签名
+     * @return 元素
      */
     public static Element getElement(final Element element, final String tagName) {
         final NodeList nodeList = element.getElementsByTagName(tagName);
@@ -165,6 +190,10 @@ public final class XmlUtil {
 
     /**
      * 获得节点的内容
+     *
+     * @param element 元素
+     * @param tagName 标签名
+     * @return 元素的文本
      */
     public static String elementText(final Element element, final String tagName) {
         final Element child = getElement(element, tagName);
@@ -173,6 +202,11 @@ public final class XmlUtil {
 
     /**
      * 获得节点的内容
+     *
+     * @param element      元素
+     * @param tagName      标签名
+     * @param defaultValue 默认值
+     * @return 元素的文本
      */
     public static String elementText(final Element element, final String tagName, final String defaultValue) {
         final Element child = getElement(element, tagName);
@@ -181,6 +215,9 @@ public final class XmlUtil {
 
     /**
      * 将NodeList转换为Element列表
+     *
+     * @param nodeList 节点
+     * @return 元素集合
      */
     public static List<Element> transElements(final NodeList nodeList) {
         return transElements(null, nodeList);
@@ -188,6 +225,10 @@ public final class XmlUtil {
 
     /**
      * 将NodeList转换为Element列表
+     *
+     * @param parentEle 父元素
+     * @param nodeList  节点集合
+     * @return 元素列表
      */
     public static List<Element> transElements(final Element parentEle, final NodeList nodeList) {
         final int length = nodeList.getLength();
@@ -203,6 +244,9 @@ public final class XmlUtil {
 
     /**
      * 去除xml无效字符
+     *
+     * @param xmlContent xml字符串
+     * @return 清理后的字符串
      */
     public static String cleanInvalid(final String xmlContent) {
         return StringUtil.isBlank(xmlContent) ? "" : xmlContent.replaceAll(INVALID_REGEX, "");

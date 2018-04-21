@@ -46,6 +46,12 @@ public final class JAXBUtil {
 
     /**
      * 对象转xml（单个对象）
+     *
+     * @param clazzz   类
+     * @param instatce 对象
+     * @param format   是否格式化输出
+     * @param <T>      范型
+     * @return xml字符串
      */
     public static <T> String object2Xml(final Class<T> clazzz, final T instatce, final boolean format) {
         final JAXBContext jaxbContext = PROXY.get(clazzz);
@@ -64,6 +70,11 @@ public final class JAXBUtil {
 
     /**
      * xml转对象
+     *
+     * @param clazzz 类
+     * @param xml    字符串
+     * @param <T>    范型
+     * @return 对象
      */
     @SuppressWarnings("unchecked")
     public static <T> T xml2Object(final Class<T> clazzz, final String xml) {
@@ -79,6 +90,12 @@ public final class JAXBUtil {
 
     /**
      * 对象转xml持久化到文件
+     *
+     * @param clazz    类
+     * @param instance 对象
+     * @param file     文件
+     * @param format   格式化输出
+     * @param <T>      范型
      */
     public static <T> void object2File(final Class<T> clazz, final T instance, final File file, final boolean format) {
         final JAXBContext jaxbContext = PROXY.get(clazz);
@@ -96,6 +113,11 @@ public final class JAXBUtil {
 
     /**
      * 文件中xml还原成对象
+     *
+     * @param clazz 类
+     * @param file  文件
+     * @param <T>   范型
+     * @return 对象
      */
     @SuppressWarnings("unchecked")
     public static <T> T fileToObject(final Class<T> clazz, final File file) {
@@ -111,6 +133,11 @@ public final class JAXBUtil {
 
     /**
      * 输入流中的xml转成对象
+     *
+     * @param clazz       类
+     * @param inputStream 输入流
+     * @param <T>         范型
+     * @return 对象
      */
     @SuppressWarnings("unchecked")
     public static <T> T streamToObject(final Class<T> clazz, final InputStream inputStream) {

@@ -1,6 +1,6 @@
 package com.star.test;
 
-import com.alisoft.nano.bench.Nano;
+
 import com.star.collection.CollectionUtil;
 import org.junit.Test;
 
@@ -44,10 +44,10 @@ public class CollectionUtilTest {
 
     @Test
     public void test() {
-        Nano.bench().measurements(measurements).threads(threads).measure("test normal version", () -> {
-            for (int i = 0; i < SerialTimes; i++) {
-            }
-        });
+//        Nano.bench().measurements(measurements).threads(threads).measure("test normal version", () -> {
+//            for (int i = 0; i < SerialTimes; i++) {
+//            }
+//        });
     }
 
 }

@@ -30,6 +30,10 @@ public final class CookieUtil {
 
     /**
      * 从request获得cookie
+     *
+     * @param request 请求
+     * @param name    头信息
+     * @return cookie
      */
     public static Cookie getCookie(final HttpServletRequest request, final String name) {
         final Cookie[] cookies = request.getCookies();
@@ -52,6 +56,10 @@ public final class CookieUtil {
 
     /**
      * 获得cookie中name键的value
+     *
+     * @param request 请求
+     * @param name    头信息
+     * @return 头信息的值
      */
     public static String getCookieValue(final HttpServletRequest request, final String name) {
         final Cookie cookie = getCookie(request, name);
@@ -62,6 +70,12 @@ public final class CookieUtil {
      * 设置cookie
      * <p>
      * domain之前没用过，不知道起啥作用，留着扩展用
+     *
+     * @param response 响应
+     * @param name     键
+     * @param value    值
+     * @param maxAge   有效期
+     * @param domain   域
      */
     public static void setCookie(final HttpServletResponse response, final String name, final String value,
                                  final int maxAge, final String domain) {
@@ -84,6 +98,10 @@ public final class CookieUtil {
      * 删除cookie
      * <p>
      * domain之前没用过，不知道起啥作用，留着扩展用
+     *
+     * @param response 响应
+     * @param domain   域
+     * @param name     键
      */
     public static void removeCookie(final HttpServletResponse response, final String name, final String domain) {
         setCookie(response, name, "", 0, domain);

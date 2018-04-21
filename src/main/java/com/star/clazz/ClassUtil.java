@@ -6,7 +6,6 @@ import com.star.exception.ToolException;
 import com.star.io.resource.ResourceUtil;
 import com.star.reflect.ConstructorUtil;
 import com.star.string.StringUtil;
-import com.sun.xml.internal.ws.util.UtilException;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -102,7 +101,7 @@ public final class ClassUtil {
         try {
             resources = ClassLoaderUtil.getClassLoader().getResources(packagePath);
         } catch (IOException e) {
-            throw new UtilException(StringUtil.format("Loading classPath [{}] error!", packagePath), e);
+            throw new ToolException(StringUtil.format("Loading classPath [{}] error!", packagePath), e);
         }
         final Set<String> paths = new HashSet<>();
         while (resources.hasMoreElements()) {
@@ -186,7 +185,7 @@ public final class ClassUtil {
     }
 
     /**
-     * 获得给定类所在包的路径<
+     * 获得给定类所在包的路径
      *
      * @param clazz 类
      * @return 包名

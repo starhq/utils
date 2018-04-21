@@ -1,7 +1,7 @@
 package com.star.aop;
 
+import com.star.exception.ToolException;
 import com.star.reflect.MethodUtil;
-import com.sun.xml.internal.ws.util.UtilException;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -61,7 +61,7 @@ public abstract class Aspect implements InvocationHandler {
         if (before(target, method, args)) {
             try {
                 result = MethodUtil.invoke(target, method, args);
-            } catch (UtilException e) {
+            } catch (ToolException e) {
                 final Throwable cause = e.getCause();
                 if (e.getCause() instanceof InvocationTargetException) {
                     afterException(target, method, args, ((InvocationTargetException) cause).getTargetException());

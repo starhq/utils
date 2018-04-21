@@ -11,7 +11,6 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
  * httpClient 连接管理器
  *
  * @author pengdh
- * @date 2017/10/28
  */
 public enum HttpConnectionManagerSingleton {
     INSTANCE;

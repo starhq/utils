@@ -1,6 +1,6 @@
 package com.star.test;
 
-import com.alisoft.nano.bench.Nano;
+
 import org.junit.Test;
 
 public class BeanUtilTest {
@@ -23,10 +23,10 @@ public class BeanUtilTest {
 
     @Test
     public void test() {
-        Nano.bench().measurements(measurements).threads(threads).measure("test normal version", () -> {
-            for (int i = 0; i < SerialTimes; i++) {
-            }
-        });
+//        Nano.bench().measurements(measurements).threads(threads).measure("test normal version", () -> {
+//            for (int i = 0; i < SerialTimes; i++) {
+//            }
+//        });
     }
 
 }

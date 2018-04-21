@@ -1,7 +1,6 @@
 package com.star.test;
 
-import com.alisoft.nano.bench.Nano;
-import com.star.string.HexUtil;
+
 import org.junit.Test;
 
 public class HexUtilTest {
@@ -19,20 +18,20 @@ public class HexUtilTest {
 //        System.out.println(HexUtil.decode(str.toCharArray())[0]);
 //        System.out.println(hex2Byte(str.toUpperCase())[0]);
 
-        Nano.bench().measurements(measurements).threads(threads).measure("hex new version", () -> {
-            for (int i = 0; i < SerialTimes; i++) {
-                HexUtil.decode(str.toCharArray());
-            }
-        });
+//        Nano.bench().measurements(measurements).threads(threads).measure("hex new version", () -> {
+//            for (int i = 0; i < SerialTimes; i++) {
+//                HexUtil.decode(str.toCharArray());
+//            }
+//        });
     }
 
     @Test
     public void testTrimByJDK() {
-        Nano.bench().measurements(measurements).threads(threads).measure("hex old version", () -> {
-            for (int i = 0; i < SerialTimes; i++) {
-                hex2Byte(str.toUpperCase());
-            }
-        });
+//        Nano.bench().measurements(measurements).threads(threads).measure("hex old version", () -> {
+//            for (int i = 0; i < SerialTimes; i++) {
+//                hex2Byte(str.toUpperCase());
+//            }
+//        });
     }
 
     public static byte[] hex2Byte(final String str) {

@@ -33,6 +33,9 @@ public class HttpResponse extends AbstractHttpBase<HttpResponse> {
 
     /**
      * 读取http连接中的响应内容
+     *
+     * @param httpConnection 链接
+     * @return 本身
      */
     public static HttpResponse readResponse(final HttpConnection httpConnection) {
         final HttpResponse httpResponse = new HttpResponse();
@@ -55,6 +58,8 @@ public class HttpResponse extends AbstractHttpBase<HttpResponse> {
 
     /**
      * 获得响应码
+     *
+     * @return 响应码
      */
     public int getStatus() {
         return status;
@@ -62,6 +67,8 @@ public class HttpResponse extends AbstractHttpBase<HttpResponse> {
 
     /**
      * 获取内容编码
+     *
+     * @return 内容编码
      */
     public String contentEncoding() {
         return getHeader(HttpHeader.CONTENT_ENCODING);
@@ -69,6 +76,8 @@ public class HttpResponse extends AbstractHttpBase<HttpResponse> {
 
     /**
      * 获得相应的字节数组
+     *
+     * @return 字节数组
      */
     public byte[] bodyBytes() {
         byte[] bytes;
@@ -83,7 +92,7 @@ public class HttpResponse extends AbstractHttpBase<HttpResponse> {
     /**
      * 获得响应体
      *
-     * @return
+     * @return 响应字符串
      */
     public String getBody() {
         return IoUtil.read(bodyStream()).toString(CharsetUtil.charset(charset));
@@ -91,6 +100,8 @@ public class HttpResponse extends AbstractHttpBase<HttpResponse> {
 
     /**
      * 获得服务区响应流
+     *
+     * @return 输入流
      */
     public InputStream bodyStream() {
         return new ByteArrayInputStream(this.output.toByteArray());
@@ -98,6 +109,8 @@ public class HttpResponse extends AbstractHttpBase<HttpResponse> {
 
     /**
      * 这都要注解嘛
+     *
+     * @return 响应内容
      */
     @Override
     public String toString() {
@@ -115,12 +128,18 @@ public class HttpResponse extends AbstractHttpBase<HttpResponse> {
 
     /**
      * 是否为gzip压缩过的内容
+     *
+     * @return 是否压缩过
      */
     public boolean isGzip() {
         final String contentEncoding = contentEncoding();
         return contentEncoding != null && contentEncoding.equalsIgnoreCase("gzip");
     }
 
+    /**
+     *
+     * @param inputStream 输入流
+     */
     private void readBody(final InputStream inputStream) {
         InputStream input;
         try {

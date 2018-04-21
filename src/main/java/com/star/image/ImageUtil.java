@@ -1,6 +1,7 @@
 package com.star.image;
 
 import com.star.exception.IORuntimeException;
+import com.star.exception.ToolException;
 import com.star.extra.NumberUtil;
 import com.star.io.CharsetUtil;
 import com.star.io.IoUtil;
@@ -8,7 +9,6 @@ import com.star.io.file.PathUtil;
 import com.star.math.ArithmeticUtil;
 import com.star.security.base64.Base64Util;
 import com.star.string.StringUtil;
-import com.sun.xml.internal.ws.util.UtilException;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -1283,7 +1283,7 @@ public class ImageUtil {
             try {
                 return Font.createFont(Font.TYPE1_FONT, fontFile);
             } catch (Exception e1) {
-                throw new UtilException(e);
+                throw new ToolException(e);
             }
         } catch (IOException e) {
             throw new IORuntimeException(e);
@@ -1306,7 +1306,7 @@ public class ImageUtil {
             try {
                 return Font.createFont(Font.TYPE1_FONT, fontStream);
             } catch (Exception e1) {
-                throw new UtilException(e);
+                throw new ToolException(e);
             }
         } catch (IOException e) {
             throw new IORuntimeException(e);

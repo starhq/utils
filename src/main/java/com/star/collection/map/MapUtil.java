@@ -117,8 +117,9 @@ public final class MapUtil {
     /**
      * 初始化TreeMap
      *
-     * @param <K> 泛型 键
-     * @param <V> 泛型 值
+     * @param comparator 比较器
+     * @param <K>        泛型 键
+     * @param <V>        泛型 值
      * @return TreeMap
      */
     public static <K, V> Map<K, V> newTreeMap(final Comparator<K> comparator) {
@@ -128,8 +129,10 @@ public final class MapUtil {
     /**
      * 初始化TreeMap
      *
-     * @param <K> 泛型 键
-     * @param <V> 泛型 值
+     * @param map        需要包装的map
+     * @param comparator 比较器
+     * @param <K>        泛型 键
+     * @param <V>        泛型 值
      * @return TreeMap
      */
     public static <K, V> Map<K, V> newTreeMap(final Map<K, V> map, final Comparator<K> comparator) {
@@ -212,8 +215,10 @@ public final class MapUtil {
     /**
      * 创建链接调用map
      *
-     * @param <K> 泛型 键
-     * @param <V> 泛型 值
+     * @param key   键
+     * @param value 值
+     * @param <K>   泛型 键
+     * @param <V>   泛型 值
      * @return map创建类
      */
     public static <K, V> MapBuilder<K, V> builder(final K key, final V value) {

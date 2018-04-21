@@ -85,6 +85,8 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
 
     /**
      * 构造方法
+     *
+     * @param url 链接
      */
     public HttpRequest(final String url) {
         super();
@@ -93,6 +95,9 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
 
     /**
      * 设置请求方法
+     *
+     * @param method http方法
+     * @return 本身
      */
     public HttpRequest setMethod(final HttpMethod method) {
         this.method = method;
@@ -101,6 +106,10 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
 
     /**
      * new 请求，同时设置方法
+     *
+     * @param url    链接
+     * @param method http方法
+     * @return 本身
      */
     public static HttpRequest getRequest(final String url, final HttpMethod method) {
         return new HttpRequest(url).setMethod(method);
@@ -108,6 +117,9 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
 
     /**
      * 设置contenttype
+     *
+     * @param contentType 类型
+     * @return 本身
      */
     public HttpRequest contentType(final String contentType) {
         setHeader(HttpHeader.CONTENT_TYPE, contentType, true);
@@ -116,6 +128,9 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
 
     /**
      * 设置是否常连接
+     *
+     * @param isKeepAlive 是否保持存活
+     * @return 本身
      */
     public HttpRequest keepAlive(final boolean isKeepAlive) {
         setHeader(HttpHeader.CONNECTION, isKeepAlive ? "Keep-Alive" : "Close", true);
@@ -124,6 +139,8 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
 
     /**
      * 是否为长连接
+     *
+     * @return 是否长链接
      */
     public boolean isKeepAlive() {
         final String connection = getHeader(HttpHeader.CONNECTION);
@@ -134,6 +151,8 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
 
     /**
      * 获取内容长度
+     *
+     * @return 内容长度
      */
     public String contentLength() {
         return getHeader(HttpHeader.CONTENT_LENGTH);
@@ -141,6 +160,9 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
 
     /**
      * 设置内容长度
+     *
+     * @param value 长度
+     * @return 本身
      */
     public HttpRequest contentLength(final int value) {
         setHeader(HttpHeader.CONTENT_LENGTH, String.valueOf(value), true);
@@ -149,6 +171,10 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
 
     /**
      * 设置表单数据
+     *
+     * @param name  键
+     * @param value 值
+     * @return 本身
      */
     public HttpRequest setForm(final String name, final Object value) {
         this.body = "";
@@ -176,6 +202,10 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
 
     /**
      * 文件表单项
+     *
+     * @param name 键
+     * @param file 文件
+     * @return 本身
      */
     public HttpRequest setForm(final String name, final File file) {
         if (!Objects.isNull(file)) {
@@ -194,6 +224,9 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
 
     /**
      * 设置map类型表单数据
+     *
+     * @param formMap map
+     * @return 本身
      */
     public HttpRequest setForm(final Map<String, Object> formMap) {
         for (final Map.Entry<String, Object> entry : formMap.entrySet()) {
@@ -204,6 +237,8 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
 
     /**
      * 获取表单数据
+     *
+     * @return map
      */
     public Map<String, Object> getForm() {
         return form;
@@ -211,6 +246,9 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
 
     /**
      * 设置内容主体
+     *
+     * @param body q请求体
+     * @return 本身
      */
     public HttpRequest body(final String body) {
         this.body = body;
@@ -221,6 +259,9 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
 
     /**
      * 设置超时
+     *
+     * @param milliseconds 超时时间
+     * @return 本身
      */
     public HttpRequest setTimeout(final int milliseconds) {
         this.timeout = milliseconds;
@@ -229,6 +270,8 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
 
     /**
      * 执行请求
+     *
+     * @return httpresponse
      */
     public HttpResponse execute() {
         if (HttpMethod.GET.equals(method)) {
@@ -256,6 +299,10 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
 
     /**
      * basic验证
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @return 本身
      */
     public HttpRequest basicAuth(final String username, final String password) {
         final String data = username.concat(":").concat(password);
@@ -306,6 +353,8 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
 
     /**
      * 普通字符串数据
+     *
+     * @param output 输出流
      */
     private void writeForm(final OutputStream output) {
         if (!MapUtil.isEmpty(form)) {
@@ -321,6 +370,8 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
 
     /**
      * 发送文件对象表单
+     *
+     * @param output 输出流
      */
     private void writeFileForm(final OutputStream output) {
         for (final Entry<String, File> entry : this.fileForm.entrySet()) {
@@ -343,6 +394,8 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
 
     /**
      * 添加结尾数据
+     *
+     * @param output 输出流
      */
     private void formEnd(final OutputStream output) {
         try {

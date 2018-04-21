@@ -94,7 +94,7 @@ public final class Factory {
      * 按表名获取表
      *
      * @param tableName 表名
-     * @return
+     * @return 表
      */
     public Table getTableByName(final String tableName) {
         Assert.isTrue(!StringUtil.isBlank(tableName), "table name can't be blank");
@@ -121,7 +121,7 @@ public final class Factory {
      * 按表名数组获取表
      *
      * @param tableNames 表名数据
-     * @return
+     * @return 表集合
      */
     public List<Table> getTableByNames(final String[] tableNames) {
         List<Table> tables = new ArrayList<>(tableNames.length);

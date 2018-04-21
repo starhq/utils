@@ -31,9 +31,9 @@ public final class Dom4JUtil {
     }
 
     /**
-     * @param xmlSource
-     * @param elementName
-     * @return
+     * @param xmlSource   xml字符串
+     * @param elementName 元素名
+     * @return 元素的title
      */
     public static String getElementTitle(final String xmlSource, final String elementName) {
         try {
@@ -53,6 +53,11 @@ public final class Dom4JUtil {
 
     /**
      * 按节点名，取节点属性值
+     *
+     * @param xmlSource    xml字符串
+     * @param elementName  元素名
+     * @param propertyName 属性名
+     * @return 属性值
      */
     @SuppressWarnings("unchecked")
     public static String getElementProperty(final String xmlSource, final String elementName,
@@ -72,6 +77,12 @@ public final class Dom4JUtil {
 
     /**
      * 更新属性
+     *
+     * @param xmlSource     xml字符串
+     * @param elementName   元素名
+     * @param propertyName  属性名
+     * @param propertyValue 属性值
+     * @return 更新后的xml字符串
      */
     @SuppressWarnings("unchecked")
     public static String updataElementProperty(final String xmlSource, final String elementName,
@@ -100,6 +111,10 @@ public final class Dom4JUtil {
 
     /**
      * 通过正则表达式,按元素分割
+     *
+     * @param sourceXml   xml字符串
+     * @param elementName 元素名
+     * @return 字符串集合
      */
     public static List<String> partitionXml(final String sourceXml, final String elementName) {
         final String template = StringUtil.format("<{}(.*?\\n?)*?</{}>", elementName, elementName);
@@ -110,6 +125,11 @@ public final class Dom4JUtil {
 
     /**
      * xml写入文件
+     *
+     * @param doc          xml对象
+     * @param filePath     路径
+     * @param charset      编码
+     * @param isEscapeText 是否转义
      */
     public static void xmlWriteToFile(final Document doc, final Path filePath, final String charset,
                                       final boolean isEscapeText) {
@@ -137,6 +157,10 @@ public final class Dom4JUtil {
 
     /**
      * 查询元素节点
+     *
+     * @param xmlSource   xml字符串
+     * @param elementName 元素名
+     * @return 是否存在
      */
     public boolean selectElement(final String xmlSource, final String elementName) {
         boolean result = false;
@@ -161,6 +185,9 @@ public final class Dom4JUtil {
 
     /**
      * 判断是否只有一个根节点
+     *
+     * @param xmlSource xml字符串
+     * @return 是否一个根节点
      */
     public boolean needConvert(final String xmlSource) {
         try {

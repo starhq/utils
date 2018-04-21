@@ -27,6 +27,11 @@ public final class RegexUtil {
 
     /**
      * 获得匹配的字符串
+     *
+     * @param pattern    正则
+     * @param content    内容
+     * @param groupIndex 位置
+     * @return 字符串
      */
     public static String get(final Pattern pattern, final String content, final int groupIndex) {
         final Matcher matcher = pattern.matcher(content);
@@ -35,6 +40,10 @@ public final class RegexUtil {
 
     /**
      * 删除正则匹配到的内容之前的字符 如果没有找到，则返回原文
+     *
+     * @param pattern 正则
+     * @param content 内容
+     * @return 字符串
      */
     public static String delPre(final Pattern pattern, final String content) {
         final Matcher matcher = pattern.matcher(content);
@@ -43,6 +52,10 @@ public final class RegexUtil {
 
     /**
      * 给定内容是否匹配正则
+     *
+     * @param pattern 正则
+     * @param content 内容
+     * @return 是否匹配
      */
     public static boolean isMatch(final Pattern pattern, final String content) {
         return pattern.matcher(content).matches();
@@ -50,6 +63,13 @@ public final class RegexUtil {
 
     /**
      * 表达式中提取信息到集合中
+     *
+     * @param pattern     正则
+     * @param content     内容
+     * @param collections 集合
+     * @param group       位置
+     * @param <T>         范型
+     * @return 字符串集合
      */
     public static <T extends Collection<String>> T findAll(final Pattern pattern, final String content, final int group, final T collections) {
         final Matcher matcher = pattern.matcher(content);
@@ -61,6 +81,9 @@ public final class RegexUtil {
 
     /**
      * 转义字符串，将正则的关键字转义
+     *
+     * @param content 内容
+     * @return 转移字符串
      */
     public static String escape(final String content) {
         final StringBuilder builder = new StringBuilder();

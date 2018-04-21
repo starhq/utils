@@ -58,6 +58,10 @@ public class HttpConnection {
 
     /**
      * 构造方法
+     *
+     * @param httpMethod http方法
+     * @param urlStr     地址
+     * @param timeout    超市
      */
     public HttpConnection(final String urlStr, final HttpMethod httpMethod, final int timeout) {
         this.url = URLUtil.url(urlStr);
@@ -70,6 +74,8 @@ public class HttpConnection {
 
     /**
      * 初始化连接相关信息
+     *
+     * @return 本身
      */
     public HttpConnection initconn() {
         try {
@@ -96,6 +102,8 @@ public class HttpConnection {
 
     /**
      * 获取请求方法,GET/POST
+     *
+     * @return http方法
      */
     public HttpMethod getMethod() {
         return httpMethod;
@@ -103,6 +111,8 @@ public class HttpConnection {
 
     /**
      * 设置请求方法
+     *
+     * @param httpMethod http方法
      */
     public void setMethod(final HttpMethod httpMethod) {
         this.httpMethod = httpMethod;
@@ -110,6 +120,8 @@ public class HttpConnection {
 
     /**
      * 设置域名验证器<br>
+     *
+     * @param hostnameVerifier 域名验证qi器
      */
     public void setHostnameVerifier(final HostnameVerifier hostnameVerifier) {
         this.hostnameVerifier = hostnameVerifier;
@@ -117,6 +129,8 @@ public class HttpConnection {
 
     /**
      * 设置信任信息
+     *
+     * @param trustManagers 信任信息
      */
     public void setTrustManagers(final TrustManager... trustManagers) {
         if (!ArrayUtil.isEmpty(trustManagers)) {
@@ -126,6 +140,8 @@ public class HttpConnection {
 
     /**
      * 获取请求URL
+     *
+     * @return url
      */
     public URL getUrl() {
         return url;
@@ -133,6 +149,8 @@ public class HttpConnection {
 
     /**
      * 设置请求URL
+     *
+     * @param url 请求地址
      */
     public void setUrl(final URL url) {
         this.url = url;
@@ -140,6 +158,8 @@ public class HttpConnection {
 
     /**
      * 获取HttpURLConnection对象
+     *
+     * @return 连接
      */
     public HttpURLConnection getHttpURLConnection() {
         return conn;
@@ -147,6 +167,11 @@ public class HttpConnection {
 
     /**
      * 设置请求头
+     *
+     * @param header     请求头
+     * @param value      值得
+     * @param isOverride 是否覆盖
+     * @return 本身
      */
     public HttpConnection header(final String header, final String value, final boolean isOverride) {
         if (!Objects.isNull(conn)) {
@@ -162,6 +187,11 @@ public class HttpConnection {
 
     /**
      * 设置请求头
+     *
+     * @param header     请求头
+     * @param value      值得
+     * @param isOverride 是否覆盖
+     * @return 本身
      */
     public HttpConnection header(final HttpHeader header, final String value, final boolean isOverride) {
         return header(header.toString(), value, isOverride);
@@ -169,6 +199,10 @@ public class HttpConnection {
 
     /**
      * 设置请求头<br>
+     *
+     * @param headers    请求头集合
+     * @param isOverride 是否覆盖
+     * @return 本身
      */
     public HttpConnection header(final Map<String, List<String>> headers, final boolean isOverride) {
         if (!MapUtil.isEmpty(headers)) {
@@ -184,6 +218,9 @@ public class HttpConnection {
 
     /**
      * 获取Http请求头
+     *
+     * @param header http头
+     * @return 头信息
      */
     public String header(final HttpHeader header) {
         return this.conn.getHeaderField(header.toString());
@@ -191,6 +228,8 @@ public class HttpConnection {
 
     /**
      * 获取所有Http请求头
+     *
+     * @return 头信息集合
      */
     public Map<String, List<String>> headers() {
         return this.conn.getHeaderFields();
@@ -198,6 +237,8 @@ public class HttpConnection {
 
     /**
      * 关闭缓存
+     *
+     * @return 返回本身
      */
     public HttpConnection disableCache() {
         this.conn.setUseCaches(false);
@@ -208,6 +249,10 @@ public class HttpConnection {
      * 设置连接超时
      * <p>
      * type -1 链接超时 1 读取超市 0 两样都设
+     *
+     * @param timeout 超市
+     * @param type    超时类型
+     * @return 本身
      */
     public HttpConnection setTimeout(final int timeout, final int type) {
         if (timeout > 0 && null != this.conn) {
@@ -230,6 +275,9 @@ public class HttpConnection {
 
     /**
      * 设置Cookie
+     *
+     * @param cookie cookie
+     * @return 本身
      */
     public HttpConnection setCookie(final String cookie) {
         if (!Objects.isNull(cookie)) {
@@ -240,6 +288,9 @@ public class HttpConnection {
 
     /**
      * 采用流方式上传数据，无需本地缓存数据。<br>
+     *
+     * @param blockSize 缓存大小
+     * @return 本身
      */
     public HttpConnection setChunkedStreamingMode(final int blockSize) {
         conn.setChunkedStreamingMode(blockSize);
@@ -249,7 +300,8 @@ public class HttpConnection {
     /**
      * 连接
      *
-     * @throws IOException
+     * @return 本身
+     * @throws IOException io异常
      */
     public HttpConnection connect() throws IOException {
         if (!Objects.isNull(this.conn)) {
@@ -260,6 +312,8 @@ public class HttpConnection {
 
     /**
      * 断开连接
+     *
+     * @return 本身
      */
     public HttpConnection disconnect() {
         if (!Objects.isNull(this.conn)) {
@@ -270,6 +324,8 @@ public class HttpConnection {
 
     /**
      * 获得输入流
+     *
+     * @return 输入流
      */
     public InputStream getInputStream() {
         final String setCookie = header(HttpHeader.SET_COOKIE);
@@ -285,6 +341,8 @@ public class HttpConnection {
 
     /**
      * 获得错误内容的出入流
+     *
+     * @return 输入流∂
      */
     public InputStream getErrorStream() {
         return Objects.isNull(this.conn) ? null : this.conn.getErrorStream();
@@ -292,6 +350,8 @@ public class HttpConnection {
 
     /**
      * 获得错误内容的出出流
+     *
+     * @return 输出流
      */
     public OutputStream getOutputStream() {
         try {
@@ -305,6 +365,8 @@ public class HttpConnection {
 
     /**
      * 获取响应码
+     *
+     * @return 响应码
      */
     public int responseCode() {
         try {
@@ -317,6 +379,8 @@ public class HttpConnection {
 
     /**
      * 获得字符集编码
+     *
+     * @return 编码
      */
     public String charset() {
         return HttpUtil.getCharset(conn);
@@ -324,6 +388,8 @@ public class HttpConnection {
 
     /**
      * 初始化http请求
+     *
+     * @return 本身
      */
     private HttpURLConnection openHttp() {
         try {
@@ -336,6 +402,8 @@ public class HttpConnection {
 
     /**
      * 初始化https请求
+     *
+     * @return 本身
      */
     private HttpsURLConnection openHttps() {
         try {

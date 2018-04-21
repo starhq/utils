@@ -48,7 +48,6 @@ public final class SecureUtil {
 
     /**
      * 默认密钥字节数
-     * <p>
      * <pre>
      * RSA/DSA
      * Default Keysize 1024
@@ -398,7 +397,7 @@ public final class SecureUtil {
      * Certification为证书文件<br>
      * see: http://snowolf.iteye.com/blog/391931
      *
-     * @param in       {@link InputStream}
+     * @param input    {@link InputStream}
      * @param password 密码
      * @return {@link KeyStore}
      */
@@ -412,7 +411,7 @@ public final class SecureUtil {
      * see: http://snowolf.iteye.com/blog/391931
      *
      * @param type     类型
-     * @param in       {@link InputStream}
+     * @param input    {@link InputStream}
      * @param password 密码
      * @return {@link KeyStore}
      */

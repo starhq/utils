@@ -110,6 +110,7 @@ public final class SetUtil {
      * 集合包装成TreeSet
      *
      * @param collection 集合
+     * @param comparator 比较器
      * @param <T>        范型
      * @return TreeSet
      */

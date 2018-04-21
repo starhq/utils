@@ -23,6 +23,9 @@ public final class Assert {
 
     /**
      * 断言是否为正
+     *
+     * @param expression 是否为真的表达式
+     * @param message    断言的信息
      */
     public static void isTrue(final boolean expression, final String message) {
         if (!expression) {
@@ -32,6 +35,9 @@ public final class Assert {
 
     /**
      * 断言对象为空
+     *
+     * @param object  对象
+     * @param message 断言的信息
      */
     public static void isNull(final Object object, final String message) {
         if (!Objects.isNull(object)) {
@@ -41,6 +47,9 @@ public final class Assert {
 
     /**
      * 断言对象不为空
+     *
+     * @param object  对象
+     * @param message 断言的信息
      */
     public static void notNull(final Object object, final String message) {
         if (Objects.isNull(object)) {
@@ -50,6 +59,9 @@ public final class Assert {
 
     /**
      * 字符串不能为空
+     *
+     * @param message 断言的信息
+     * @param text    字符串
      */
     public static void notEmpty(final String text, final String message) {
         if (StringUtil.isEmpty(text)) {
@@ -59,6 +71,9 @@ public final class Assert {
 
     /**
      * 字符串不能为空白
+     *
+     * @param text    字符串
+     * @param message 字符串
      */
     public static void notBlank(final String text, final String message) {
         if (StringUtil.isBlank(text)) {
@@ -68,6 +83,10 @@ public final class Assert {
 
     /**
      * textToSearch不能包含substring,好像作用不大啊
+     *
+     * @param message      断言信息
+     * @param textToSearch 要搜索的字符串
+     * @param substring    需要匹配的字符串
      */
     public static void notContain(final String textToSearch, final String substring, final String message) {
         if (!StringUtil.isEmpty(textToSearch) && !StringUtil.isEmpty(substring) && !textToSearch.contains(substring)) {
@@ -78,6 +97,9 @@ public final class Assert {
 
     /**
      * 数组不能为空
+     *
+     * @param array   对象数组
+     * @param message 断言字符串
      */
     public static void notEmpty(final Object[] array, final String message) {
         if (ArrayUtil.isEmpty(array)) {
@@ -87,6 +109,9 @@ public final class Assert {
 
     /**
      * 数组中不能包含空
+     *
+     * @param array   对象数组
+     * @param message 断言字符串
      */
     public static void noNullElements(final Object[] array, final String message) {
         if (ArrayUtil.isEmpty(array)) {
@@ -100,6 +125,9 @@ public final class Assert {
 
     /**
      * 集合不能为空
+     *
+     * @param collection 集合
+     * @param message    断言字符串
      */
     public static void notEmpty(final Collection<?> collection, final String message) {
         if (CollectionUtil.isEmpty(collection)) {
@@ -109,6 +137,9 @@ public final class Assert {
 
     /**
      * map不能为空
+     *
+     * @param map     map
+     * @param message 断言字符串
      */
     public static void notEmpty(final Map<?, ?> map, final String message) {
         if (MapUtil.isEmpty(map)) {

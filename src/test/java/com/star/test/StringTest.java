@@ -1,6 +1,6 @@
 package com.star.test;
 
-import com.alisoft.nano.bench.Nano;
+
 import com.star.string.StringUtil;
 import org.junit.Test;
 
@@ -31,11 +31,11 @@ public class StringTest {
 
     @Test
     public void testTrimByJDK() {
-        Nano.bench().measurements(measurements).threads(threads).measure("string startwith", () -> {
-            for (int i = 0; i < SerialTimes; i++) {
-                startWith(STR, PRE, true);
-            }
-        });
+//        Nano.bench().measurements(measurements).threads(threads).measure("string startwith", () -> {
+//            for (int i = 0; i < SerialTimes; i++) {
+//                startWith(STR, PRE, true);
+//            }
+//        });
     }
 
     public static boolean startWith(CharSequence str, CharSequence prefix, boolean isIgnoreCase) {

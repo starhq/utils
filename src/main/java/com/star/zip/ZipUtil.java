@@ -40,6 +40,10 @@ public final class ZipUtil {
 
     /**
      * 压缩文件
+     *
+     * @param src        源文件
+     * @param dest       目标文件
+     * @param withSrcDir 包含源目录
      */
     public static void zip(final Path src, final Path dest, final boolean withSrcDir) {
         validateFile(src, dest);
@@ -84,6 +88,9 @@ public final class ZipUtil {
 
     /**
      * 解压文件
+     *
+     * @param zip  源文件
+     * @param dest 目标文件
      */
     @SuppressWarnings("unchecked")
     public static void unzip(final Path zip, final Path dest) {
@@ -114,6 +121,9 @@ public final class ZipUtil {
 
     /**
      * gzip压缩字节数数组
+     *
+     * @param val 字节数组
+     * @return 压缩的数组
      */
     public static byte[] gzipArray(final byte[] val) {
         final FastByteArrayOutputStream bos = new FastByteArrayOutputStream(val.length);
@@ -133,6 +143,9 @@ public final class ZipUtil {
 
     /**
      * gzip压缩文件
+     *
+     * @param path 文件
+     * @return 压缩后的字节数组
      */
     public static byte[] gzipFile(final Path path) {
         Assert.isTrue(PathUtil.exist(path), "gzip array byte failure,the input path is not exists");
@@ -153,6 +166,9 @@ public final class ZipUtil {
 
     /**
      * gzip解压
+     *
+     * @param buf 压缩过的数组
+     * @return 字节数组
      */
     public static byte[] unGzip(final byte[] buf) {
         GZIPInputStream gzi = null;
@@ -173,6 +189,9 @@ public final class ZipUtil {
 
     /**
      * 判断压缩文件保存的路径是否为源文件路径的子文件夹，如果是，则抛出异常
+     *
+     * @param src  源文件
+     * @param dest 目标文件
      */
     private static void validateFile(final Path src, final Path dest) {
         if (Files.isDirectory(src) && dest.startsWith(src)) {
@@ -185,6 +204,8 @@ public final class ZipUtil {
 
     /**
      * 关闭当前Entry，继续下一个Entry
+     *
+     * @param zipOutStream 压缩输出流额
      */
     private static void closeEntry(final ZipOutputStream zipOutStream) {
         try {
@@ -196,6 +217,10 @@ public final class ZipUtil {
 
     /**
      * 从压缩包中拷贝子文件到指定文件中
+     *
+     * @param zipFile  压缩文件
+     * @param zipEntry 压缩实体
+     * @param path     文件
      */
     private static void copy(final ZipFile zipFile, final ZipEntry zipEntry, final Path path) {
         InputStream input = null;

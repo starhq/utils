@@ -15,7 +15,7 @@ import java.util.Properties;
 /**
  * 属性文件读取工具类
  *
- * @sstarhq
+ * @author starhq
  */
 public class Config {
 

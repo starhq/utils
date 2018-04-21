@@ -47,6 +47,9 @@ public final class CharsetUtil {
 
     /**
      * 转换为Charset对象
+     *
+     * @param charset 编码字符串
+     * @return 编码
      */
     public static Charset charset(final String charset) {
         return StringUtil.isBlank(charset) ? Charset.defaultCharset() : Charset.forName(charset);
@@ -54,6 +57,9 @@ public final class CharsetUtil {
 
     /**
      * 转换为Charset对象
+     *
+     * @param charset 编码
+     * @return 编码
      */
     public static Charset charset(final Charset charset) {
         return Objects.isNull(charset) ? DEFAULT : charset;

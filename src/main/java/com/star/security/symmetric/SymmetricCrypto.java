@@ -99,7 +99,6 @@ public class SymmetricCrypto {
      *
      * @param algorithm 算法
      * @param key       密钥，如果为<code>null</code>自动生成一个key
-     * @return {@link SymmetricCrypto}
      */
     public void init(final String algorithm, final SecretKey key) {
         this.secretKey = key;

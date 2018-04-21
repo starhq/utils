@@ -37,11 +37,11 @@ public class SqlRunner {
     /**
      * 查询
      *
-     * @param conn 连接
-     * @param sql  sql
-     * @param rsh  结果处理器
-     *             * @param params          参数
-     * @param <T>  泛型
+     * @param conn   连接
+     * @param sql    sql
+     * @param rsh    结果处理器
+     * @param params 参数
+     * @param <T>    泛型
      * @return 查询对象
      */
     public <T> T query(final Connection conn, final String sql, final ResultSetHandler<T> rsh, final Object... params) {
@@ -238,7 +238,9 @@ public class SqlRunner {
      *
      * @param conn   连接
      * @param sql    sql
+     * @param rsh 结果集处理器
      * @param params 参数
+     * @param <T>    范型
      * @return 影响的行数
      */
     public <T> T insertBatch(Connection conn, String sql, ResultSetHandler<T> rsh, Object[][] params) {
@@ -250,8 +252,10 @@ public class SqlRunner {
      *
      * @param conn      连接
      * @param closeConn 是否关闭连接
+     * @param rsh 结果集处理器
      * @param sql       sql
      * @param params    参数
+     * @param <T>       范型
      * @return 影响的行数
      */
     public <T> T insertBatch(final Connection conn, final boolean closeConn, final String sql, final ResultSetHandler<T> rsh, final Object[]...

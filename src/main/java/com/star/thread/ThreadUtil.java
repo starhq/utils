@@ -99,7 +99,7 @@ public final class ThreadUtil {
      * 新建一个CountDownLatch
      *
      * @param threadCount 线程数量
-     * @return
+     * @return CountDownLatch
      */
     public static CountDownLatch newCountDownLatch(final int threadCount) {
         return new CountDownLatch(threadCount);

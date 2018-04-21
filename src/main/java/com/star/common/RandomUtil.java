@@ -154,7 +154,7 @@ public final class RandomUtil {
      *
      * @param baseString 在这个字符串里选择
      * @param length     指定长度
-     * @retur 随机字符串
+     * @return 随机字符串
      */
     public static String randomString(final String baseString, final int length) {
         final StringBuilder builder = StringUtil.builder(length);

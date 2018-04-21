@@ -1,6 +1,6 @@
 package com.star.test;
 
-import com.alisoft.nano.bench.Nano;
+
 import org.junit.Test;
 
 public class HttpComponentUtilTest {
@@ -24,10 +24,10 @@ public class HttpComponentUtilTest {
 
     @Test
     public void testFileEmpty() {
-        Nano.bench().measurements(measurements).threads(threads).measure("file dir empty", () -> {
-            for (int i = 0; i < SerialTimes; i++) {
-//                FileUtil.loopFiles(file, null);
-            }
-        });
+//        Nano.bench().measurements(measurements).threads(threads).measure("file dir empty", () -> {
+//            for (int i = 0; i < SerialTimes; i++) {
+////                FileUtil.loopFiles(file, null);
+//            }
+//        });
     }
 }

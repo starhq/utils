@@ -1,7 +1,7 @@
 package com.star.lang;
 
+import com.star.exception.ToolException;
 import com.star.string.StringUtil;
-import com.sun.xml.internal.ws.util.UtilException;
 
 /**
  * 调用者。可以通过此类的方法获取调用者、多级调用者以及判断是否被调用
@@ -205,7 +205,7 @@ public class Caller {
             try {
                 return Class.forName(className);
             } catch (ClassNotFoundException e) {
-                throw new UtilException(StringUtil.format("[{}] not found!", className), e);
+                throw new ToolException(StringUtil.format("[{}] not found!", className), e);
             }
         }
 
@@ -215,7 +215,7 @@ public class Caller {
             try {
                 return Class.forName(className);
             } catch (ClassNotFoundException e) {
-                throw new UtilException(StringUtil.format("[{}] not found!", className), e);
+                throw new ToolException(StringUtil.format("[{}] not found!", className), e);
             }
         }
 
@@ -225,7 +225,7 @@ public class Caller {
             try {
                 return Class.forName(className);
             } catch (ClassNotFoundException e) {
-                throw new UtilException(StringUtil.format("[{}] not found!", className), e);
+                throw new ToolException(StringUtil.format("[{}] not found!", className), e);
             }
         }
 

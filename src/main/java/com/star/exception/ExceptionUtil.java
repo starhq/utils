@@ -59,7 +59,7 @@ public final class ExceptionUtil {
     /**
      * 获取当前栈信息
      *
-     * @return
+     * @return 栈信息数组
      */
     public static StackTraceElement[] getStackElements() {
         return Thread.currentThread().getStackTrace();
@@ -118,7 +118,7 @@ public final class ExceptionUtil {
      * @param throwable           异常对象
      * @param limit               限制最大长度
      * @param replaceCharToStrMap 替换字符为指定字符串
-     * @return
+     * @return 异常信息字符串
      */
     public static String stacktraceToString(final Throwable throwable, final int limit, final Map<Character, String> replaceCharToStrMap) {
         final FastByteArrayOutputStream baos = new FastByteArrayOutputStream();

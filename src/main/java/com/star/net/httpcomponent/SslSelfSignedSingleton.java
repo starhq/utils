@@ -17,7 +17,6 @@ import java.security.NoSuchAlgorithmException;
  * 因此需要创建一个SSL连接，接受自签名证书的信任策略，使其通过验证。
  *
  * @author pengdh
- * @date 2017/10/28
  */
 public enum SslSelfSignedSingleton {
     INSTANCE;
