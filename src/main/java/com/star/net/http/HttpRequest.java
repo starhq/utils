@@ -94,17 +94,6 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
     }
 
     /**
-     * 设置请求方法
-     *
-     * @param method http方法
-     * @return 本身
-     */
-    public HttpRequest setMethod(final HttpMethod method) {
-        this.method = method;
-        return this;
-    }
-
-    /**
      * new 请求，同时设置方法
      *
      * @param url    链接
@@ -113,6 +102,17 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
      */
     public static HttpRequest getRequest(final String url, final HttpMethod method) {
         return new HttpRequest(url).setMethod(method);
+    }
+
+    /**
+     * 设置请求方法
+     *
+     * @param method http方法
+     * @return 本身
+     */
+    public HttpRequest setMethod(final HttpMethod method) {
+        this.method = method;
+        return this;
     }
 
     /**
@@ -223,6 +223,15 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
     }
 
     /**
+     * 获取表单数据
+     *
+     * @return map
+     */
+    public Map<String, Object> getForm() {
+        return form;
+    }
+
+    /**
      * 设置map类型表单数据
      *
      * @param formMap map
@@ -233,15 +242,6 @@ public class HttpRequest extends AbstractHttpBase<HttpRequest> {
             setForm(entry.getKey(), entry.getValue());
         }
         return this;
-    }
-
-    /**
-     * 获取表单数据
-     *
-     * @return map
-     */
-    public Map<String, Object> getForm() {
-        return form;
     }
 
     /**

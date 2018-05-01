@@ -137,7 +137,6 @@ public class HttpResponse extends AbstractHttpBase<HttpResponse> {
     }
 
     /**
-     *
      * @param inputStream 输入流
      */
     private void readBody(final InputStream inputStream) {
