@@ -1,7 +1,6 @@
 package com.star.test;
 
-import com.alisoft.nano.bench.Nano;
-import com.star.collection.array.ArrayUtil;
+
 import org.junit.Test;
 
 public class ArithmeticUtilTest {
@@ -28,10 +27,10 @@ public class ArithmeticUtilTest {
 
     @Test
     public void testTrimByJDK() {
-        Nano.bench().measurements(measurements).threads(threads).measure("normal version", () -> {
-            for (int i = 0; i < SerialTimes; i++) {
-                ArrayUtil.isEmpty(array);
-            }
-        });
+//        Nano.bench().measurements(measurements).threads(threads).measure("normal version", () -> {
+//            for (int i = 0; i < SerialTimes; i++) {
+//                ArrayUtil.isEmpty(array);
+//            }
+//        });
     }
 }

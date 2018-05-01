@@ -39,7 +39,7 @@ public class SimpleCache<K, V> implements Cache<K, V> {
      *
      * @param key 键
      * @return 值
-     * @throws CacheException
+     * @throws CacheException 缓存异常
      */
     @Override
     public V get(K key) throws CacheException {
@@ -57,7 +57,7 @@ public class SimpleCache<K, V> implements Cache<K, V> {
      * @param key   键
      * @param value 值
      * @return 值
-     * @throws CacheException
+     * @throws CacheException 缓存异常
      */
     @Override
     public V put(K key, V value) throws CacheException {
@@ -75,7 +75,7 @@ public class SimpleCache<K, V> implements Cache<K, V> {
      *
      * @param key 键
      * @return 从缓存删除的值
-     * @throws CacheException
+     * @throws CacheException 缓存异常
      */
     @Override
     public V remove(K key) throws CacheException {
@@ -90,7 +90,7 @@ public class SimpleCache<K, V> implements Cache<K, V> {
     /**
      * 清空缓存
      *
-     * @throws CacheException
+     * @throws CacheException 缓存异常
      */
     @Override
     public void clear() throws CacheException {

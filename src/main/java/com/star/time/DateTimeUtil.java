@@ -196,8 +196,9 @@ public final class DateTimeUtil {
      * @return 小时数
      */
     public static int getHour(final LocalDateTime ldt, final boolean is24HourClock) {
-        return Objects.isNull(ldt) ? LocalDateTime.now().get(is24HourClock ? ChronoField.HOUR_OF_DAY : ChronoField.HOUR_OF_AMPM) : ldt.get(is24HourClock ? ChronoField
-                .HOUR_OF_DAY : ChronoField.HOUR_OF_AMPM);
+        return Objects.isNull(ldt) ? LocalDateTime.now().get(is24HourClock ? ChronoField.HOUR_OF_DAY : ChronoField.HOUR_OF_AMPM) : ldt.get
+                (is24HourClock ? ChronoField
+                        .HOUR_OF_DAY : ChronoField.HOUR_OF_AMPM);
     }
 
     /**
@@ -425,6 +426,11 @@ public final class DateTimeUtil {
      * 指定时间增加一定偏移量
      * <p>
      * ldt为空采用默认当前时间
+     *
+     * @param ldt         时间
+     * @param unit        计算单位
+     * @param amountToAdd 数量
+     * @return 计算后的时间
      */
     public static LocalDateTime plus(final LocalDateTime ldt, final ChronoUnit unit, final long amountToAdd) {
         final LocalDateTime date = Objects.isNull(ldt) ? LocalDateTime.now() : ldt;
@@ -435,6 +441,11 @@ public final class DateTimeUtil {
      * 指定时间减少一定偏移量
      * <p>
      * ldt为空采用默认当前时间
+     *
+     * @param ldt         时间
+     * @param unit        计算单位
+     * @param amountToAdd 数量
+     * @return 计算后的时间
      */
     public static LocalDateTime minus(final LocalDateTime ldt, final ChronoUnit unit, final long amountToAdd) {
         final LocalDateTime date = Objects.isNull(ldt) ? LocalDateTime.now() : ldt;
@@ -445,6 +456,11 @@ public final class DateTimeUtil {
      * 两个时间点相差多少时间单位
      * <p>
      * 开始时间为空采用当前时间,截至时间为空抛异常
+     *
+     * @param start 开始
+     * @param end   结束
+     * @param unit  计算单位
+     * @return 时间差
      */
     public static long dateDiff(final LocalDateTime start, final LocalDateTime end, final ChronoUnit unit) {
         final LocalDateTime date = Objects.isNull(start) ? LocalDateTime.now() : start;

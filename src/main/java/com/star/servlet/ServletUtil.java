@@ -4,11 +4,11 @@ import com.star.beans.BeanUtil;
 import com.star.clazz.ClassUtil;
 import com.star.collection.array.ArrayUtil;
 import com.star.exception.IORuntimeException;
+import com.star.exception.ToolException;
 import com.star.io.CharsetUtil;
 import com.star.io.IoUtil;
 import com.star.net.http.HttpMethod;
 import com.star.string.StringUtil;
-import com.sun.xml.internal.ws.util.UtilException;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
@@ -193,7 +193,7 @@ public class ServletUtil {
             try {
                 return new String(header.getBytes(CharsetUtil.ISO_8859_1), charset);
             } catch (UnsupportedEncodingException e) {
-                throw new UtilException(StringUtil.format("Error charset {} for http request header.", charset));
+                throw new ToolException(StringUtil.format("Error charset {} for http request header.", charset));
             }
         }
         return null;
@@ -374,7 +374,7 @@ public class ServletUtil {
             writer.write(text);
             writer.flush();
         } catch (IOException e) {
-            throw new UtilException(e);
+            throw new ToolException(e);
         } finally {
             IoUtil.close(writer);
         }
@@ -415,7 +415,7 @@ public class ServletUtil {
             out = response.getOutputStream();
             IoUtil.copy(in, out, bufferSize);
         } catch (IOException e) {
-            throw new UtilException(e);
+            throw new ToolException(e);
         } finally {
             IoUtil.close(out);
             IoUtil.close(in);

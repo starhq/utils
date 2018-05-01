@@ -1,7 +1,7 @@
 package com.star.thread;
 
+import com.star.exception.ToolException;
 import com.star.string.StringUtil;
-import com.sun.xml.internal.ws.util.UtilException;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -71,7 +71,7 @@ public final class GlobalThreadPool {
         try {
             executor.execute(runnable);
         } catch (Exception e) {
-            throw new UtilException(StringUtil.format("executing runnable failure: {}", e.getMessage()), e);
+            throw new ToolException(StringUtil.format("executing runnable failure: {}", e.getMessage()), e);
         }
     }
 
@@ -79,12 +79,14 @@ public final class GlobalThreadPool {
      * 执行线程(有返回值)
      *
      * @param callable 线程
+     * @param <T>      范型
+     * @return future
      */
     public static <T> Future<T> execute(final Callable<T> callable) {
         try {
             return executor.submit(callable);
         } catch (Exception e) {
-            throw new UtilException(StringUtil.format("executing callable failure: {}", e.getMessage()), e);
+            throw new ToolException(StringUtil.format("executing callable failure: {}", e.getMessage()), e);
         }
     }
 
@@ -92,6 +94,7 @@ public final class GlobalThreadPool {
      * 执行线程
      *
      * @param runnable 线程
+     * @return future
      */
     public static Future<?> submit(final Runnable runnable) {
         return executor.submit(runnable);

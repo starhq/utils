@@ -488,6 +488,7 @@ public final class IoUtil {
      *
      * @param inputStream 输入流
      * @param collection  返回集合
+     *                    @param <T>       范型
      * @return 内容
      */
     public static <T extends Collection<String>> T readUTF8Lines(final InputStream inputStream, final T collection) {
@@ -500,6 +501,7 @@ public final class IoUtil {
      * @param inputStream 输入流
      * @param charset     字符集
      * @param collection  返回集合
+     *                    @param <T>       范型
      * @return 内容
      */
     public static <T extends Collection<String>> T readLines(final InputStream inputStream, final String charset, final T collection) {
@@ -512,6 +514,7 @@ public final class IoUtil {
      * @param inputStream 输入流
      * @param charset     字符集
      * @param collection  返回集合
+     *                    @param <T>       范型
      * @return 内容
      */
     public static <T extends Collection<String>> T readLines(final InputStream inputStream, final Charset charset, final T collection) {
@@ -523,6 +526,7 @@ public final class IoUtil {
      *
      * @param reader     reader
      * @param collection 返回集合
+     *                   @param <T>       范型
      * @return 内容
      */
     public static <T extends Collection<String>> T readLines(final Reader reader, final T collection) {

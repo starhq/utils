@@ -265,6 +265,7 @@ public class AsymmetricCrypto extends BaseAsymmetric<AsymmetricCrypto> {
      *
      * @param data    被加密的字符串
      * @param keyType 私钥或公钥 {@link KeyType}
+     * @param charset 编码
      * @return Base64字符串
      * @since 4.0.1
      */

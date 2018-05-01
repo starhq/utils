@@ -76,6 +76,9 @@ public final class HtmlUtil {
      * 转义文本中的HTML字符为安全的字符
      * <p>
      * &amp; with &amp;amp;(有点变扭)
+     *
+     * @param text 字符串
+     * @return 转移后的字符串
      */
     public static String encode(final String text) {
         return encode(text, TEXT);
@@ -97,6 +100,7 @@ public final class HtmlUtil {
      *
      * @param content  文本
      * @param tagNames 要清除的标签
+     * @param withTagContent 是否包含标签内容
      * @return 去除标签后的文本
      */
     public static String removeHtmlTag(final String content, final boolean withTagContent, final String... tagNames) {

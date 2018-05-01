@@ -156,6 +156,11 @@ public final class ArithmeticUtil {
      * 提供精确的除法运算
      * <p>
      * scale大于0，精确到sacle位小数，小于0不做处理
+     *
+     * @param value1 被除数
+     * @param value2 除数
+     * @param scale 精度
+     * @return 商
      */
     public static BigDecimal divide(final String value1, final String value2, final int scale) {
         final BigDecimal bigDecimal1 = new BigDecimal(value1);
@@ -190,6 +195,11 @@ public final class ArithmeticUtil {
      * 提供精确的取余数
      * <p>
      * scale大于0，精确到sacle位小数，小于0不做处理
+     *
+     * @param value1 被除数
+     * @param value2 除数
+     * @param scale 精度
+     * @return 商
      */
     public static BigDecimal remainder(final String value1, final String value2, final int scale) {
         final BigDecimal bigDecimal1 = new BigDecimal(value1);

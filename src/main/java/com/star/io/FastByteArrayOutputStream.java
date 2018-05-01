@@ -48,7 +48,6 @@ public class FastByteArrayOutputStream extends OutputStream {
      * @param b   字节数组
      * @param off 便宜量
      * @param len 长度
-     * @throws IOException
      */
     @Override
     public void write(byte[] b, int off, int len) {
@@ -59,7 +58,6 @@ public class FastByteArrayOutputStream extends OutputStream {
      * 流中写入数据
      *
      * @param b 数据
-     * @throws IOException
      */
     @Override
     public void write(int b) {
@@ -78,7 +76,6 @@ public class FastByteArrayOutputStream extends OutputStream {
     /**
      * 关闭流
      *
-     * @throws IOException
      */
     @Override
     public void close() {

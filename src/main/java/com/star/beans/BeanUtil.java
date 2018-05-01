@@ -70,6 +70,7 @@ public final class BeanUtil {
      *
      * @param instance 实例
      * @param name     属性名
+     * @param <T>      范型
      * @return 对应属性的值
      */
     public static <T> Object getSimpleProperty(final T instance, final String name) {
@@ -84,6 +85,7 @@ public final class BeanUtil {
      * @param instance 实例
      * @param name     属性名
      * @param value    值
+     * @param <T>      范型
      */
     public static <T> void setSimpleProperty(final T instance, final String name, final Object value) {
         final PropertyDescriptor descriptor = getDescriptor(instance.getClass(), name);
@@ -96,6 +98,7 @@ public final class BeanUtil {
      *
      * @param maps  键值对
      * @param clazz 要转换成的类
+     * @param <T>   范型
      * @return 设置好参数的对象
      */
     public static <T> T mapToBean(final Map<String, Object> maps, final Class<T> clazz) {
@@ -116,6 +119,7 @@ public final class BeanUtil {
      * 对象转map
      *
      * @param instance 实例
+     * @param <T>      范型
      * @return 实例的键值对
      */
     public static <T> Map<String, Object> beanToMap(final T instance) {

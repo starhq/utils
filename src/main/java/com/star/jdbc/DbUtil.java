@@ -61,8 +61,8 @@ public final class DbUtil {
     /**
      * 关闭连接
      *
-     * @param conn
-     * @throws SQLException
+     * @param conn 连接
+     * @throws SQLException sql异常
      */
     public static void close(final Connection conn) throws SQLException {
         if (conn != null) {
@@ -74,7 +74,7 @@ public final class DbUtil {
      * 关闭结果集
      *
      * @param resultSet 结果集
-     * @throws SQLException
+     * @throws SQLException sql异常
      */
     public static void close(final ResultSet resultSet) throws SQLException {
         if (resultSet != null) {
@@ -86,7 +86,7 @@ public final class DbUtil {
      * 关闭stmt
      *
      * @param stmt stmt
-     * @throws SQLException
+     * @throws SQLException sql异常
      */
     public static void close(final Statement stmt) throws SQLException {
         if (stmt != null) {
@@ -97,8 +97,7 @@ public final class DbUtil {
     /**
      * 静默关闭连接
      *
-     * @param conn
-     * @throws SQLException
+     * @param conn 连接
      */
     public static void closeQuietly(final Connection conn) {
         try {
@@ -160,7 +159,7 @@ public final class DbUtil {
      * 提交并关闭连接
      *
      * @param conn 连接
-     * @throws SQLException
+     * @throws SQLException sql异常
      */
     public static void commitAndClose(final Connection conn) throws SQLException {
         if (conn != null) {
@@ -190,7 +189,7 @@ public final class DbUtil {
      * 回滚
      *
      * @param conn 连接
-     * @throws SQLException
+     * @throws SQLException sql异常
      */
     public static void rollback(final Connection conn) throws SQLException {
         if (conn != null) {
@@ -202,7 +201,7 @@ public final class DbUtil {
      * 回滚并关闭
      *
      * @param conn 连接
-     * @throws SQLException
+     * @throws SQLException sql异常
      */
     public static void rollbackAndClose(Connection conn) throws SQLException {
         if (conn != null) {
@@ -218,7 +217,6 @@ public final class DbUtil {
      * 回滚并静默关闭
      *
      * @param conn 连接
-     * @throws SQLException
      */
     public static void rollbackAndCloseQuietly(Connection conn) {
         try {

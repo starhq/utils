@@ -164,6 +164,8 @@ public enum HttpStatus {
 
     /**
      * 获取httpstatus值
+     *
+     * @return 响应码
      */
     public int getCode() {
         return code;

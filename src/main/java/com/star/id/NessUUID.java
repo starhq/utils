@@ -76,8 +76,8 @@ public final class NessUUID {
     /**
      * 取代jdk中uuid的对应方法
      *
-     * @param str
-     * @return
+     * @param str uuid字符串
+     * @return uuid
      */
     public static UUID fromString(final String str) {
         final int len = str.length();
@@ -114,8 +114,8 @@ public final class NessUUID {
     /**
      * 取代jdk中uuid的对应方法
      *
-     * @param uuid
-     * @return
+     * @param uuid uuid
+     * @return 字符串
      */
     public static String toString(final UUID uuid) {
         long msb = uuid.getMostSignificantBits();

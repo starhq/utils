@@ -55,6 +55,7 @@ public final class ArrayUtil {
      *
      * @param componentType 数组元素的类型
      * @param newSize       数组大小
+     * @param <T>           范型
      * @return 空数组
      */
     @SuppressWarnings("unchecked")

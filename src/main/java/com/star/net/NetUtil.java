@@ -85,6 +85,9 @@ public final class NetUtil {
 
     /**
      * 验证端口是否可用
+     *
+     * @param port 端口
+     * @return 是否可用
      */
     public static boolean isUsableLocalPort(final int port) {
         boolean result;
@@ -103,6 +106,9 @@ public final class NetUtil {
 
     /**
      * 是否内网地址
+     *
+     * @param ipAddress ip地址
+     * @return 是否内网
      */
     public static boolean isInnerIP(final String ipAddress) {
 
@@ -143,6 +149,9 @@ public final class NetUtil {
 
     /**
      * ip的最后一部分用*来替代
+     *
+     * @param ipString ip
+     * @return 格式化过的ip
      */
     public static String hideIpPart(final String ipString) {
         return new StringBuilder(ipString.length()).append(ipString.substring(0, ipString.lastIndexOf(StringUtil.C_DOT) + 1))
@@ -163,7 +172,7 @@ public final class NetUtil {
     /**
      * 查询本机mac地址
      *
-     * @return
+     * @return mac地址
      */
     public static String getMac() {
         NetworkInterface network;

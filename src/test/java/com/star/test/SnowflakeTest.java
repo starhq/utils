@@ -1,6 +1,6 @@
 package com.star.test;
 
-import com.alisoft.nano.bench.Nano;
+
 import com.star.id.Snowflake;
 import org.junit.Test;
 
@@ -16,11 +16,11 @@ public class SnowflakeTest {
     public void testSnowflake() {
         Snowflake snowflake = new Snowflake(0, 0, true);
 
-        Nano.bench().measurements(measurements).threads(threads).measure("snowflake", () -> {
-            for (int i = 0; i < SerialTimes; i++) {
-                System.out.println(snowflake.nextId());
-            }
-        });
+//        Nano.bench().measurements(measurements).threads(threads).measure("snowflake", () -> {
+//            for (int i = 0; i < SerialTimes; i++) {
+//                System.out.println(snowflake.nextId());
+//            }
+//        });
     }
 
 //    @Test

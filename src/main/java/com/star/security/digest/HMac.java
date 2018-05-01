@@ -72,7 +72,6 @@ public class HMac {
      *
      * @param algorithm 算法
      * @param key       密钥
-     * @return {@link HMac}
      */
     public void init(ALGORITHM algorithm, byte[] key) {
         init(algorithm, (null == key) ? null : new SecretKeySpec(key, algorithm.toString()));

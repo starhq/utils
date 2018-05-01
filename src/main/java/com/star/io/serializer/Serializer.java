@@ -8,6 +8,8 @@ package com.star.io.serializer;
 public interface Serializer {
     /**
      * 用的哪种序列化方式
+     *
+     * @return 序列化工具的名字
      */
     String name();
 

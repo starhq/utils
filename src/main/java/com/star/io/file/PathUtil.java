@@ -305,7 +305,8 @@ public final class PathUtil {
     /**
      * 获取指定位置的子路径部分，支持负数，例如起始为-1表示从后数第一个节点位置
      *
-     * @param path 路径
+     * @param path  路径
+     * @param index 起始位置
      * @return 获取的子路径
      */
     public static Path subIndexPath(final Path path, final int index) {
@@ -658,6 +659,7 @@ public final class PathUtil {
      * @param charset  字符集
      * @param isAppend 是否在文件尾追加
      * @param elements 集合
+     * @param <T>      范型
      */
     public static <T> void writeLines(final Path path, final Charset charset, final boolean isAppend, final Collection<T> elements) {
         try (BufferedWriter bufferedWriter = getWriter(path, charset, isAppend)) {
@@ -677,6 +679,7 @@ public final class PathUtil {
      * @param path     文件
      * @param isAppend 是否在文件尾追加
      * @param elements 集合
+     * @param <T>      范型
      */
     public static <T> void writeUTF8Lines(final Path path, final boolean isAppend, final Collection<T> elements) {
         writeLines(path, CharsetUtil.CHARSET_UTF_8, isAppend, elements);
@@ -686,6 +689,7 @@ public final class PathUtil {
      * 写入数据到文件
      *
      * @param data     数据
+     * @param path     路径
      * @param isAppend 是否追加模式
      */
     public static void writeBytes(final byte[] data, final Path path, final boolean isAppend) {

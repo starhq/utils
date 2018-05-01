@@ -50,6 +50,10 @@ public final class HttpUtil {
 
     /**
      * 获取客户端ip
+     *
+     * @param request          请求
+     * @param otherHeaderNames 头信息
+     * @return ip
      */
     public static String getClientIP(final HttpServletRequest request, final String... otherHeaderNames) {
         String[] headers = new String[]{"X-Forwarded-For", "X-Real-IP", "Proxy-Client-IP", "WL-Proxy-Client-IP"};
@@ -72,6 +76,11 @@ public final class HttpUtil {
 
     /**
      * 发送get或者delete请求
+     *
+     * @param urlString     链接
+     * @param customCharset 编码
+     * @param httpMethod    http方法
+     * @return 响应
      */
     public static String get(final String urlString, final String customCharset, final HttpMethod httpMethod) {
         final HttpRequest httpRequest = HttpRequest.getRequest(urlString, httpMethod);
@@ -83,6 +92,11 @@ public final class HttpUtil {
 
     /**
      * 发送post或者put请求
+     *
+     * @param urlString  链接
+     * @param httpMethod http方法
+     * @param params     参数
+     * @return 响应
      */
     public static String post(final String urlString, final String params, final HttpMethod httpMethod) {
         return HttpRequest.getRequest(urlString, httpMethod).body(params).execute().getBody();
@@ -90,6 +104,11 @@ public final class HttpUtil {
 
     /**
      * 发送post或者put请求
+     *
+     * @param urlString  链接
+     * @param httpMethod http方法
+     * @param paramMap   参数
+     * @return 响应
      */
     public static String post(final String urlString, final Map<String, Object> paramMap, final HttpMethod httpMethod) {
         return HttpRequest.getRequest(urlString, httpMethod).setForm(paramMap).execute().getBody();
@@ -97,6 +116,10 @@ public final class HttpUtil {
 
     /**
      * 获得远程String
+     *
+     * @param url           链接
+     * @param customCharset 编码
+     * @return 响应
      */
     public static String downloadString(final String url, final String customCharset) {
         InputStream input;
@@ -115,6 +138,10 @@ public final class HttpUtil {
 
     /**
      * 下载文件
+     *
+     * @param url  链接
+     * @param file 文件
+     * @return 下载的字节数
      */
     public static long downloadFile(final String url, final File file) {
         InputStream input = null;
@@ -133,6 +160,9 @@ public final class HttpUtil {
 
     /**
      * 将Map形式的Form表单数据转换为Url参数形式
+     *
+     * @param paramMap 参数
+     * @return 参数形式的字符串
      */
     public static String toParams(final Map<String, Object> paramMap) {
         return MapUtil.isEmpty(paramMap) ? "" : IterUtil.join(paramMap.entrySet(), "&");
@@ -140,6 +170,10 @@ public final class HttpUtil {
 
     /**
      * 将Map形式的Form表单数据转换为Url参数形式
+     *
+     * @param paramMap 参数
+     * @param charset  编码
+     * @return 参数信息的字符串
      */
     public static String toParams(final Map<String, Object> paramMap, final String charset) {
         final Map<String, Object> maps = new ConcurrentHashMap<>(paramMap.size());
@@ -151,6 +185,10 @@ public final class HttpUtil {
 
     /**
      * 将url参数解析为Map
+     *
+     * @param paramsStr 参数形式的字符串
+     * @param charset   编码
+     * @return map
      */
     public static Map<String, List<String>> decodeParams(final String paramsStr, final String charset) {
         // 直接用分隔符截成n个数组来处理，逻辑简单点也能达到效果
@@ -190,6 +228,10 @@ public final class HttpUtil {
 
     /**
      * 将表单数据加到URL中（用于GET表单提交）
+     *
+     * @param url  链接
+     * @param form 参数
+     * @return 带参数的字符串
      */
     public static String urlWithForm(final String url, final Map<String, Object> form) {
         final String queryString = toParams(form);
@@ -198,6 +240,10 @@ public final class HttpUtil {
 
     /**
      * 将表单数据字符串加到URL中（用于GET表单提交）
+     *
+     * @param url         链接
+     * @param queryString 参数
+     * @return 带参数的字符串
      */
     public static String urlWithForm(final String url, final String queryString) {
         final StringBuffer stringBuffer = new StringBuffer();
@@ -216,6 +262,9 @@ public final class HttpUtil {
 
     /**
      * 从Http连接的头信息中获得字符集
+     *
+     * @param conn 链接
+     * @return 编码
      */
     public static String getCharset(final HttpURLConnection conn) {
         return RegexUtil.get(CHARSET_PATTERN, conn.getContentType(), 1);
@@ -223,6 +272,9 @@ public final class HttpUtil {
 
     /**
      * 从多级反向代理中获得第一个非unknown IP地址
+     *
+     * @param ipStr ip
+     * @return 真实ip
      */
     public static String getMultistageReverseProxyIp(final String ipStr) {
         String resultIp = "";
@@ -240,6 +292,9 @@ public final class HttpUtil {
 
     /**
      * 检测给定字符串是否为未知，多用于检测HTTP请求相关
+     *
+     * @param checkString 字符串
+     * @return 是否未知
      */
     public static boolean isUnknow(final String checkString) {
         return StringUtil.isBlank(checkString) || "unknown".equalsIgnoreCase(checkString);
@@ -251,6 +306,11 @@ public final class HttpUtil {
      * reponse读的时候需要依赖这方法，但传入inputstream就得不到页面的charset了
      * <p>
      * 修改下，单纯的通过input和charset来得到string
+     *
+     * @param url               链接
+     * @param charset           编码
+     * @param useContentCharset 使用内容的编码
+     * @return 响应
      */
     public static String getString(final URL url, final String charset, final
     boolean useContentCharset) {
@@ -297,6 +357,9 @@ public final class HttpUtil {
 
     /**
      * 根据文件扩展名获得MimeType
+     *
+     * @param filePath 文件名
+     * @return MimeType
      */
     public static String getMimeType(final String filePath) {
         return URLConnection.getFileNameMap().getContentTypeFor(filePath);
@@ -304,6 +367,11 @@ public final class HttpUtil {
 
     /**
      * 将键值对加入到值为List类型的Map中
+     *
+     * @param params 参数
+     * @param name   键
+     * @param value  值
+     * @return 是否添加成功
      */
     private static boolean addParam(final Map<String, List<String>> params, final String name, final String value) {
         List<String> values = params.get(name);

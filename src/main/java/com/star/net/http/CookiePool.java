@@ -5,9 +5,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * cookie池 做缓存用
- * 
- * @author http://git.oschina.net/loolly/hutool
  *
+ * @author http://git.oschina.net/loolly/hutool
  */
 public final class CookiePool {
 
@@ -21,6 +20,9 @@ public final class CookiePool {
 
     /**
      * 获得某个网站的Cookie信息
+     *
+     * @param host 主机
+     * @return cookie信息
      */
     public static String get(final String host) {
         return cookies.get(host);
@@ -28,6 +30,9 @@ public final class CookiePool {
 
     /**
      * 将某个网站的Cookie放入Cookie池
+     *
+     * @param host   主机
+     * @param cookie cookie信息
      */
     public static void put(final String host, final String cookie) {
         cookies.put(host, cookie);

@@ -1,6 +1,6 @@
 package com.star.test;
 
-import com.alisoft.nano.bench.Nano;
+
 import com.star.reflect.MethodUtil;
 import org.junit.Test;
 
@@ -34,10 +34,10 @@ public class ConstructorTest {
 
     @Test
     public void testTrimByJDK() {
-        Nano.bench().measurements(measurements).threads(threads).measure("classvalue version", () -> {
-            for (int i = 0; i < SerialTimes; i++) {
-            }
-        });
+//        Nano.bench().measurements(measurements).threads(threads).measure("classvalue version", () -> {
+//            for (int i = 0; i < SerialTimes; i++) {
+//            }
+//        });
     }
 
 }

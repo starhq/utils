@@ -109,9 +109,9 @@ public final class FieldUtil {
     /**
      * 直接读取对象属性值,无视private/protected修饰符,不经过getter函数.
      *
-     * @param object 要读取的对象
+     * @param object 要设置的对象
      * @param field  属性
-     * @return 属性值
+     * @param value 值
      */
     public static void setFieldValue(final Object object, final Field field, final Object value) {
         makeAccessible(field);
@@ -128,7 +128,7 @@ public final class FieldUtil {
      *
      * @param object    要读取的对象
      * @param fieldName 属性名
-     * @return 属性值
+     * @param value 值
      */
     public static void setFieldValue(final Object object, final String fieldName, final Object value) {
         final Field field = getField(object.getClass(), fieldName).orElseThrow(ToolException::new);

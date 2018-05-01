@@ -70,6 +70,9 @@ public abstract class AbstractHttpBase<T> {
 
     /**
      * 根据name获得头信息
+     *
+     * @param name http头
+     * @return 头的字符串
      */
     public String getHeader(final HttpHeader name) {
         final List<String> values = headers.get(name.toString());
@@ -78,6 +81,8 @@ public abstract class AbstractHttpBase<T> {
 
     /**
      * 删除头信息
+     *
+     * @param name 头信息字符串
      */
     public void removeHeader(final String name) {
         if (!StringUtil.isBlank(name)) {
@@ -87,6 +92,11 @@ public abstract class AbstractHttpBase<T> {
 
     /**
      * 设置头信息
+     *
+     * @param name       头信息
+     * @param value      头信息的值
+     * @param isOverride 是否覆盖
+     * @return 本身
      */
     @SuppressWarnings("unchecked")
     public T setHeader(final String name, final String value, final boolean isOverride) {
@@ -105,6 +115,11 @@ public abstract class AbstractHttpBase<T> {
 
     /**
      * 设置请求头
+     *
+     * @param name       头信息
+     * @param value      头信息的值
+     * @param isOverride 是否覆盖
+     * @return 本身
      */
     public T setHeader(final HttpHeader name, final String value, final boolean isOverride) {
         return setHeader(name.toString(), value, isOverride);
@@ -112,6 +127,8 @@ public abstract class AbstractHttpBase<T> {
 
     /**
      * 获取头信息
+     *
+     * @return 头信息集合
      */
     public Map<String, List<String>> getHeaders() {
         return Collections.unmodifiableMap(headers);
@@ -119,6 +136,8 @@ public abstract class AbstractHttpBase<T> {
 
     /**
      * 返回http版本
+     *
+     * @return http版本
      */
     public String getHttpVersion() {
         return httpVersion;
@@ -126,6 +145,9 @@ public abstract class AbstractHttpBase<T> {
 
     /**
      * 设置httpversion
+     *
+     * @param httpVersion http版本
+     * @return 本身
      */
     @SuppressWarnings("unchecked")
     public T setHttpVersion(final HttpVersion httpVersion) {
@@ -135,6 +157,8 @@ public abstract class AbstractHttpBase<T> {
 
     /**
      * 返回字符集
+     *
+     * @return 编码
      */
     public String getCharset() {
         return charset;
@@ -142,6 +166,9 @@ public abstract class AbstractHttpBase<T> {
 
     /**
      * 设置字符集
+     *
+     * @param charset 编码字符串
+     * @return 本身
      */
     @SuppressWarnings("unchecked")
     public T setCharset(final String charset) {

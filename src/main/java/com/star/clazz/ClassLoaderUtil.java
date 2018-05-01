@@ -39,6 +39,7 @@ public final class ClassLoaderUtil {
      *
      * @param className     全路径类名
      * @param isInitialized 是否初始化
+     * @param <T>           范型
      * @return 实体对象
      */
     @SuppressWarnings("unchecked")
@@ -55,6 +56,7 @@ public final class ClassLoaderUtil {
      * 加载类并初始化
      *
      * @param className 全路径类名
+     * @param <T>       范型
      * @return 实体对象
      */
     public static <T> Class<T> loadClass(final String className) {
